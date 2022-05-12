@@ -1,44 +1,132 @@
 <template>
-	<div class="px-4 py-2" v-if="$store.state.login">
-		<div>
-			<img src="@/assets/pebble-dev.png" alt="Pebble Dev" class="logo">
+
+
+<div v-if="$store.state.login">
+    <!-- Modifier à partir d'ici -->
+
+	<div class="container">
+
+		<h1 class="my-3">Module de gestion du personnel</h1>
+
+		<h2>Statistiques</h2>
+
+		<div class="row">
+			<div class="col">
+				<div class="card">
+					<div class="card-body">
+						<h3>Revue des effectifs</h3>
+					</div>
+					<ul class="list-group list-group-flush">
+						<li class="list-group-item d-flex justify-content-between align-items-center">
+							<span>Personnels actifs</span>
+							<span class="badge bg-secondary">123</span>
+						</li>
+						<li class="list-group-item d-flex justify-content-between align-items-center">
+							<span>Total contacts</span>
+							<span class="badge bg-secondary">456</span>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="col">
+				<div class="card">
+					<div class="card-body">
+						<div id="piechart"></div>
+					</div>
+				</div>
+			</div>
 		</div>
-		<h1 class="text-center">Bienvenue dans votre nouvelle application</h1>
+
+		<div class="row">
+
+			<div class="list-group col-xm-12 col-lg-6">
+				<h3 class="list-group-item bg-light">Revue des  effectifs</h3>
+				<a class="list-group-item list-group-item-action">Personnels actifs<span class="badge bg-secondary float-end">123</span></a>
+				<a class="list-group-item list-group-item-action">Personnels ressources<span class="badge bg-secondary float-end">456</span></a>
+				<a class="list-group-item list-group-item-action">Sorties des effectifs le mois prochain<span class="badge bg-warning float-end">12</span></a>
+				</div>
+
+			<div class="list-group col">
+				<h3 class="list-group-item bg-light">Les contrats en cours</h3>
+
+				<a class="list-group-item list-group-item-action">Contrat à durée indéterminée<span class="badge bg-secondary float-end">123</span></a>
+				<a class="list-group-item list-group-item-action">Contrat à durée déterminée<span class="badge bg-secondary float-end">456</span></a>
+				<a class="list-group-item list-group-item-action">Contrat d'apprentissage<span class="badge bg-secondary float-end">12</span></a>
+				<a class="list-group-item list-group-item-action">Contrat de professionalisation<span class="badge bg-secondary float-end">3</span></a>
+				<a class="list-group-item list-group-item-action">Contrat de stage<span class="badge bg-secondary float-end">1</span></a>
+				<a class="list-group-item list-group-item-action">Total<span class="badge bg-primary float-end">595</span></a>
+			</div>
+		</div>
+
 		<hr>
-		<h2>Bibliothèques pré-installés</h2>
-		<ul>
-			<li><a href="https://getbootstrap.com/docs/5.0/getting-started/introduction/" target="_blank">Bootstrap 5</a></li>
-			<li><a href="https://icons.getbootstrap.com/" target="_blank">Bootstrap icons</a></li>
-			<li><a href="https://router.vuejs.org/" target="_blank">Vue Router</a></li>
-			<li><a href="https://vuex.vuejs.org/" target="_blank">Vue X (store)</a></li>
-		</ul>
 
-		<h2>Outils de développement</h2>
-		<ul>
-			<li><strong><a href="https://github.com/cairnmanagement/pebble-ui" target="_blank">pebble-ui</a></strong> (module vuejs)</li>
-			<li><strong><a href="https://github.com/cairnmanagement/appjs" target="_blank">APP.js</a></strong> (fonctions de gestion de l'application et de connexion à l'API)</li>
-		</ul>
-		<h2>Pour bien démarrer</h2>
-		<ol>
-			<li>Lisez la documentation de <strong><a href="https://github.com/cairnmanagement/sample-app">pebbleapp</a></strong> pour rester à jour</li>
-			<li>Configurez la base de votre application dans /src/config.json</li>
-			<li>Ne modifiez pas les sous-modules (/src/components/pebble-ui, /src/js/app). Ceux-ci se mettent à jour via pebbleapp.</li>
-			<li>Développez vos vues dans /src/views et vos composants d'interface dans /src/components</li>
-		</ol>
-	</div>
+		<StructurePersonnelForm />
+	</div>    
+</div>
+
+        <!-- fin de modif-->
 </template>
-
-<style lang="scss" scoped>
-.logo {
-	max-width:360px;
-	display:block;
-	margin:20px auto;
-}
-</style>
 
 <script>
 
+import {GoogleCharts} from 'google-charts';
+
+import StructurePersonnelForm from '@/components/StructurePersonnelForm.vue'
+
 export default {
-	name: 'Home'
+    name: 'Home',
+
+	components: {
+		StructurePersonnelForm
+	},
+
+	data() {
+		return {
+			chart_disp: false
+		}
+	},
+
+	methods: {
+		/**
+		 * Affiche un diagramme
+		 */
+		drawChart() {
+			let el = document.getElementById('piechart');
+
+			let data = [
+				['Task', 'Hours per Day'],
+				['Work',     11],
+				['Eat',      2],
+				['Commute',  2],
+				['Watch TV', 2],
+				['Sleep',    7]
+			];
+
+			var visData = GoogleCharts.api.visualization.arrayToDataTable(data);
+			var chart = new GoogleCharts.api.visualization.PieChart(el);
+
+			chart.draw(visData);
+		},
+
+		/**
+		 * Charge un diagramme
+		 */
+		loadChart() {
+			let el = document.getElementById('piechart');
+			if (typeof el !== 'undefined') {
+				GoogleCharts.load(this.drawChart);
+			}
+		}
+	},
+
+	updated() {
+		this.loadChart();
+	},
+
+	mounted() {
+		this.loadChart();
+		// GoogleCharts.load(this.drawChart);
+		//GoogleCharts.setOnLoadCallback(this.drawChart);
+	}
 }
 </script>

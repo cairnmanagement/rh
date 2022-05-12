@@ -17,7 +17,7 @@
 				<router-link :to="'/element/'+openedElement.id+'/properties'" custom v-slot="{ navigate, href }">
 					<a class="btn btn-dark me-2" :href="href" @click="navigate">
 						<i class="bi bi-file-earmark me-1"></i>
-						{{openedElement.name}}
+						{{openedElement.cache_nom}}
 					</a>
 				</router-link>
 
@@ -32,21 +32,38 @@
 							</router-link>
 						</li>
 					</ul>
+					
 				</div>
+					<a class="nav-link text-light" href="#"><i class="bi bi-arrow-clockwise"></i></a>
+
 			</div>
 		</template>
 
 
 		<template v-slot:menu>
 			<AppMenu>
-				<AppMenuItem href="/" look="dark" icon="bi bi-house">Home</AppMenuItem>
-				<AppMenuItem href="/about" look="dark" icon="bi bi-app">About</AppMenuItem>
+				<AppMenuItem href="/" look="dark" icon="bi bi-house">Accueil</AppMenuItem>
+				<AppMenuItem href="/personnel-actif" look="dark" icon="bi bi-person-check">Personnel actif</AppMenuItem>
+				<AppMenuItem href="/contacts" look="dark" icon="bi bi-person">Tous les contacts</AppMenuItem>
+				<AppMenuItem href="/contrats" look="dark" icon="bi bi-file-check">Contrats</AppMenuItem>
+				<AppMenuItem href="/docs-complements" look="dark" icon="bi bi-file-code">Docs complémentaires</AppMenuItem>
+				<AppMenuItem href="/a-propos" look="dark" icon="bi bi-app">À propos</AppMenuItem>
 			</AppMenu>
 		</template>
 
 		<template v-slot:list>
-			<AppMenu>
-				<AppMenuItem :href="'/element/'+el.id" icon="bi bi-file-earmark" v-for="el in elements" :key="el.id">{{el.name}}</AppMenuItem>
+			<AppMenu v-if="$route.path == '/' || $route.path == '/personnel-actif'">
+				<AppMenuItem :href="'/element/'+el.id" icon="bi bi-file-person" v-for="el in elements" :key="el.id">{{el.cache_nom}}</AppMenuItem>
+			</AppMenu>
+			<AppMenu v-else-if="$route.path == '/contrats'">
+				<AppMenuItem :href="'/contrats/1'" icon="bi bi-file-text"><strong class="">Ambre Gaveau </strong><br><span class="text-success text-nowrap">OPS support et réseaux</span><br><span>CDD 35h<i class="bi bi-arrow-right m-1"></i>15-10-2023</span><br></AppMenuItem>
+				<AppMenuItem :href="'/contrats/2'" icon="bi bi-file-text"><strong class="">Sébastien Héligon</strong><br><span class="text-success text-nowrap">Développeur Web</span><br><span>CDD 35h<i class="bi bi-arrow-right m-1"></i>15-03-2023</span><br></AppMenuItem>
+				<AppMenuItem :href="'/contrats/3'" icon="bi bi-file-text"><strong class="">Kopp Killian</strong><br><span class="text-success text-nowrap">Directeur SI Recherches et développements</span><br><span>CDI 178 J.<i class="bi bi-arrow-right m-1"></i> N.D.</span><br></AppMenuItem>
+				<AppMenuItem :href="'/contrats/4'" icon="bi bi-file-text"><strong class="">Le Bihan Cédric</strong><br><span class="text-success text-nowrap">OPS support et réseaux</span><br><span>CDI 226 J.<i class="bi bi-arrow-right m-1"></i>N.D.</span><br></AppMenuItem>
+				<AppMenuItem :href="'/contrats/5'" icon="bi bi-file-text"><strong class="">Lehoux Mari</strong><br><span class="text-success text-nowrap">Développeur Web</span><br><span>CDD 35h<i class="bi bi-arrow-right m-1"></i>11-07-2022</span><br></AppMenuItem>
+				<AppMenuItem :href="'/contrats/6'" icon="bi bi-file-text"><strong class="">Modard Guillaume</strong><br><span class="text-success text-nowrap">Développeur et Gourou Fullstack Senior</span><br><span>CDI 178 J.<i class="bi bi-arrow-right m-1"></i>N.D.</span><br></AppMenuItem>
+				<AppMenuItem :href="'/contrats/7'" icon="bi bi-file-text"><strong class="">Modard Guillaume</strong><br><span class="text-primary text-nowrap">Créateur d'API</span><br><span>CDD<i class="bi bi-arrow-right m-1"></i>Terminé le 25-03-2022</span><br></AppMenuItem>
+
 			</AppMenu>
 		</template>
 
@@ -59,7 +76,11 @@
 	</AppWrapper>
 	
 </template>
-
+<style lang="scss">
+h3 {
+	font-weight: normal!important;
+}
+</style>
 <script>
 
 import AppWrapper from '@/components/pebble-ui/AppWrapper.vue'
