@@ -17,7 +17,7 @@
 				<div class="col-2">
 					<img src="../assets/facewoman.png" class="img-fluid rounded-5 rounded-circle"  alt="photo identité de l'agent">
 				</div>
-				</div>		
+			</div>		
 			<div class="row">
 					<h1 class="fw-light">{{openedElement.oPersonne.prenom}} {{openedElement.oPersonne.nom}}</h1>
 					<!--<h2 class="fw-light">!!{{openedElement.oFonction.nom}}</h2>-->
@@ -25,7 +25,6 @@
 						<div class="row justify-content-center" v-if="openedElement.oPersonne">
 							<!--<span>{{openedElement.oPersonne.tel1.numero}}</span>
 							<span>{{openedElement.oPersonne.mail1.adresse}}</span>-->
-
 							<button class="btn btn-primary col-1 m-1"><i class="bi bi-envelope"></i></button>
 							<button class="btn btn-primary col-1 m-1"><i class="bi bi-telephone-outbound-fill"></i></button>
 						</div>
@@ -100,18 +99,19 @@
 					</p>
 					<div id="collapseInfo" class="accordion-collapse collapse show" aria-labelledby="headingTwo" data-bs-parent="#accordionInfo">
 						<div class="accordion-body list-group-flush">
-								<div class="list-group-item">
-									<span class="d-block">{{openedElement.oPersonne.civilite}} {{openedElement.cache_nom}} est
-									né(e) le !!<strong>{{openedElement.oPersonne.dn}}</strong> à <strong> {{openedElement.oPersonne.lieuNaissance}} </strong>.<br>
-									{{openedElement.oPersonne.prenom}} est de nationalité <strong>{{openedElement.oPersonne.nationalite}}.</strong></span>
-								</div>
-								<div class="list-group-item">
-									<span class="d-block">Son numéro de sécurité sociale est : <strong>{{openedElement.nss}}</strong></span>
-								</div>
+							<div class="list-group-item">
+								<span class="d-block">{{openedElement.oPersonne.civilite}} {{openedElement.cache_nom}} est
+								né(e) le !!<strong>{{openedElement.oPersonne.dn}}</strong> à <strong> {{openedElement.oPersonne.lieuNaissance}} </strong>.<br>
+								{{openedElement.oPersonne.prenom}} est de nationalité <strong>{{openedElement.oPersonne.nationalite}}.</strong></span>
+							</div>
+							<div class="list-group-item">
+								<span class="d-block">Son numéro de sécurité sociale est : <strong>{{openedElement.nss}}</strong></span>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
+			
 			<div class="col-sm-12 col-xl-6">
 				<div class="accordion my-2">
 					<div class="accordion-item" id="accordionContrats">
@@ -125,14 +125,13 @@
 								<div class="list-group-flush">
 									<a href="" class="list-group-item list-group-item-action">
 										<div class="text-primary"><span class="text-success text-nowrap">Développeur et Gourou Fullstack Senior</span></div>
-										<div><i class="bi bi-file-text"></i><span class="m-1">CDI du 22/04/2022 178 J.<i class="bi bi-arrow-right m-1"></i>N.D.</span></div>
+										<div><i class="bi bi-file-text"></i><span class="m-1">CDI 22/04/2022<i class="bi bi-arrow-right m-1"></i>N.D.</span></div>
 									</a>
 									<a href="" class="list-group-item list-group-item-action">
-										<div class="text-primary"><span class="text-primary text-nowrap">Créateur d'API</span></div>
-										<div><i class="bi bi-file-text"></i><span class="m-1">CDD du 22/04/2020 35h.<i class="bi bi-arrow-right m-1"></i>terminé le 21/04/2022</span></div>
+										<div><span class="text-muted text-nowrap">Créateur d'API</span></div>
+										<div><i class="bi bi-file-text"></i><span class="text-muted m-1">CDD 13/04/2020<i class="bi bi-arrow-right m-1"></i>terminé le 12/04/2022</span></div>
 									</a>
 								</div>
-								
 							</div>
 						</div>
 					</div>
@@ -143,7 +142,7 @@
 			<div class="accordion my-2 col-sm-12 col-xl-6">
 				<div class="accordion-item" id="accordionDocuments">
 					<p class="accordion-header" id="Documents">
-						<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDocuments" aria-expanded="false" aria-controls="collapseContrats">
+						<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDocuments" aria-expanded="false" aria-controls="collapseDocuments">
 						Documents joints au dossier
 						</button>
 					</p>

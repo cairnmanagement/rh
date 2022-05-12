@@ -56,13 +56,13 @@
 				<AppMenuItem :href="'/element/'+el.id" icon="bi bi-file-person" v-for="el in elements" :key="el.id">{{el.cache_nom}}</AppMenuItem>
 			</AppMenu>
 			<AppMenu v-else-if="$route.path == '/contrats'">
-				<AppMenuItem :href="'/contrats/1'" icon="bi bi-file-text"><strong class="">Ambre Gaveau </strong><br><span class="text-success text-nowrap">OPS support et réseaux</span><br><span>CDD 35h<i class="bi bi-arrow-right m-1"></i>15-10-2023</span><br></AppMenuItem>
-				<AppMenuItem :href="'/contrats/2'" icon="bi bi-file-text"><strong class="">Sébastien Héligon</strong><br><span class="text-success text-nowrap">Développeur Web</span><br><span>CDD 35h<i class="bi bi-arrow-right m-1"></i>15-03-2023</span><br></AppMenuItem>
-				<AppMenuItem :href="'/contrats/3'" icon="bi bi-file-text"><strong class="">Kopp Killian</strong><br><span class="text-success text-nowrap">Directeur SI Recherches et développements</span><br><span>CDI 178 J.<i class="bi bi-arrow-right m-1"></i> N.D.</span><br></AppMenuItem>
-				<AppMenuItem :href="'/contrats/4'" icon="bi bi-file-text"><strong class="">Le Bihan Cédric</strong><br><span class="text-success text-nowrap">OPS support et réseaux</span><br><span>CDI 226 J.<i class="bi bi-arrow-right m-1"></i>N.D.</span><br></AppMenuItem>
-				<AppMenuItem :href="'/contrats/5'" icon="bi bi-file-text"><strong class="">Lehoux Mari</strong><br><span class="text-success text-nowrap">Développeur Web</span><br><span>CDD 35h<i class="bi bi-arrow-right m-1"></i>11-07-2022</span><br></AppMenuItem>
-				<AppMenuItem :href="'/contrats/6'" icon="bi bi-file-text"><strong class="">Modard Guillaume</strong><br><span class="text-success text-nowrap">Développeur et Gourou Fullstack Senior</span><br><span>CDI 178 J.<i class="bi bi-arrow-right m-1"></i>N.D.</span><br></AppMenuItem>
-				<AppMenuItem :href="'/contrats/7'" icon="bi bi-file-text"><strong class="">Modard Guillaume</strong><br><span class="text-primary text-nowrap">Créateur d'API</span><br><span>CDD<i class="bi bi-arrow-right m-1"></i>Terminé le 25-03-2022</span><br></AppMenuItem>
+				<AppMenuItem :href="'/contrats/1'" icon="bi bi-file-text"><strong class="">Ambre Gaveau </strong><br><span class="text-success">OPS support et réseaux</span><br><span>CDD 10/10/2021<i class="bi bi-arrow-right m-1"></i>31-07-2023</span><br></AppMenuItem>
+				<AppMenuItem :href="'/contrats/2'" icon="bi bi-file-text"><strong class="">Sébastien Héligon</strong><br><span class="text-success">Développeur Web</span><br><span>CDD 11/09/2021<i class="bi bi-arrow-right m-1"></i>10-09-2023</span><br></AppMenuItem>
+				<AppMenuItem :href="'/contrats/3'" icon="bi bi-file-text"><strong class="">Kopp Killian</strong><br><span class="text-success">Directeur SI Recherches et développements</span><br><span>CDI 21/06/2020<i class="bi bi-arrow-right m-1"></i>sans date de sortie</span><br></AppMenuItem>
+				<AppMenuItem :href="'/contrats/4'" icon="bi bi-file-text"><strong class="">Le Bihan Cédric</strong><br><span class="text-success">OPS support et réseaux</span><br><span>CDI 12-04-2022<i class="bi bi-arrow-right m-1"></i>sans date de sortie</span><br></AppMenuItem>
+				<AppMenuItem :href="'/contrats/5'" icon="bi bi-file-text"><strong class="">Lehoux Mari</strong><br><span class="text-success">Développeur Web</span><br><span>CDD 12/07/2021<i class="bi bi-arrow-right m-1"></i>11-07-2022</span><br></AppMenuItem>
+				<AppMenuItem :href="'/contrats/6'" icon="bi bi-file-text"><strong class="">Modard Guillaume</strong><br><span class="text-success">Développeur et Gourou Fullstack Senior</span><br><span>CDI 13/04/2022<i class="bi bi-arrow-right m-1"></i>sans date de sortie</span><br></AppMenuItem>
+				<AppMenuItem :href="'/contrats/7'" icon="bi bi-file-text"><strong class="text-muted">Modard Guillaume</strong><br><span class="text-muted">Créateur d'API</span><br><span class="text-muted">CDD 13/04/2020<i class="bi bi-arrow-right m-1"></i>12-04-2022</span><br></AppMenuItem>
 
 			</AppMenu>
 		</template>

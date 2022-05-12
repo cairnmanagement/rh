@@ -25,39 +25,55 @@
 							<span>Total contacts</span>
 							<span class="badge bg-secondary">456</span>
 						</li>
+						<li class="list-group-item list-group-flush d-flex justify-content-between align-items-center">
+							<span>Sorties des effectifs le mois prochain</span>
+							<span class="badge bg-warning">12</span>
+						</li>
 					</ul>
 				</div>
 			</div>
 			<div class="col">
 				<div class="card">
 					<div class="card-body">
+						<h3>Les contrats en cours</h3>
+					</div>
+					<ul class="list-group list-group-flush">
+						<li class="list-group-item d-flex justify-content-between align-items-center">
+							<span>Contrat à durée indéterminée</span>
+							<span class="badge bg-secondary">123</span>
+						</li>
+						<li class="list-group-item d-flex justify-content-between align-items-center">
+							<span>Contrat à durée déterminée</span>
+							<span class="badge bg-secondary">456</span>
+						</li>
+						<li class="list-group-item list-group-flush d-flex justify-content-between align-items-center">
+							<span>Contrat d'apprentissage</span>
+							<span class="badge bg-secondary">12</span>
+						</li>
+						<li class="list-group-item list-group-flush d-flex justify-content-between align-items-center">
+							<span>Contrat de professionalisation</span>
+							<span class="badge bg-secondary">3</span>
+						</li>
+						<li class="list-group-item list-group-flush d-flex justify-content-between align-items-center">
+							<span>Contrat de stage</span>
+							<span class="badge bg-secondary">2</span>
+						</li>
+						<li class="list-group-item list-group-flush d-flex justify-content-between align-items-center">
+							<span>Total</span>
+							<span class="badge bg-warning">595</span>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="col">
+				<div class="card">
+					<div class="card-body">
+						<h3>Les contrats en cours par type</h3>
 						<div id="piechart"></div>
 					</div>
 				</div>
 			</div>
 		</div>
-
-		<div class="row">
-
-			<div class="list-group col-xm-12 col-lg-6">
-				<h3 class="list-group-item bg-light">Revue des  effectifs</h3>
-				<a class="list-group-item list-group-item-action">Personnels actifs<span class="badge bg-secondary float-end">123</span></a>
-				<a class="list-group-item list-group-item-action">Personnels ressources<span class="badge bg-secondary float-end">456</span></a>
-				<a class="list-group-item list-group-item-action">Sorties des effectifs le mois prochain<span class="badge bg-warning float-end">12</span></a>
-				</div>
-
-			<div class="list-group col">
-				<h3 class="list-group-item bg-light">Les contrats en cours</h3>
-
-				<a class="list-group-item list-group-item-action">Contrat à durée indéterminée<span class="badge bg-secondary float-end">123</span></a>
-				<a class="list-group-item list-group-item-action">Contrat à durée déterminée<span class="badge bg-secondary float-end">456</span></a>
-				<a class="list-group-item list-group-item-action">Contrat d'apprentissage<span class="badge bg-secondary float-end">12</span></a>
-				<a class="list-group-item list-group-item-action">Contrat de professionalisation<span class="badge bg-secondary float-end">3</span></a>
-				<a class="list-group-item list-group-item-action">Contrat de stage<span class="badge bg-secondary float-end">1</span></a>
-				<a class="list-group-item list-group-item-action">Total<span class="badge bg-primary float-end">595</span></a>
-			</div>
-		</div>
-
 		<hr>
 
 		<StructurePersonnelForm />
@@ -94,12 +110,12 @@ export default {
 			let el = document.getElementById('piechart');
 
 			let data = [
-				['Task', 'Hours per Day'],
-				['Work',     11],
-				['Eat',      2],
-				['Commute',  2],
-				['Watch TV', 2],
-				['Sleep',    7]
+				['Task', 'Type de contrat'],
+				['CDI',     123],
+				['CDD',      456],
+				['Apprentissage',  12],
+				['Professionalisation', 3],
+				['Stage',    2]
 			];
 
 			var visData = GoogleCharts.api.visualization.arrayToDataTable(data);

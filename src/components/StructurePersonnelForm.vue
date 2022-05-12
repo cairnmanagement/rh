@@ -4,7 +4,7 @@
             <h2 class="mb-3">Nouveau collaborateur</h2>
 
             <div class="row g-2">
-                <div class="col-3">
+                <div class="col-2 mb-3">
                     <label for="personne_civilite" class="form-label">Civilité</label>
                     <select class="form-select" id="personne_civilite" name="civilite" v-model="personnel.oPersonne.civilite">
                         <option value="Mr">Monsieur</option>
@@ -32,7 +32,7 @@
                 </div>
             </div>
             <div class="row g-2">
-                <div class="col mb-3">
+                <div class="col-3 mb-3">
                     <label for="telephone_1" class="form-label">Téléphone</label>
                     <input type="tel" class="form-control" id="telephone_1" name="tel1_numero" v-model="personnel.oPersonne.tel1.numero">
                 </div>
@@ -41,10 +41,12 @@
                     <input type="email" class="form-control" id="mail_1" name="mail_adresse" v-model="personnel.oPersonne.mail1.adresse">
                 </div>
             </div>
-            <div class="row g-2 mb-3">
+            <div class="row g-2">
+                <div class="col mb-3">
                     <label for="numeroSecu" class="form-label">Numéro de sécurité sociale</label>
-                    <input type="number" class="form-control" id="numeroSecu" name="nss" v-model="personnel.nss">
+                    <input type="text" class="form-control" id="numeroSecu" name="nss" v-model="personnel.nss">
                 </div>
+            </div>
             <h3 class="mt-2">Adresse postale</h3>
             <div class="row g-2">
                 <div class="col-2 mb-3">
