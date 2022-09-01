@@ -1,10 +1,19 @@
 {
-    "name": "e-DRH",
+    "env": "dev",
+    "name": "rh",
+    "domains": {
+        "dev": "localhost",
+        "prod": "pebble.solutions"
+    },
     "cfg": {
-        "module": "e-DRH",
+        "module": "rh",
         "moduleLabel": "e-DRH",
         "aside": true,
-        "app_mode": "default"
+        "app_mode": "default",
+        "ppp": "private",
+        "logos": null,
+        "backAction": "/",
+        "backNavigation": true
     },
     "cfgMenu": {
         "href": null
@@ -16,15 +25,25 @@
         "header": true
     },
     "api": {
-        "baseURL": "http://local.fe.tld/api/",
         "elements": "structurePersonnel"
     },
     "firebaseConfig": {
-        "apiKey": "AIzaSyAm-yEHEBuXt_2frDrNrH2o3mT0Ffj_4v0",
-        "authDomain": "ace-charter-310713.firebaseapp.com",
-        "projectId": "ace-charter-310713",
-        "storageBucket": "ace-charter-310713.appspot.com",
-        "messagingSenderId": "914156232758",
-        "appId": "1:914156232758:web:b493274bf256cabb68f897"
+        "prod": {
+            "apiKey": "AIzaSyAm-yEHEBuXt_2frDrNrH2o3mT0Ffj_4v0",
+            "authDomain": "ace-charter-310713.firebaseapp.com",
+            "databaseURL": "https://ace-charter-310713-default-rtdb.europe-west1.firebasedatabase.app",
+            "projectId": "ace-charter-310713",
+            "storageBucket": "ace-charter-310713.appspot.com",
+            "messagingSenderId": "914156232758",
+            "appId": "1:914156232758:web:01c518ecc09b006c68f897"
+        },
+        "dev": {
+            "apiKey": "AIzaSyAzwQE4rI03KgtFYEN2zkXhqUA1-agVQsA",
+            "authDomain": "pebble-test.firebaseapp.com",
+            "projectId": "pebble-test",
+            "storageBucket": "pebble-test.appspot.com",
+            "messagingSenderId": "985626064716",
+            "appId": "1:985626064716:web:3ecdc2429eb46b0b97c1e9"
+        }
     }
 }
