@@ -13,11 +13,125 @@
 
 	<!--en-tête fiche personnel-->
 		<section class="text-center py-3 bg-light" v-if="openedElement.extendedData">
-			<div class="row justify-content-center">
-				<div class="col-2">
-					<img src="../assets/facewoman.png" class="img-fluid rounded-5 rounded-circle"  alt="photo identité de l'agent">
+			<div class="row">
+				<div class="col-6">
+					<div class="card mb-3">
+						<div class="card-body">
+							<div>
+								<user-image :name="openedElement.oPersonne.nom"></user-image>
+							</div>
+							<h3>{{openedElement.oPersonne.prenom}} {{openedElement.oPersonne.nom}}</h3>
+							<p> CDI depuis le DD/MM/YYYY</p>
+						</div>
+					</div>
+					<div class="card mb-3">
+						<div class="card-body">
+							<div class="d-flex align-items-center justify-content-between">
+								<h4 class="card-title m-0">Etat-civil</h4>
+								<a href="/" class="btn btn-light"><i class="bi bi-pencil"></i></a>
+							</div>
+						</div>
+						<ul class="list-group list-group-flush">
+							<li class="list-group-item">
+								<div class="d-flex align-items-center justify-content-between">
+									<span>Nom complet:</span><span>{{openedElement.oPersonne.civilite}} {{openedElement.oPersonne.prenom}} {{openedElement.oPersonne.nom}}</span>
+								</div>
+							</li>
+							<li class="list-group-item">
+								<div class="d-flex align-items-center justify-content-between">
+									<span>né(e) le:</span><span>{{openedElement.oPersonne.dn}}</span> 
+								</div>
+							</li>
+							<li class="list-group-item">
+								<div class="d-flex align-items-center justify-content-between">
+									<span>Lieu de naissance:</span><span>{{openedElement.oPersonne.lieuNaissance}}</span> 
+								</div>
+							</li>
+							
+							<li class="list-group-item">
+								<div class="d-flex align-items-center justify-content-between">
+									<span>Nationalité:</span><span>{{openedElement.oPersonne.nationalite}}</span> 
+								</div>
+							</li>
+							<li class="list-group-item">
+								<div class="d-flex align-items-center justify-content-between">
+									<span>N° de sécurité sociale:</span><span>{{openedElement.nss}}</span> 
+								</div>
+							</li>
+						</ul>
+					</div>
+					<div class="card mb-3">
+						<div class="card-body">
+							<div class=" card-header d-flex align-items-center justify-content-between">
+								<h3>Coordonnées</h3>
+								<a href="/" class="text-primary fs-4"><i class="bi bi-plus-lg"></i></a>
+							</div>
+							<ul class="list-group list-group-flush">
+								<li v-if="openedElement.oPersonne.tel1.numero" class="list-group-item d-flex align-items-baseline">
+									<div class="me-3"><i class="bi bi-phone"></i></div>
+									<div class="flex-fill">
+										<div class="d-flex align-items-center justify-content-between">
+											<a :href="'tel:'+openedElement.oPersonne.tel1.numero" class="text-decoration-none">{{openedElement.oPersonne.tel1.numero}}</a>
+											<button class="btn btn-sm btn-link text-black-50"><i class="bi bi-trash3"></i></button>
+										</div>
+									</div>
+								</li>
+								<li v-if="openedElement.oPersonne.mail1.adresse" class="list-group-item">
+									<div class="d-flex align-items-start justify-content-between">
+										<div><i class="bi bi-envelope"></i></div>
+										<div class="d-flex flex-column align-items-start justify-content-between" >
+											<div class="d-flex align-items-start justify-content-between">
+												<span>{{openedElement.oPersonne.mail1.adresse}}</span>
+												<span><i class="bi bi-trash3"></i></span>
+											</div>
+											<div v-if="openedElement.oPersonne.mail2.adresse">
+												<span>{{openedElement.oPersonne.mail2.adresse}}</span>
+												<span><i class="bi bi-trash3"></i></span>
+											</div>
+										</div>
+									</div>
+								</li>
+								
+								<li v-if="openedElement.oPersonne.mail1.adresse" class="list-group-item">
+									<div class="d-flex align-items-start justify-content-between">
+										<div><i class="bi bi-geo-alt"></i></div>
+										<div class="d-flex flex-column align-items-start justify-content-between" >
+											<div class="text-muted">
+												Contrat
+												<span><i class="bi bi-trash3"></i></span>
+											</div>
+											<div class="d-flex flex-column align-items-start justify-content-between">
+												<span>{{openedElement.oPersonne.adresse.voie}}</span>
+												<span>{{openedElement.oPersonne.adresse.cp}} {{openedElement.oPersonne.adresse.localite}}</span>
+												<span> </span>
+
+											</div>
+											<div class="text-muted">
+												Courrier
+												<span><i class="bi bi-trash3"></i></span>
+											</div>
+											<div v-if="openedElement.oPersonne.mail2.adresse">
+												<span>{{openedElement.oPersonne.mail2.adresse}}</span>
+											</div>
+										</div>
+									</div>
+								</li>
+							</ul>
+
+
+						</div>
+					</div>
 				</div>
-			</div>		
+				<div class="card col-6">
+					<div class="card-body">
+						<h3>Contrats</h3>
+						{{openedElement.oPersonne.adresse}}
+					</div>
+				</div>
+			</div>	
+			
+			{{openedElement.extendedData}}
+					
 			<div class="row">
 					<h1 class="fw-light">{{openedElement.oPersonne.prenom}} {{openedElement.oPersonne.nom}}</h1>
 					<!--<h2 class="fw-light">!!{{openedElement.oFonction.nom}}</h2>-->
@@ -90,27 +204,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="accordion my-2 col-sm-12 col-xl-6">
-				<div class="accordion-item" id="accordionInfo">
-					<p class="accordion-header" id="Info">
-						<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInfo" aria-expanded="false" aria-controls="collapseInfo">
-						Informations personnelles
-						</button>
-					</p>
-					<div id="collapseInfo" class="accordion-collapse collapse show" aria-labelledby="headingTwo" data-bs-parent="#accordionInfo">
-						<div class="accordion-body list-group-flush">
-							<div class="list-group-item">
-								<span class="d-block">{{openedElement.oPersonne.civilite}} {{openedElement.cache_nom}} est
-								né(e) le !!<strong>{{openedElement.oPersonne.dn}}</strong> à <strong> {{openedElement.oPersonne.lieuNaissance}} </strong>.<br>
-								{{openedElement.oPersonne.prenom}} est de nationalité <strong>{{openedElement.oPersonne.nationalite}}.</strong></span>
-							</div>
-							<div class="list-group-item">
-								<span class="d-block">Son numéro de sécurité sociale est : <strong>{{openedElement.nss}}</strong></span>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+			
 			
 			<div class="col-sm-12 col-xl-6">
 				<div class="accordion my-2">
@@ -137,126 +231,15 @@
 					</div>
 				</div>
 			</div>
+			<div class="row justify-content-center">
+				<div class="col-2">
+					<img src="../assets/facewoman.png" class="img-fluid rounded-5 rounded-circle"  alt="photo identité de l'agent">
+				</div>
+			</div>
 
 	<!-- documents joints au dossier -->
-			<div class="accordion my-2 col-sm-12 col-xl-6">
-				<div class="accordion-item" id="accordionDocuments">
-					<p class="accordion-header" id="Documents">
-						<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDocuments" aria-expanded="false" aria-controls="collapseDocuments">
-						Documents joints au dossier
-						</button>
-					</p>
-					<div id="collapseDocuments" class="accordion-collapse collapse show" aria-labelledby="headingThree" data-bs-parent="#accordionContrats">
-						<div class="accordion-body list-group-flush">
-							<a href="#" class="list-group-item list-group-item-action  d-flex gap-2 py-2 align-items-center" aria-current="true">
-							<span class="text-center text-success align-items-baseline"><i class="bi bi-check-circle"></i></span>
-								<div class="d-flex gap-2 w-100 justify-content-between">
-									<p class="mb-0">Fiche de renseignements</P>
-									<small class="opacity-50 text-nowrap text-success">15/03/2022</small>
-								</div>
-							</a>
-							<a href="#" class="list-group-item list-group-item-action d-flex gap-2 py-2 align-items-center" aria-current="true">
-							<span class="text-center text-danger"><i class="bi bi-file-arrow-down"></i></span>
-								<div class="d-flex gap-2 w-100 justify-content-between">
-								<p class="mb-0">Pièce d'identité</p>
-								<small class="opacity-50 text-nowrap text-danger">Ajouter</small>
-								</div>
-							</a>
-							<a href="#" class="list-group-item list-group-item-action d-flex gap-2 py-2 align-items-center" aria-current="true">
-							<span class="text-center text-success"><i class="bi bi-check-circle"></i></span>
-								<div class="d-flex gap-2 w-100 justify-content-between">
-								<p class="mb-0">Photo</p>
-								<small class="opacity-50 text-nowrap text-success">15/03/2022</small>
-								</div>
-							</a>
-							<a href="#" class="list-group-item list-group-item-action d-flex gap-2 py-2 align-items-center" aria-current="true">
-							<span class="text-center text-danger"><i class="bi bi-file-arrow-down"></i></span>
-								<div class="d-flex gap-2 w-100 justify-content-between">
-								<p class="mb-0">Droit sécurité sociale</p>
-								<small class="opacity-50 text-nowrap text-danger">Ajouter</small>
-								</div>
-							</a>
-							<a href="#" class="list-group-item list-group-item-action d-flex gap-2 py-2 align-items-center" aria-current="true">
-							<span class="text-center text-success"><i class="bi bi-check-circle"></i></span>
-								<div class="d-flex gap-2 w-100 justify-content-between">
-								<p class="mb-0">Permis de conduire</p>
-								<small class="opacity-50 text-nowrap">15/03/2022</small>
-								</div>
-							</a>
-							<a href="#" class="list-group-item list-group-item-action d-flex gap-2 py-2 align-items-center" aria-current="true">
-							<span class="text-center text-danger"><i class="bi bi-file-arrow-down"></i></span>
-								<div class="d-flex gap-2 w-100 justify-content-between">
-								<p class="mb-0">Justificatif de domicile</p>
-								<small class="opacity-50 text-nowrap text-danger">15/03/2022</small>
-								</div>
-							</a>
-							<a href="#" class="list-group-item list-group-item-action d-flex gap-2 py-2 align-items-center" aria-current="true">
-							<span class="text-center text-success"><i class="bi bi-check-circle"></i></span>
-								<div class="d-flex gap-2 w-100 justify-content-between">
-								<p class="mb-0">RIB</p>
-								<small class="opacity-50 text-nowrap text-success">15/03/2022</small>
-								</div>
-							</a>
-							<a href="#" class="list-group-item list-group-item-action d-flex gap-2 py-2 align-items-center" aria-current="true">
-							<span class="text-center text-danger"><i class="bi bi-file-arrow-down"></i></span>
-								<div class="d-flex gap-2 w-100 justify-content-between">
-								<p class="mb-0">Certificat d'aptitudes physiques</p>
-								<small class="opacity-50 text-nowrap text-danger">Ajouter</small>
-								</div>
-							</a>
-							<a href="#" class="list-group-item list-group-item-action d-flex gap-2 py-2 align-items-center" aria-current="true">
-							<span class="text-center text-success"><i class="bi bi-check-circle"></i></span>
-								<div class="d-flex gap-2 w-100 justify-content-between">
-								<p class="mb-0">Certificat d'aptitudes psychotechniques</p>
-								<small class="opacity-50 text-nowrap text-success">15/03/2022</small>
-								</div>
-							</a>
-							<a href="#" class="list-group-item list-group-item-action d-flex gap-2 py-2 align-items-center" aria-current="true">
-							<span class="text-center text-success"><i class="bi bi-check-circle"></i></span>
-								<div class="d-flex gap-2 w-100 justify-content-between">
-								<p class="mb-0">Visite médicale du travail</p>
-								<small class="opacity-50 text-nowrap text-success">15/03/2022</small>
-								</div>
-							</a>
-							<a href="#" class="list-group-item list-group-item-action d-flex gap-2 py-2 align-items-center" aria-current="true">
-							<span class="text-center text-success"><i class="bi bi-check-circle"></i></span>
-								<div class="d-flex gap-2 w-100 justify-content-between">
-								<p class="mb-0">Charte véhicule</p>
-								<small class="opacity-50 text-nowrap text-success">15/03/2022</small>
-								</div>
-							</a>
-							<a href="#" class="list-group-item list-group-item-action d-flex gap-2 py-2 align-items-center" aria-current="true">
-							<span class="text-center text-success"><i class="bi bi-check-circle"></i></span>
-								<div class="d-flex gap-2 w-100 justify-content-between">
-								<p class="mb-0">Charte informatique</p>
-								<small class="opacity-50 text-nowrap text-success">15/03/2022</small>
-								</div>
-							</a>
-							<a href="#" class="list-group-item list-group-item-action d-flex gap-2 py-2 align-items-center" aria-current="true">
-							<span class="text-center text-success"><i class="bi bi-check-circle"></i></span>
-								<div class="d-flex gap-2 w-100 justify-content-between">
-								<p class="mb-0">Fiche(s) de poste</p>
-								<small class="opacity-50 text-nowrap text-success">15/03/2022</small>
-								</div>
-							</a>
-							<a href="#" class="list-group-item list-group-item-action d-flex gap-2 py-2 align-items-center" aria-current="true">
-							<span class="text-center text-success"><i class="bi bi-check-circle"></i></span>
-								<div class="d-flex gap-2 w-100 justify-content-between">
-								<p class="mb-0">Attestation validité permis</p>
-								<small class="opacity-50 text-nowrap text-success">15/03/2022</small>
-								</div>
-							</a>
-							<a href="#" class="list-group-item list-group-item-action d-flex gap-2 py-2 align-items-center" aria-current="true">
-							<span class="text-center text-success"><i class="bi bi-check-circle"></i></span>
-								<div class="d-flex gap-2 w-100 justify-content-between">
-								<p class="mb-0">Accueil sécurité</p>
-								<small class="opacity-50 text-nowrap text-success">15/03/2022</small>
-								</div>
-							</a>
-						</div>
-					</div>
-				</div>
-			</div><!-- fin documents joints au dossier -->
+			
+			<!-- fin documents joints au dossier -->
 		</div>
 	<!-- FIN accordion avec Coordonnées, informations personnelles et contrats de travail et docts joints au dossier-->
 
@@ -273,73 +256,66 @@
 <script>
 
 import {mapState} from 'vuex'
+import UserImage from '../components/pebble-ui/UserImage.vue';
 
 export default {
-
-	data() {
-		return {
-			pending : {
-				extendedData : true
-			}
-		}
-	},
-
-    computed: {
-        ...mapState(['openedElement'])
+    data() {
+        return {
+            pending: {
+                extendedData: true
+            }
+        };
     },
-
-	methods: {
-		/**
-		 * Charger les données complémentaires du personnel
-		 */
-		loadData(id) {
-
-			if (!this.openedElement.extendedData) {
-				this.pending.extendedData = true;
-				this.$app.apiGet('structurePersonnel/GET/'+id, {
-					api_hierarchy: true
-				})
-				.then(personnelData => {
-					personnelData.extendedData = true;
-					this.$store.dispatch('refreshOpened', personnelData);
-					this.pending.extendedData = false;
-				})
-				.catch(this.$app.catchError);
-			}
-			else {
-				this.pending.extendedData = false;
-			}
-		}
-	},
-
+    computed: {
+        ...mapState(["openedElement"])
+    },
+    methods: {
+        /**
+         * Charger les données complémentaires du personnel
+         */
+        loadData(id) {
+            if (!this.openedElement.extendedData) {
+                this.pending.extendedData = true;
+                this.$app.apiGet("structurePersonnel/GET/" + id, {
+                    api_hierarchy: true
+                })
+                    .then(personnelData => {
+                    personnelData.extendedData = true;
+                    this.$store.dispatch("refreshOpened", personnelData);
+                    this.pending.extendedData = false;
+                })
+                    .catch(this.$app.catchError);
+            }
+            else {
+                this.pending.extendedData = false;
+            }
+        }
+    },
     /**
      * Lorsque la route interne est mise à jour, le nouvel élément doit être chargé.
      */
     beforeRouteUpdate(to) {
-        this.$store.dispatch('load', to.params.id);
-		this.loadData(to.params.id);
+        this.$store.dispatch("load", to.params.id);
+        this.loadData(to.params.id);
     },
-
-
     /**
      * Lorsqu'on quite la route active, l'élément ouvert est vidé.
      */
     beforeRouteLeave(from, to, next) {
-        this.$store.dispatch('unload');
+        this.$store.dispatch("unload");
         next();
     },
-
-
     /**
      * Lorsque l'élément est monté, on va lire l'élément à charger passé en paramètre.
      */
     mounted() {
         /**
          * Ici on va charger l'élém
-		 */
-        this.$store.dispatch('load', this.$route.params.id);
-		this.loadData(this.$route.params.id);
-    }
+         */
+        this.$store.dispatch("load", this.$route.params.id);
+        this.loadData(this.$route.params.id);
+    },
+    components: { UserImage }
 }
 
 </script>

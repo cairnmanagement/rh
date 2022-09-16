@@ -218,11 +218,171 @@
 			</div>
 		</div>
 	</div>
+
 	<hr>
-	
+	<div>
+		sauvegarde
+		<div class="accordion my-2 col-sm-12 col-xl-6">
+				<div class="accordion-item" id="accordionDocuments">
+					<p class="accordion-header" id="Documents">
+						<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDocuments" aria-expanded="false" aria-controls="collapseDocuments">
+						Documents joints au dossier
+						</button>
+					</p>
+					<div id="collapseDocuments" class="accordion-collapse collapse show" aria-labelledby="headingThree" data-bs-parent="#accordionContrats">
+						<div class="accordion-body list-group-flush">
+							<a href="#" class="list-group-item list-group-item-action  d-flex gap-2 py-2 align-items-center" aria-current="true">
+							<span class="text-center text-success align-items-baseline"><i class="bi bi-check-circle"></i></span>
+								<div class="d-flex gap-2 w-100 justify-content-between">
+									<p class="mb-0">Fiche de renseignements</P>
+									<small class="opacity-50 text-nowrap text-success">15/03/2022</small>
+								</div>
+							</a>
+							<a href="#" class="list-group-item list-group-item-action d-flex gap-2 py-2 align-items-center" aria-current="true">
+							<span class="text-center text-danger"><i class="bi bi-file-arrow-down"></i></span>
+								<div class="d-flex gap-2 w-100 justify-content-between">
+								<p class="mb-0">Pièce d'identité</p>
+								<small class="opacity-50 text-nowrap text-danger">Ajouter</small>
+								</div>
+							</a>
+							<a href="#" class="list-group-item list-group-item-action d-flex gap-2 py-2 align-items-center" aria-current="true">
+							<span class="text-center text-success"><i class="bi bi-check-circle"></i></span>
+								<div class="d-flex gap-2 w-100 justify-content-between">
+								<p class="mb-0">Photo</p>
+								<small class="opacity-50 text-nowrap text-success">15/03/2022</small>
+								</div>
+							</a>
+							<a href="#" class="list-group-item list-group-item-action d-flex gap-2 py-2 align-items-center" aria-current="true">
+							<span class="text-center text-danger"><i class="bi bi-file-arrow-down"></i></span>
+								<div class="d-flex gap-2 w-100 justify-content-between">
+								<p class="mb-0">Droit sécurité sociale</p>
+								<small class="opacity-50 text-nowrap text-danger">Ajouter</small>
+								</div>
+							</a>
+							<a href="#" class="list-group-item list-group-item-action d-flex gap-2 py-2 align-items-center" aria-current="true">
+							<span class="text-center text-success"><i class="bi bi-check-circle"></i></span>
+								<div class="d-flex gap-2 w-100 justify-content-between">
+								<p class="mb-0">Permis de conduire</p>
+								<small class="opacity-50 text-nowrap">15/03/2022</small>
+								</div>
+							</a>
+							<a href="#" class="list-group-item list-group-item-action d-flex gap-2 py-2 align-items-center" aria-current="true">
+							<span class="text-center text-danger"><i class="bi bi-file-arrow-down"></i></span>
+								<div class="d-flex gap-2 w-100 justify-content-between">
+								<p class="mb-0">Justificatif de domicile</p>
+								<small class="opacity-50 text-nowrap text-danger">15/03/2022</small>
+								</div>
+							</a>
+							<a href="#" class="list-group-item list-group-item-action d-flex gap-2 py-2 align-items-center" aria-current="true">
+							<span class="text-center text-success"><i class="bi bi-check-circle"></i></span>
+								<div class="d-flex gap-2 w-100 justify-content-between">
+								<p class="mb-0">RIB</p>
+								<small class="opacity-50 text-nowrap text-success">15/03/2022</small>
+								</div>
+							</a>
+							<a href="#" class="list-group-item list-group-item-action d-flex gap-2 py-2 align-items-center" aria-current="true">
+							<span class="text-center text-danger"><i class="bi bi-file-arrow-down"></i></span>
+								<div class="d-flex gap-2 w-100 justify-content-between">
+								<p class="mb-0">Certificat d'aptitudes physiques</p>
+								<small class="opacity-50 text-nowrap text-danger">Ajouter</small>
+								</div>
+							</a>
+							<a href="#" class="list-group-item list-group-item-action d-flex gap-2 py-2 align-items-center" aria-current="true">
+							<span class="text-center text-success"><i class="bi bi-check-circle"></i></span>
+								<div class="d-flex gap-2 w-100 justify-content-between">
+								<p class="mb-0">Certificat d'aptitudes psychotechniques</p>
+								<small class="opacity-50 text-nowrap text-success">15/03/2022</small>
+								</div>
+							</a>
+							<a href="#" class="list-group-item list-group-item-action d-flex gap-2 py-2 align-items-center" aria-current="true">
+							<span class="text-center text-success"><i class="bi bi-check-circle"></i></span>
+								<div class="d-flex gap-2 w-100 justify-content-between">
+								<p class="mb-0">Visite médicale du travail</p>
+								<small class="opacity-50 text-nowrap text-success">15/03/2022</small>
+								</div>
+							</a>
+							<a href="#" class="list-group-item list-group-item-action d-flex gap-2 py-2 align-items-center" aria-current="true">
+							<span class="text-center text-success"><i class="bi bi-check-circle"></i></span>
+								<div class="d-flex gap-2 w-100 justify-content-between">
+								<p class="mb-0">Charte véhicule</p>
+								<small class="opacity-50 text-nowrap text-success">15/03/2022</small>
+								</div>
+							</a>
+							<a href="#" class="list-group-item list-group-item-action d-flex gap-2 py-2 align-items-center" aria-current="true">
+							<span class="text-center text-success"><i class="bi bi-check-circle"></i></span>
+								<div class="d-flex gap-2 w-100 justify-content-between">
+								<p class="mb-0">Charte informatique</p>
+								<small class="opacity-50 text-nowrap text-success">15/03/2022</small>
+								</div>
+							</a>
+							<a href="#" class="list-group-item list-group-item-action d-flex gap-2 py-2 align-items-center" aria-current="true">
+							<span class="text-center text-success"><i class="bi bi-check-circle"></i></span>
+								<div class="d-flex gap-2 w-100 justify-content-between">
+								<p class="mb-0">Fiche(s) de poste</p>
+								<small class="opacity-50 text-nowrap text-success">15/03/2022</small>
+								</div>
+							</a>
+							<a href="#" class="list-group-item list-group-item-action d-flex gap-2 py-2 align-items-center" aria-current="true">
+							<span class="text-center text-success"><i class="bi bi-check-circle"></i></span>
+								<div class="d-flex gap-2 w-100 justify-content-between">
+								<p class="mb-0">Attestation validité permis</p>
+								<small class="opacity-50 text-nowrap text-success">15/03/2022</small>
+								</div>
+							</a>
+							<a href="#" class="list-group-item list-group-item-action d-flex gap-2 py-2 align-items-center" aria-current="true">
+							<span class="text-center text-success"><i class="bi bi-check-circle"></i></span>
+								<div class="d-flex gap-2 w-100 justify-content-between">
+								<p class="mb-0">Accueil sécurité</p>
+								<small class="opacity-50 text-nowrap text-success">15/03/2022</small>
+								</div>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+
+	</div>
 <!--fin de projet de vue du dossier agent-->
 </div>
+<div class="container">
+    <div v-for="abs in listabsence" :key="'absence'+abs.id">
+		test api absence {{abs.dc}}
+    </div> 
+</div> 
+
 </template>
+<script>
+	export default {
+	
+		data() {
+			return {
+				listabsence: [],
+					
+				}
+				
+		},
+	
+	
+		
+	
+		methods: {
+			DisplayList() {
+				let apiUrl = 'structurePersonnel/GET/'+561+'/absence';
+				this.$app.apiGet(apiUrl)
+				.then( (data) => {
+					this.listabsence = data.result;
+					console.log(this.listabsence)
+				})
+				.catch(this.$app.catchError);
+			},
+		},
+		mounted() {
+			this.DisplayList();
+		},   
+	}
+		
+	</script>
 <!--
 <script>
 import {GoogleCharts} from 'google-charts';

@@ -1,7 +1,7 @@
 <template>
     <div class="card" v-if="personnel">
         <div class="card-body">  
-            <h2 class="mb-3">Nouveau collaborateur</h2>
+            <h2 class="mb-3">Nouveau contact</h2>
 
             <div class="row g-2">
                 <div class="col-2 mb-3">

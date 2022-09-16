@@ -1,148 +1,80 @@
 <template>
 
-
-<div v-if="$store.state.login">
-    <!-- Modifier à partir d'ici -->
-
-	<div class="container">
-
-		<h1 class="my-3">Module de gestion du personnel</h1>
-
-		<h2>Statistiques</h2>
-
-		<div class="row">
-			<div class="col">
-				<div class="card">
-					<div class="card-body">
-						<h3>Revue des effectifs</h3>
-					</div>
-					<ul class="list-group list-group-flush">
-						<li class="list-group-item d-flex justify-content-between align-items-center">
-							<span>Personnels actifs</span>
-							<span class="badge bg-secondary">123</span>
-						</li>
-						<li class="list-group-item d-flex justify-content-between align-items-center">
-							<span>Total contacts</span>
-							<span class="badge bg-secondary">456</span>
-						</li>
-						<li class="list-group-item list-group-flush d-flex justify-content-between align-items-center">
-							<span>Sorties des effectifs le mois prochain</span>
-							<span class="badge bg-warning">12</span>
-						</li>
-					</ul>
+	<div v-if="$store.state.login">
+<!-- Modifier à partir d'ici -->
+		<HeaderToolbar>
+				<div class="d-flex align-items-center justify-content-end">
+					<!-- garaph checkbox si
+					<div class="d-flex align-items-center">
+						<div class="form-check form-switch form-check-reverse ms-2" title="Mode graphique">
+							<input class="form-check-input" type="checkbox" role="switch" id="chartModeSwitch" v-model="chartMode">
+							<label class="form-check-label" for="chartModeSwitch">
+								<i class="bi bi-bar-chart"></i>
+							</label>
+						</div>
+					</div> -->
+					<button class="btn btn-light" @click.prevent="$emit('refresh')" title="Actualiser les données" :disabled="isPending">
+						<i class="bi bi-arrow-clockwise" v-if="!isPending"></i>
+						<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" v-else></span>
+					</button>
 				</div>
+			</HeaderToolbar>
+		<div class="container">
+			<h1 class="my-3">Module de gestion du personnel</h1>
+			<div class="mb-3">
+				<StaffManagementCard :display-mode="displayMode"/>
 			</div>
-			<div class="col">
-				<div class="card">
-					<div class="card-body">
-						<h3>Les contrats en cours</h3>
-					</div>
-					<ul class="list-group list-group-flush">
-						<li class="list-group-item d-flex justify-content-between align-items-center">
-							<span>Contrat à durée indéterminée</span>
-							<span class="badge bg-secondary">123</span>
-						</li>
-						<li class="list-group-item d-flex justify-content-between align-items-center">
-							<span>Contrat à durée déterminée</span>
-							<span class="badge bg-secondary">456</span>
-						</li>
-						<li class="list-group-item list-group-flush d-flex justify-content-between align-items-center">
-							<span>Contrat d'apprentissage</span>
-							<span class="badge bg-secondary">12</span>
-						</li>
-						<li class="list-group-item list-group-flush d-flex justify-content-between align-items-center">
-							<span>Contrat de professionalisation</span>
-							<span class="badge bg-secondary">3</span>
-						</li>
-						<li class="list-group-item list-group-flush d-flex justify-content-between align-items-center">
-							<span>Contrat de stage</span>
-							<span class="badge bg-secondary">2</span>
-						</li>
-						<li class="list-group-item list-group-flush d-flex justify-content-between align-items-center">
-							<span>Total</span>
-							<span class="badge bg-warning">595</span>
-						</li>
-					</ul>
-				</div>
+			<div class="card">
+				<ContractsTimeLine/>
 			</div>
-			<div class="col">
-				<div class="card">
-					<div class="card-body">
-						<h3>Les contrats en cours par type</h3>
-						<div id="piechart"></div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<hr>
-
-		<StructurePersonnelForm />
-	</div>    
-</div>
-
-        <!-- fin de modif-->
+			<hr>
+				<StructurePersonnelForm />
+		</div> 
+		
+		
+	</div>
+<!-- fin de modif-->
 </template>
 
 <script>
 
-import {GoogleCharts} from 'google-charts';
-
+import { mapState } from 'vuex';
 import StructurePersonnelForm from '@/components/StructurePersonnelForm.vue'
+import HeaderToolbar from '../components/pebble-ui/toolbar/HeaderToolbar.vue';
+import StaffManagementCard from '../components/StaffManagementCard.vue';
+import ContractsTimeLine from '../components/ContractsTimeLine.vue';
+
 
 export default {
     name: 'Home',
 
 	components: {
-		StructurePersonnelForm
-	},
+    StructurePersonnelForm,
+    HeaderToolbar,
+    StaffManagementCard,
+    ContractsTimeLine
+},
 
 	data() {
 		return {
-			chart_disp: false
+			chartMode: false
 		}
 	},
 
-	methods: {
+	computed: {
+
+		...mapState([Element]),
 		/**
-		 * Affiche un diagramme
+		 * Retourne le mode d'affichage des informations (table ou graphique)
+		 * @returns {String}
 		 */
-		drawChart() {
-			let el = document.getElementById('piechart');
-
-			let data = [
-				['Task', 'Type de contrat'],
-				['CDI',     123],
-				['CDD',      456],
-				['Apprentissage',  12],
-				['Professionalisation', 3],
-				['Stage',    2]
-			];
-
-			var visData = GoogleCharts.api.visualization.arrayToDataTable(data);
-			var chart = new GoogleCharts.api.visualization.PieChart(el);
-
-			chart.draw(visData);
-		},
-
-		/**
-		 * Charge un diagramme
-		 */
-		loadChart() {
-			let el = document.getElementById('piechart');
-			if (typeof el !== 'undefined') {
-				GoogleCharts.load(this.drawChart);
-			}
+		displayMode() {
+			return this.chartMode ? 'chart' : 'list';
 		}
-	},
 
-	updated() {
-		this.loadChart();
-	},
-
-	mounted() {
-		this.loadChart();
-		// GoogleCharts.load(this.drawChart);
-		//GoogleCharts.setOnLoadCallback(this.drawChart);
 	}
+	
+
+
 }
 </script>
