@@ -18,9 +18,9 @@
 				<div class="col-12 col-xl-6">
 					<div class="card mb-3">
 						<div class="card-body">
-							<div>
-								<user-image :name="openedElement.oPersonne.nom"></user-image>
-								<span class="badge bg-secondary">{{openedElement.matricule}}</span>
+							<div class="position-relative">
+								<user-image :name="openedElement.oPersonne.nom" size="xl"></user-image>
+								<span class="badge bg-secondary position-absolute" style="top:0px;">{{openedElement.matricule}}</span>
 							</div>
 							<h3>{{openedElement.oPersonne.prenom}} {{openedElement.oPersonne.nom}}</h3>
 							<p> CDI depuis le DD/MM/YYYY</p>
@@ -71,7 +71,7 @@
 								<h4 class="card-title m-0">Coordonnées</h4>
 								<!-- <a href="/" class="btn btn-light"><i class="bi bi-plus-lg"></i></a> -->
 								<div class="dropdown">
-									<button class="btn btn-lg btn-light dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+									<button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
 										<i class="bi bi-plus-lg"></i>
 									</button>
 									<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">

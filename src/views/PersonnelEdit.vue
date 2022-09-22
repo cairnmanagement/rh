@@ -1,5 +1,5 @@
 <template>
-    <AppModal :title="this.$route.params.id ?'Modification Contact' :'Nouveau Contact'" size="lg" @modal-hide="routeToParent()" :submitBtn="1" :deleteBtn="1">
+    <AppModal :title="this.$route.params.id ?'Modification Contact' :'Nouveau Contact'" size="lg" @modal-hide="routeToParent()" :submitBtn="true" :cancelBtn="true">
         <ContactForm></ContactForm>
 </AppModal>
 </template>
@@ -13,7 +13,7 @@ export default {
          * retourne à la route précédente
          */
         routeToParent() {
-            this.$router.push('/');
+            this.$router.go(-1);
         }
     }
 }
