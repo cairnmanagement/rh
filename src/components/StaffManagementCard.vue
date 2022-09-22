@@ -5,7 +5,9 @@
                 <div class="card-body">
                     <div class="d-flex align-items-center justify-content-between">
                         <h3>12! personnels actifs</h3>
-                        <button class="btn btn-sm btn-light">Ajouter<i class="bi bi-plus-lg ms-1"></i></button>
+                        <router-link :to="{name:'PersonnelNew'}" v-slot="{navigate,href}" custom>
+                            <a :href="href" @click="navigate" class="btn btn-lg btn-light">Ajouter<i class="bi bi-plus-lg ms-1"></i></a>
+                        </router-link>
                     </div>
                     <PersonalList/>
                 </div>
@@ -22,16 +24,12 @@
                                 <i class="bi bi-bar-chart"></i>
                             </label>
                         </div>
-                        <button class="btn btn-sm btn-light">Ajouter<i class="bi bi-plus-lg ms-1"></i></button>
                     </div>
                     <ContractsList v-if="displayMode == 'list'"/>
                     <ContractsGraph v-if="displayMode =='chart'"/>
                 </div>
             </div>
         </div>
-        <!-- <div>
-        <ContractsTimeLine/>
-        </div> -->
     </div>
 </template>
 
@@ -40,7 +38,6 @@
 import ContractsList from './ContractsList.vue';
 import ContractsGraph from './ContractsGraph.vue';
 import PersonalList from './PersonalList.vue';
-//import ContractsTimeLine from './ContractsTimeLine.vue';
 
 export default {
 

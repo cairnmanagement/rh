@@ -37,7 +37,7 @@ import { mapState } from 'vuex'
 		...mapState(['elements', 'openedElement']),
 
             birthdayString() {
-                let birthdayNames =['Guillaume Modard'];
+                let birthdayNames =[];
 
             this.birthday.forEach(birthday => {
                 birthdayNames.push(birthday.cache_nom);

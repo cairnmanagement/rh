@@ -14,7 +14,7 @@
 						<i class="bi bi-arrow-left"></i>
 					</a>
 				</router-link>
-				<router-link :to="'/element/'+openedElement.id+'/properties'" custom v-slot="{ navigate, href }">
+				<router-link :to="'/personnel/'+openedElement.id+'/properties'" custom v-slot="{ navigate, href }">
 					<a class="btn btn-dark me-2" :href="href" @click="navigate">
 						<i class="bi bi-file-earmark me-1"></i>
 						{{openedElement.cache_nom}}
@@ -27,7 +27,7 @@
 					</button>
 					<ul class="dropdown-menu" aria-labelledby="fileDdMenu">
 						<li>
-							<router-link :to="'/element/'+openedElement.id+'/informations'" custom v-slot="{ navigate, href }">
+							<router-link :to="'/personnel/'+openedElement.id+'/informations'" custom v-slot="{ navigate, href }">
 								<a class="dropdown-item" :href="href" @click="navigate">Informations</a>
 							</router-link>
 						</li>
@@ -76,7 +76,7 @@
 					</div>
 				</div>
 				<div class="wrapper">
-					<AppMenuItem :href="'/element/'+personnel.id" v-for="personnel in filterElements" :key="personnel.id">
+					<AppMenuItem :href="'/personnel/'+personnel.id" v-for="personnel in filterElements" :key="personnel.id">
 						<div class="d-flex align-items-center justify-content-between">
 							<div class="d-flex align-items-center">
 								<div class="me-2">
@@ -112,11 +112,31 @@
 			<AppMenu v-else-if="$route.path == '/personnel-actif'">
 				<div class="search-wrapper input-group sticky-top">
 					<span   class="input-group-text" ><i class="bi bi-search"></i></span>
-					<input v-model="search" type="text" class="form-control" placeholder="Votre recherche" aria-label="Username" aria-describedby="recherche">
+					<input v-model="search" type="text" class="form-control" placeholder="Rechercher dans la liste" aria-label="Username" aria-describedby="recherche">
 				</div>
-				<div class="btn-group" role="group">
+				<div class=" my-1 card bg-light input-group">
+					<div class="ms-2 form-check">
+						<input class="form-check-input" type="checkbox" value="" id="flexCheckIndeterminate">
+						<label class="form-check-label" for="flexCheckIndeterminate">
+						tous / sous contrat / hors contrat
+						</label>
+					</div>
+					<div class="ms-2 form-check">
+						<input class="form-check-input" type="checkbox" value="" id="flexCheckIndeterminate">
+						<label class="form-check-label" for="flexCheckIndeterminate">
+						tous / avec matricule / sans matricule
+						</label>
+					</div>
+					<div class="ms-2 form-check">
+						<input class="form-check-input" type="checkbox" value="" id="flexCheckIndeterminate">
+						<label class="form-check-label" for="flexCheckIndeterminate">
+						tous / employables / non employables
+						</label>
+					</div>
+				</div>
+				<div class="btn-group mb-1 ms-1" role="group">
 					<div class="dropdown">
-						<button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenu3" data-bs-toggle="dropdown" aria-expanded="false">
+						<button class="btn btn-outline-secondary dropdown-toggle mx-1" type="button" id="dropdownMenu3" data-bs-toggle="dropdown" aria-expanded="false">
 							contrat
 						</button>
 						<ul class="dropdown-menu" aria-labelledby="dropdownMenu3">
@@ -126,7 +146,7 @@
 						</ul>
 					</div>
 					<div class="dropdown">
-						<button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenu4" data-bs-toggle="dropdown" aria-expanded="false">
+						<button class="btn btn-outline-secondary dropdown-toggle mx-1" type="button" id="dropdownMenu4" data-bs-toggle="dropdown" aria-expanded="false">
 							matricule
 						</button>
 						<ul class="dropdown-menu" aria-labelledby="dropdownMenu4">

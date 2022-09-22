@@ -13,22 +13,27 @@
 
 	<!--en-tête fiche personnel-->
 		<section class="text-center py-3 bg-light" v-if="openedElement.extendedData">
+			
 			<div class="row">
-				<div class="col-6">
+				<div class="col-12 col-xl-6">
 					<div class="card mb-3">
 						<div class="card-body">
 							<div>
 								<user-image :name="openedElement.oPersonne.nom"></user-image>
+								<span class="badge bg-secondary">{{openedElement.matricule}}</span>
 							</div>
 							<h3>{{openedElement.oPersonne.prenom}} {{openedElement.oPersonne.nom}}</h3>
 							<p> CDI depuis le DD/MM/YYYY</p>
+							<p>calcul fin de période d'essai</p>
 						</div>
 					</div>
 					<div class="card mb-3">
 						<div class="card-body">
 							<div class="d-flex align-items-center justify-content-between">
 								<h4 class="card-title m-0">Etat-civil</h4>
-								<a href="/" class="btn btn-light"><i class="bi bi-pencil"></i></a>
+								<router-link :to="{name:'ModificationEtatCivil', params:{id:openedElement.id}}" v-slot="{navigate,href}" custom>
+									<a :href="href" @click="navigate" class="btn btn-light"><i class="bi bi-pencil ms-1"></i></a>
+								</router-link>
 							</div>
 						</div>
 						<ul class="list-group list-group-flush">
@@ -62,87 +67,112 @@
 					</div>
 					<div class="card mb-3">
 						<div class="card-body">
-							<div class=" card-header d-flex align-items-center justify-content-between">
-								<h3>Coordonnées</h3>
-								<a href="/" class="text-primary fs-4"><i class="bi bi-plus-lg"></i></a>
+							<div class="d-flex align-items-center justify-content-between">
+								<h4 class="card-title m-0">Coordonnées</h4>
+								<!-- <a href="/" class="btn btn-light"><i class="bi bi-plus-lg"></i></a> -->
+								<div class="dropdown">
+									<button class="btn btn-lg btn-light dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+										<i class="bi bi-plus-lg"></i>
+									</button>
+									<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+										<li>
+											<router-link :to="{name:'ressourcePhone', params:{id:openedElement.id, idPhone:openedElement.oPersonne.tel1.id}}" v-slot="{navigate,href}" custom>
+												<a class="dropdown-item" :href="href" @click="navigate">Téléphone</a>
+											</router-link>
+										</li>
+										<li>
+											<router-link :to="{name:'ressourceMail', params:{id:openedElement.id, idMail:openedElement.oPersonne.mail1.id}}" v-slot="{navigate,href}" custom>
+												<a class="dropdown-item" :href="href" @click="navigate">Mail</a>
+											</router-link>
+										</li>
+										<li>
+											<router-link :to="{name:'ressourceAddress', params:{id:openedElement.id, idAdress:openedElement.oPersonne.adresse.id}}" v-slot="{navigate,href}" custom>
+												<a class="dropdown-item" :href="href" @click="navigate">Adresse</a>
+											</router-link>
+
+
+										</li>
+									</ul>
+								</div>
 							</div>
-							<ul class="list-group list-group-flush">
-								<li v-if="openedElement.oPersonne.tel1.numero" class="list-group-item d-flex align-items-baseline">
-									<div class="me-3"><i class="bi bi-phone"></i></div>
-									<div class="flex-fill">
+						</div>
+						<ul class="list-group list-group-flush">
+							<li v-if="openedElement.oPersonne.tel1.numero" class="list-group-item d-flex align-items-baseline">
+								<div class="me-3"><i class="bi bi-phone"></i></div>
+								<div class="flex-fill">
+									<div class="d-flex align-items-center justify-content-between">
+										<a :href="'tel:'+openedElement.oPersonne.tel1.numero" class="text-decoration-none">{{openedElement.oPersonne.tel1.numero}}</a>
+										<button class="btn btn-sm btn-link text-black-50"><i class="bi bi-trash3"></i></button>
+									</div>
+								</div>
+							</li>
+							<li v-if="openedElement.oPersonne.mail1.adresse" class="list-group-item d-flex align-items-baseline">
+								<div class="me-3"><i class="bi bi-envelope"></i></div>
+								<div class="d-flex flex-column flex-fill" >
+									<div class="d-flex align-items-center justify-content-between">
+										<a :href="'mail'+openedElement.oPersonne.mail1.adresse" class="text-decoration-none">{{openedElement.oPersonne.mail1.adresse}}</a>
+										<button class="btn btn-sm btn-link text-black-50"><i class="bi bi-trash3"></i></button>
+
+									</div>
+									<div class="d-flex align-items-center justify-content-between" v-if="openedElement.oPersonne.mail2.adresse">
+										<a :href="'mail'+openedElement.oPersonne.mail2.adresse" class="text-decoration-none">{{openedElement.oPersonne.mail2.adresse}}</a>
+										<button class="btn btn-sm btn-link text-black-50"><i class="bi bi-trash3"></i></button>
+									</div>
+								</div>
+							</li>
+							
+							<li v-if="openedElement.oPersonne.adresse" class="list-group-item d-flex align-items-baseline">
+									<div class="me-3"><i class="bi bi-geo-alt"></i></div>
+									<div class="d-flex flex-column flex-fill" >
 										<div class="d-flex align-items-center justify-content-between">
-											<a :href="'tel:'+openedElement.oPersonne.tel1.numero" class="text-decoration-none">{{openedElement.oPersonne.tel1.numero}}</a>
+											<span class="text-muted">Contrat</span>
 											<button class="btn btn-sm btn-link text-black-50"><i class="bi bi-trash3"></i></button>
 										</div>
-									</div>
-								</li>
-								<li v-if="openedElement.oPersonne.mail1.adresse" class="list-group-item">
-									<div class="d-flex align-items-start justify-content-between">
-										<div><i class="bi bi-envelope"></i></div>
-										<div class="d-flex flex-column align-items-start justify-content-between" >
-											<div class="d-flex align-items-start justify-content-between">
-												<span>{{openedElement.oPersonne.mail1.adresse}}</span>
-												<span><i class="bi bi-trash3"></i></span>
-											</div>
-											<div v-if="openedElement.oPersonne.mail2.adresse">
-												<span>{{openedElement.oPersonne.mail2.adresse}}</span>
-												<span><i class="bi bi-trash3"></i></span>
-											</div>
+										<div class="d-flex flex-column align-items-start justify-content-between">
+											<span>{{openedElement.oPersonne.adresse.voie}}</span>
+											<span>{{openedElement.oPersonne.adresse.cp}} {{openedElement.oPersonne.adresse.localite}}</span>
+										</div>
+										<div class="d-flex align-items-center justify-content-between">
+											<span class="text-muted">Domicile</span>
+											<button class="btn btn-sm btn-link text-black-50"><i class="bi bi-trash3"></i></button>
+										</div>
+										<div class="d-flex flex-column align-items-start justify-content-between">
+											<span>{{openedElement.oPersonne.adresse.voie}}</span>
+											<span>{{openedElement.oPersonne.adresse.cp}} {{openedElement.oPersonne.adresse.localite}}</span>
 										</div>
 									</div>
-								</li>
-								
-								<li v-if="openedElement.oPersonne.mail1.adresse" class="list-group-item">
-									<div class="d-flex align-items-start justify-content-between">
-										<div><i class="bi bi-geo-alt"></i></div>
-										<div class="d-flex flex-column align-items-start justify-content-between" >
-											<div class="text-muted">
-												Contrat
-												<span><i class="bi bi-trash3"></i></span>
-											</div>
-											<div class="d-flex flex-column align-items-start justify-content-between">
-												<span>{{openedElement.oPersonne.adresse.voie}}</span>
-												<span>{{openedElement.oPersonne.adresse.cp}} {{openedElement.oPersonne.adresse.localite}}</span>
-												<span> </span>
-
-											</div>
-											<div class="text-muted">
-												Courrier
-												<span><i class="bi bi-trash3"></i></span>
-											</div>
-											<div v-if="openedElement.oPersonne.mail2.adresse">
-												<span>{{openedElement.oPersonne.mail2.adresse}}</span>
-											</div>
-										</div>
-									</div>
-								</li>
-							</ul>
-
-
-						</div>
+							</li>
+						</ul>
 					</div>
+					<hr>
 				</div>
-				<div class="card col-6">
+				<div class="card col-12 col-xl-6">
 					<div class="card-body">
-						<h3>Contrats</h3>
-						{{openedElement.oPersonne.adresse}}
+						<div class="d-flex align-items-center justify-content-between">
+							<h4 class="card-title m-0">Contrats</h4>
+							<!-- <a href="/" class="btn btn-light"><i class="bi bi-plus-lg"></i></a> -->
+						</div>
+						<hr>
+						kdfklDKLL
 					</div>
+					<hr>
+					mlqsjfmljqm
 				</div>
 			</div>	
+			{{openedElement}}
 			
-			{{openedElement.extendedData}}
 					
-			<div class="row">
-					<h1 class="fw-light">{{openedElement.oPersonne.prenom}} {{openedElement.oPersonne.nom}}</h1>
-					<!--<h2 class="fw-light">!!{{openedElement.oFonction.nom}}</h2>-->
-					<!--<p class="lead text-muted">Structure {{openedElement.structure}} Id. #{{openedElement.id}}</p>-->
-						<div class="row justify-content-center" v-if="openedElement.oPersonne">
-							<!--<span>{{openedElement.oPersonne.tel1.numero}}</span>
-							<span>{{openedElement.oPersonne.mail1.adresse}}</span>-->
-							<button class="btn btn-primary col-1 m-1"><i class="bi bi-envelope"></i></button>
-							<button class="btn btn-primary col-1 m-1"><i class="bi bi-telephone-outbound-fill"></i></button>
-						</div>
-			</div>
+			<!-- <div class="row">
+				<h1 class="fw-light">{{openedElement.oPersonne.prenom}} {{openedElement.oPersonne.nom}}</h1>
+				<h2 class="fw-light">!!{{openedElement.oFonction.nom}}</h2>
+				<p class="lead text-muted">Structure {{openedElement.structure}} Id. #{{openedElement.id}}</p>
+				<div class="row justify-content-center" v-if="openedElement.oPersonne">
+					<span>{{openedElement.oPersonne.tel1.numero}}</span>
+					<span>{{openedElement.oPersonne.mail1.adresse}}</span>
+					<button class="btn btn-primary col-1 m-1"><i class="bi bi-envelope"></i></button>
+					<button class="btn btn-primary col-1 m-1"><i class="bi bi-telephone-outbound-fill"></i></button>
+				</div>
+			</div> -->
 			<!--<div v-else>
 			<div v-if="pending.extendedData">Chargement en cours...</div>
 			<div v-else class="text-danger">Erreur dans le chargement des données.</div>
@@ -157,13 +187,13 @@
 		
 
 	<!-- DEBUT accordion avec Coordonnées, informations personnelles et contrats de travail-->
-		<div class="row">
-			<div class="col-sm-12 col-xl-6">
+		<!-- <div class="row"> -->
+			<!-- <div class="col-sm-12 col-xl-6">
 				<div class="accordion my-2">
 					<div class="accordion-item" id="accordionContact">
 						<p class="accordion-header" id="Contact">
 							<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseContact" aria-expanded="false" aria-controls="collapseInfo">
-								Coordonnées 
+								Coordonnées  
 							</button>
 						</p>
 						<div id="collapseContact" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionContact">
@@ -190,8 +220,7 @@
 									<div class="d-flex flex-row justify-content-start">
 										<span class="col-1"><i class="bi bi-envelope"></i></span>
 										<span class="col">{{openedElement.oPersonne.mail2.adresse}}</span>
-									</div>
-								</a>
+									</div>AddPhoneNumber
 								<a href="#"  class="list-group-item list-group-item-action" v-if="openedElement.oPersonne">
 									<div class="d-flex flex-row justify-content-start">
 										<span class="col-1"><i class="bi bi-house"></i></span>
@@ -203,10 +232,10 @@
 						</div>
 					</div>
 				</div>
-			</div>
+			</div> -->
 			
 			
-			<div class="col-sm-12 col-xl-6">
+			<!-- <div class="col-sm-12 col-xl-6">
 				<div class="accordion my-2">
 					<div class="accordion-item" id="accordionContrats">
 						<p class="accordion-header" id="Contrats">
@@ -230,17 +259,14 @@
 						</div>
 					</div>
 				</div>
-			</div>
-			<div class="row justify-content-center">
+			</div> -->
+			<!-- <div class="row justify-content-center">
 				<div class="col-2">
 					<img src="../assets/facewoman.png" class="img-fluid rounded-5 rounded-circle"  alt="photo identité de l'agent">
 				</div>
-			</div>
-
-	<!-- documents joints au dossier -->
-			
+			</div> -->
 			<!-- fin documents joints au dossier -->
-		</div>
+		<!-- </div> -->
 	<!-- FIN accordion avec Coordonnées, informations personnelles et contrats de travail et docts joints au dossier-->
 
 
@@ -274,21 +300,23 @@ export default {
          * Charger les données complémentaires du personnel
          */
         loadData(id) {
-            if (!this.openedElement.extendedData) {
-                this.pending.extendedData = true;
-                this.$app.apiGet("structurePersonnel/GET/" + id, {
-                    api_hierarchy: true
-                })
-                    .then(personnelData => {
-                    personnelData.extendedData = true;
-                    this.$store.dispatch("refreshOpened", personnelData);
-                    this.pending.extendedData = false;
-                })
-                    .catch(this.$app.catchError);
-            }
-            else {
-                this.pending.extendedData = false;
-            }
+			if (this.openedElement) {
+				if (!this.openedElement.extendedData) {
+					this.pending.extendedData = true;
+					this.$app.apiGet("structurePersonnel/GET/" + id, {
+						api_hierarchy: true
+					})
+						.then(personnelData => {
+						personnelData.extendedData = true;
+						this.$store.dispatch("refreshOpened", personnelData);
+						this.pending.extendedData = false;
+					})
+						.catch(this.$app.catchError);
+				}
+				else {
+					this.pending.extendedData = false;
+				}
+			}
         }
     },
     /**
@@ -315,7 +343,7 @@ export default {
         this.$store.dispatch("load", this.$route.params.id);
         this.loadData(this.$route.params.id);
     },
-    components: { UserImage }
+    components: { UserImage, }
 }
 
 </script>

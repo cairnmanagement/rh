@@ -6,7 +6,7 @@
             <div class="row g-2">
                 <div class="col-2 mb-3">
                     <label for="personne_civilite" class="form-label">Civilité</label>
-                    <select class="form-select" id="personne_civilite" name="civilite" v-model="personnel.oPersonne.civilite">
+                    <select class="form-select" id="personne_civilite" name="civilite">
                         <option value="Mr">Monsieur</option>
                         <option value="Mme">Madame</option>
                         <option value="Melle">Mademoiselle</option>
@@ -14,33 +14,24 @@
                 </div>
                 <div class="col mb-3">
                     <label for="personne_nom" class="form-label">Nom</label>
-                    <input type="text" class="form-control" id="personne_nom" name="nom" v-model="personnel.oPersonne.nom">
+                    <input type="text" class="form-control" id="personne_nom" name="nom">
                 </div>
                 <div class="col mb-3">
                     <label for="personne_prenom" class="form-label">Prénom</label>
-                    <input type="text" class="form-control" id="personne_prenom" name="prenom" v-model="personnel.oPersonne.prenom">
+                    <input type="text" class="form-control" id="personne_prenom" name="prenom">
                 </div>
             </div>
             <div class="row g-2">
                 <div class="col-auto mb-3">
                     <label for="date_naissance" class="form-label">Né(e) le</label>
-                    <input type="date" class="form-control" id="date_naissance" name="dn" v-model="personnel.oPersonne.dn">
+                    <input type="date" class="form-control" id="date_naissance" name="dn">
                 </div>
                 <div class="col mb-3">
                     <label for="lieu_naissance" class="form-label">Lieu de naissance</label>
-                    <input type="text" class="form-control"  placeholder="Localité"  id="lieu_naissance" name="lieuNaissance" v-model="personnel.oPersonne.lieuNaissance">
+                    <input type="text" class="form-control"  placeholder="Localité"  id="lieu_naissance" name="lieuNaissance">
                 </div>
             </div>
-            <div class="row g-2">
-                <div class="col-3 mb-3">
-                    <label for="telephone_1" class="form-label">Téléphone</label>
-                    <input type="tel" class="form-control" id="telephone_1" name="tel1_numero" v-model="personnel.oPersonne.tel1.numero">
-                </div>
-                <div class="col mb-3">
-                    <label for="mail_1" class="form-label">Adresse mail</label>
-                    <input type="email" class="form-control" id="mail_1" name="mail_adresse" v-model="personnel.oPersonne.mail1.adresse">
-                </div>
-            </div>
+
             <div class="row g-2">
                 <div class="col mb-3">
                     <label for="numeroSecu" class="form-label">Numéro de sécurité sociale</label>
