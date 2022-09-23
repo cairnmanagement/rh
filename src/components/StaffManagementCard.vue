@@ -6,7 +6,7 @@
                     <div class="d-flex align-items-center justify-content-between">
                         <h3>12! personnels actifs</h3>
                         <router-link :to="{name:'PersonnelNew'}" v-slot="{navigate,href}" custom>
-                            <a :href="href" @click="navigate" class="btn btn-lg btn-light">Ajouter<i class="bi bi-plus-lg ms-1"></i></a>
+                            <a :href="href" @click="navigate" class="btn btn-light">Nouveau<i class="bi bi-plus-lg ms-1"></i></a>
                         </router-link>
                     </div>
                     <PersonalList/>

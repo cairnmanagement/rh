@@ -1,16 +1,13 @@
 <template>
     <div class="row g-2">
         <div class="col mb-3">
-        <label for="type" class="form-label me-3">Type:</label>
-        <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="typeadress" id="inlineCheckbox1" value="option1">
-            <label class="form-check-label" for="inlineCheckbox1">Contrat</label>
-        </div>
-        <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="typeadress" id="inlineCheckbox2" value="option2">
-            <label class="form-check-label" for="inlineCheckbox2">Domicile</label>
-        </div>
-        </div>
+                <label for="type" class="form-label">Type:</label>
+                <select class="form-select" aria-label="Default select example">
+                    <option selected></option>
+                    <option value="1">Contrat</option>
+                    <option value="2">Domicile</option>
+                </select>
+            </div>
     </div>
     <div class="row g-2">
         <div class="col-2 mb-3">

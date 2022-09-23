@@ -55,26 +55,45 @@
 			
 			<AppMenu v-if="$route.path == '/' || $route.path == '/tous'">
 				
-				<div class="btn-group sticky-top m-2" role="group">
+				<div class="btn-group sticky-top m-2">
 					<!-- recherche dinamyque dans la liste affichée -->
 					<div class="search-wrapper input-group me-1">
 						<span   class="input-group-text" ><i class="bi bi-search"></i></span>
-						<input v-model="search" type="text" class="form-control" placeholder="Votre recherche" aria-label="Username" aria-describedby="recherche">
+						<input v-model="search" type="text" class="form-control" placeholder="recherche" aria-label="Username" aria-describedby="recherche">
 					</div>
-					<!--  -->
+				</div>
 					<div class="dropdown">
-						<button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
+						<button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
 							<i class="bi bi-filter"></i>
 						</button>
 						<ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-							<li><button class="dropdown-item" type="button">Actifs</button></li>
-							<li><button class="dropdown-item" type="button">Inactifs</button></li>
-							<li><button class="dropdown-item" type="button">Candidats</button></li>
-							<li><button class="dropdown-item" type="button">blacklist</button></li>
+							<li>
+								<select class="form-select mb-2" aria-label="Default select example">
+									<option selected value="0">Tous</option>
+									<option value="1">En contrat</option>
+									<option value="2">Hors contrat</option>
+								</select>
+							</li>
+							<li>
+								<select class="form-select mb-2" aria-label="Default select example">
+									<option selected value="0">Tous</option>
+									<option value="1">Avec matricule</option>
+									<option value="2">Sans matricule</option>
+								</select>
+							</li>
+							<li>
+								<select class="form-select mb-2" aria-label="Default select example">
+									<option selected value="0">Tous</option>
+									<option value="1">Employable</option>
+									<option value="2">Non employable</option>
+								</select>
+							</li>
+							<li>
+								<button class="btn btn-sm btn-outline-primary">appliquer</button>
+							</li>
 
 						</ul>
 					</div>
-				</div>
 				<div class="wrapper">
 					<AppMenuItem :href="'/personnel/'+personnel.id" v-for="personnel in filterElements" :key="personnel.id">
 						<div class="d-flex align-items-center justify-content-between">
@@ -87,21 +106,20 @@
 									- !dentree (= "Sans contrat")
 									- dsortie < date du jour (new Date()) (= "terminé le")
 									- sinon : (= "depuis le...")
-
 									La méthode est appelée dans l'élément html comme suit :
 									<div>{{personnelContratLabel(personnel) }}</div>
 								-->
 								<div class="align-items-center justify-content-between" v-if="!personnel.dsortie">
 									<div class="d-flex justify-content-between align-items-center"> {{personnel.cache_nom}}</div>
-									<div>CDI depuis le {{ formatDateFr(personnel.dentree)}}</div>
+									<!-- <div>CDI depuis le {{ formatDateFr(personnel.dentree)}}</div> -->
 								</div>
 								<div class="align-items-center justify-content-between" v-else-if="personnel.dsortie < '2022-03-09 00:00:00'">
 									<div class="d-flex justify-content-between align-items-center">{{personnel.cache_nom}}</div>
-									<div>CDD terminé le {{ formatDateFr(personnel.dsortie)}}</div>
+									<!-- <div>CDD terminé le {{ formatDateFr(personnel.dsortie)}}</div> -->
 								</div>
 								<div class="align-items-center justify-content-between" v-else>
 									<div class="d-flex justify-content-between align-items-center">{{personnel.cache_nom}}</div>
-									<div>CDD depuis le {{ formatDateFr(personnel.dentree)}}</div>
+									<!-- <div>CDD depuis le {{ formatDateFr(personnel.dentree)}}</div> -->
 								</div>
 							</div>
 							<i class="rounded-circle bg-success" style="width:8px; height:8px;"></i>
@@ -114,27 +132,8 @@
 					<span   class="input-group-text" ><i class="bi bi-search"></i></span>
 					<input v-model="search" type="text" class="form-control" placeholder="Rechercher dans la liste" aria-label="Username" aria-describedby="recherche">
 				</div>
-				<div class=" my-1 card bg-light input-group">
-					<div class="ms-2 form-check">
-						<input class="form-check-input" type="checkbox" value="" id="flexCheckIndeterminate">
-						<label class="form-check-label" for="flexCheckIndeterminate">
-						tous / sous contrat / hors contrat
-						</label>
-					</div>
-					<div class="ms-2 form-check">
-						<input class="form-check-input" type="checkbox" value="" id="flexCheckIndeterminate">
-						<label class="form-check-label" for="flexCheckIndeterminate">
-						tous / avec matricule / sans matricule
-						</label>
-					</div>
-					<div class="ms-2 form-check">
-						<input class="form-check-input" type="checkbox" value="" id="flexCheckIndeterminate">
-						<label class="form-check-label" for="flexCheckIndeterminate">
-						tous / employables / non employables
-						</label>
-					</div>
-				</div>
-				<div class="btn-group mb-1 ms-1" role="group">
+				
+				<div class="" role="group">
 					<div class="dropdown">
 						<button class="btn btn-outline-secondary dropdown-toggle mx-1" type="button" id="dropdownMenu3" data-bs-toggle="dropdown" aria-expanded="false">
 							contrat
@@ -168,7 +167,7 @@
 				</div>
 				<div class="wrapper">
 
-					<AppMenuItem :href="'/element/'+el.id" icon="bi bi-file-person" v-for="el in filterElements" :key="el.id">
+					<AppMenuItem :href="'/personnel/'+el.id" icon="bi bi-file-person" v-for="el in filterElements" :key="el.id">
 							<span>{{el.cache_nom}}</span>
 							<div class="d-flex align-items-center justify-content-between">
 								{{ formatDateFr(el.dentree)}} > {{formatDateFr(el.dsortie)}}
@@ -187,7 +186,7 @@
 					<input v-model="search" type="text" class="form-control" placeholder="Votre recherche" aria-label="Username" aria-describedby="recherche">
 				</div>
 				<div class="wrapper">
-					<AppMenuItem :href="'/element/'+el.id" icon="bi bi-file-person" v-for="el in filterElements" :key="el.id">
+					<AppMenuItem :href="'/personnel/'+el.id" icon="bi bi-file-person" v-for="el in filterElements" :key="el.id">
 						<span>{{el.cache_nom}}</span>
 						<div class="d-flex align-items-center justify-content-between">
 							{{ formatDateFr(el.dentree)}} > {{formatDateFr(el.dsortie)}}

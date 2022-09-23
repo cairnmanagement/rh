@@ -1,5 +1,5 @@
 <template>
-    <AppModal title="Ajouter un numéro de téléphone" size="md" @modal-hide="routeToParent()" :submitBtn="1" :deleteBtn="1">
+    <AppModal title="Ajouter un numéro de téléphone" size="md" @modal-hide="routeToParent()" :submitBtn="true" :deleteBtn="true">
         <AddPhoneNumber></AddPhoneNumber>
     </AppModal>
 </template>
@@ -13,7 +13,7 @@ export default {
          * retourne à la route précédente
          */
         routeToParent() {
-            this.$router.push('/');
+            this.$router.go(-1);
         }
     }
 }

@@ -23,14 +23,22 @@
             <input type="date" class="form-control" id="date_naissance" name="dn" v-model="personnel.dn">
         </div>
         <div class="col mb-3">
-            <label for="lieu_naissance" class="form-label">Lieu de naissance</label>
-            <input type="text" class="form-control"  placeholder="Localité"  id="lieu_naissance" name="lieuNaissance" v-model="personnel.lieuNaissance">
+            <label for="lieu_naissance" class="form-label">Ville de naissance</label>
+            <input type="text" class="form-control"  placeholder="Ville"  id="lieu_naissance" name="lieuNaissance" v-model="personnel.lieuNaissance">
+        </div>
+        <div class="col mb-3">
+            <label for="pays_naissance" class="form-label">Pays de naissance</label>
+            <input type="text" class="form-control"  placeholder="Pays"  id="pays_naissance" name="paysNaissance" v-model="personnel.paysNaissance">
         </div>
     </div>
     <div class="row g-2">
         <div class="col mb-3">
             <label for="numeroSecu" class="form-label">Numéro de sécurité sociale</label>
             <input type="text" class="form-control" id="numeroSecu" name="nss" v-model="personnel.nss"/>
+        </div>
+        <div class="col-4 mb-3">
+            <label for="nationalite" class="form-label">Nationalité</label>
+            <input type="text" class="form-control"  placeholder="Nationalité"  id="nationalite" name="Nationalite" v-model="personnel.nationalite">
         </div>
     </div>		
 </template>
@@ -49,7 +57,9 @@ import { mapState } from 'vuex';
                     prenom: null,
                     dn: null,
                     lieuNaissance: null,
-                    nss: null
+                    nss: null,
+                    nationalite: null,
+                    PaysNaissance : null
                 },
             }
         },
@@ -76,6 +86,8 @@ import { mapState } from 'vuex';
                 this.personnel.dn = this.openedElement.oPersonne.dn
                 this.personnel.lieuNaissance = this.openedElement.oPersonne.lieuNaissance
                 this.personnel.nss = this.openedElement.nss
+                this.personnel.nationalite = this.openedElement.oPersonne.nationalite
+                this.personnel.paysNaissance = 'à prévoir API'
             }
         }
     }

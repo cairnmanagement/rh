@@ -23,8 +23,14 @@
 								<span class="badge bg-secondary position-absolute" style="top:0px;">{{openedElement.matricule}}</span>
 							</div>
 							<h3>{{openedElement.oPersonne.prenom}} {{openedElement.oPersonne.nom}}</h3>
-							<p> CDI depuis le DD/MM/YYYY</p>
-							<p>calcul fin de période d'essai</p>
+							<div class="align-items-center justify-content-between" >
+								<div class="d-flex align-items-center justify-content-between">
+									{{ formatDateFr(openedElement.dentree)}} > {{formatDateFr(openedElement.dsortie)}}
+									<span v-if="openedElement.dentree <= '2019-12-31 00:00:00'" class="badge bg-warning">inactif</span> 
+									<span v-else-if="openedElement.dentree > '2019-12-31 00:00:00'" class="badge bg-success">actif</span> 
+									<span v-else class="badge bg-danger">Erreur</span>
+								</div>
+							</div>
 						</div>
 					</div>
 					<div class="card mb-3">
@@ -32,7 +38,7 @@
 							<div class="d-flex align-items-center justify-content-between">
 								<h4 class="card-title m-0">Etat-civil</h4>
 								<router-link :to="{name:'ModificationEtatCivil', params:{id:openedElement.id}}" v-slot="{navigate,href}" custom>
-									<a :href="href" @click="navigate" class="btn btn-light"><i class="bi bi-pencil ms-1"></i></a>
+									<a :href="href" @click="navigate" class="btn btn-light"><i class="bi bi-pencil"></i></a>
 								</router-link>
 							</div>
 						</div>
@@ -44,7 +50,7 @@
 							</li>
 							<li class="list-group-item">
 								<div class="d-flex align-items-center justify-content-between">
-									<span>né(e) le:</span><span>{{openedElement.oPersonne.dn}}</span> 
+									<span>né(e) le:</span><span>{{birthdate}}</span> 
 								</div>
 							</li>
 							<li class="list-group-item">
@@ -71,10 +77,10 @@
 								<h4 class="card-title m-0">Coordonnées</h4>
 								<!-- <a href="/" class="btn btn-light"><i class="bi bi-plus-lg"></i></a> -->
 								<div class="dropdown">
-									<button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+									<button class="btn btn-light dropdown-toggle" type="button" id="addRessource" data-bs-toggle="dropdown" aria-expanded="false">
 										<i class="bi bi-plus-lg"></i>
 									</button>
-									<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+									<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="addRessource">
 										<li>
 											<router-link :to="{name:'ressourcePhone', params:{id:openedElement.id, idPhone:openedElement.oPersonne.tel1.id}}" v-slot="{navigate,href}" custom>
 												<a class="dropdown-item" :href="href" @click="navigate">Téléphone</a>
@@ -102,7 +108,10 @@
 								<div class="flex-fill">
 									<div class="d-flex align-items-center justify-content-between">
 										<a :href="'tel:'+openedElement.oPersonne.tel1.numero" class="text-decoration-none">{{openedElement.oPersonne.tel1.numero}}</a>
-										<button class="btn btn-sm btn-link text-black-50"><i class="bi bi-trash3"></i></button>
+										<div>
+											<button class=" btn btn-sm btn-link text-black-50 me-2"><i class="bi bi-pencil"></i></button>
+											<button class="btn btn-sm btn-link text-black-50"><i class="bi bi-trash3"></i></button>
+										</div>
 									</div>
 								</div>
 							</li>
@@ -111,12 +120,18 @@
 								<div class="d-flex flex-column flex-fill" >
 									<div class="d-flex align-items-center justify-content-between">
 										<a :href="'mail'+openedElement.oPersonne.mail1.adresse" class="text-decoration-none">{{openedElement.oPersonne.mail1.adresse}}</a>
-										<button class="btn btn-sm btn-link text-black-50"><i class="bi bi-trash3"></i></button>
+										<div>
+											<button class=" btn btn-sm btn-link text-black-50 me-2"><i class="bi bi-pencil"></i></button>
+											<button class="btn btn-sm btn-link text-black-50"><i class="bi bi-trash3"></i></button>
+										</div>
 
 									</div>
 									<div class="d-flex align-items-center justify-content-between" v-if="openedElement.oPersonne.mail2.adresse">
 										<a :href="'mail'+openedElement.oPersonne.mail2.adresse" class="text-decoration-none">{{openedElement.oPersonne.mail2.adresse}}</a>
-										<button class="btn btn-sm btn-link text-black-50"><i class="bi bi-trash3"></i></button>
+										<div>
+											<button class=" btn btn-sm btn-link text-black-50 me-2"><i class="bi bi-pencil"></i></button>
+											<button class="btn btn-sm btn-link text-black-50"><i class="bi bi-trash3"></i></button>
+										</div>
 									</div>
 								</div>
 							</li>
@@ -126,7 +141,10 @@
 									<div class="d-flex flex-column flex-fill" >
 										<div class="d-flex align-items-center justify-content-between">
 											<span class="text-muted">Contrat</span>
-											<button class="btn btn-sm btn-link text-black-50"><i class="bi bi-trash3"></i></button>
+											<div>
+												<button class=" btn btn-sm btn-link text-black-50 me-2"><i class="bi bi-pencil"></i></button>
+												<button class="btn btn-sm btn-link text-black-50"><i class="bi bi-trash3"></i></button>
+											</div>
 										</div>
 										<div class="d-flex flex-column align-items-start justify-content-between">
 											<span>{{openedElement.oPersonne.adresse.voie}}</span>
@@ -134,7 +152,10 @@
 										</div>
 										<div class="d-flex align-items-center justify-content-between">
 											<span class="text-muted">Domicile</span>
-											<button class="btn btn-sm btn-link text-black-50"><i class="bi bi-trash3"></i></button>
+											<div>
+												<button class=" btn btn-sm btn-link text-black-50 me-2"><i class="bi bi-pencil"></i></button>
+												<button class="btn btn-sm btn-link text-black-50"><i class="bi bi-trash3"></i></button>
+											</div>
 										</div>
 										<div class="d-flex flex-column align-items-start justify-content-between">
 											<span>{{openedElement.oPersonne.adresse.voie}}</span>
@@ -283,6 +304,7 @@
 
 import {mapState} from 'vuex'
 import UserImage from '../components/pebble-ui/UserImage.vue';
+import date from 'date-and-time';
 
 export default {
     data() {
@@ -293,9 +315,27 @@ export default {
         };
     },
     computed: {
-        ...mapState(["openedElement"])
+        ...mapState(["openedElement"]),
+
+		birthdate() {
+			return date.format(new Date(this.openedElement.oPersonne.dn)  , 'DD-MM-YYYY')
+		}
     },
     methods: {
+
+		/**
+		 * Modifie le format de la date entrée en paramètre et la retourne 
+		 * sous le format dd/mm:yyyy
+		 * @param {string} date 
+		 */
+
+
+		formatDateFr(date) {
+			let newDate = new Date(date);
+			let format = newDate.toLocaleDateString('fr-FR');
+			return format;
+		},
+		
         /**
          * Charger les données complémentaires du personnel
          */
