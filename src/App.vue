@@ -134,8 +134,10 @@
 				</div>
 				
 				<div class="" role="group">
+					<form action="" class="form-control">
+
 					<div class="dropdown">
-						<button class="btn btn-outline-secondary dropdown-toggle mx-1" type="button" id="dropdownMenu3" data-bs-toggle="dropdown" aria-expanded="false">
+						<button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenu3" data-bs-toggle="dropdown" aria-expanded="false">
 							contrat
 						</button>
 						<ul class="dropdown-menu" aria-labelledby="dropdownMenu3">
@@ -145,7 +147,7 @@
 						</ul>
 					</div>
 					<div class="dropdown">
-						<button class="btn btn-outline-secondary dropdown-toggle mx-1" type="button" id="dropdownMenu4" data-bs-toggle="dropdown" aria-expanded="false">
+						<button class="btn btn-outline-secondary dropdown-toggle m-4" type="button" id="dropdownMenu4" data-bs-toggle="dropdown" aria-expanded="false">
 							matricule
 						</button>
 						<ul class="dropdown-menu" aria-labelledby="dropdownMenu4">
@@ -164,6 +166,7 @@
 							<li><button class="dropdown-item" type="button">non blacklistés</button></li>
 						</ul>
 					</div>
+					</form>
 				</div>
 				<div class="wrapper">
 

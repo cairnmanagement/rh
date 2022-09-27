@@ -124,7 +124,6 @@
 											<button class=" btn btn-sm btn-link text-black-50 me-2"><i class="bi bi-pencil"></i></button>
 											<button class="btn btn-sm btn-link text-black-50"><i class="bi bi-trash3"></i></button>
 										</div>
-
 									</div>
 									<div class="d-flex align-items-center justify-content-between" v-if="openedElement.oPersonne.mail2.adresse">
 										<a :href="'mail'+openedElement.oPersonne.mail2.adresse" class="text-decoration-none">{{openedElement.oPersonne.mail2.adresse}}</a>
@@ -167,132 +166,56 @@
 					</div>
 					<hr>
 				</div>
-				<div class="card col-12 col-xl-6">
+				<div class="col-12 col-xl-6">
+				<div class="card">
 					<div class="card-body">
 						<div class="d-flex align-items-center justify-content-between">
 							<h4 class="card-title m-0">Contrats</h4>
-							<!-- <a href="/" class="btn btn-light"><i class="bi bi-plus-lg"></i></a> -->
 						</div>
 						<hr>
-						kdfklDKLL
+						<div class="list-group-flush">
+							<router-link :to="{name:'infoContrat', params:{id:openedElement.id, idContrat:openedElement.oContrat.id}}" v-slot="{navigate,href}" custom>
+								<a :href="href" @click="navigate" class="list-group-item list-group-item-action d-flex justify-content-between mb-3">
+									<div class="d-flex flex-column align-items-start">
+										<span>{{openedElement.oFonction.nom}} </span>
+										<span class="text-muted">du {{entrydate2}} au {{exitdate2}}</span>
+										<span>Contrat à durée déterminée (3 avenants)</span> 
+									</div>
+									<div class="d-flex align-items-center">
+										<i class="bi bi-arrow-up-right"></i>
+									</div>
+								</a>
+							</router-link>
+							<hr>
+							<router-link :to="{name:'infoContrat', params:{id:openedElement.id, idContrat:openedElement.oContrat.id}}" v-slot="{navigate,href}" custom>
+								<a :href="href" @click="navigate" class="list-group-item list-group-item-action d-flex justify-content-between mb-1">
+									<div class="d-flex flex-column align-items-start">
+										<span>{{openedElement.oFonction.nom}} <span>(Cadre)</span></span>
+										<span class="text-success">depuis le {{entrydate2}}</span>
+										<span class="mb-2">Contrat à durée indéterminée (3 avenants)</span> 
+										<div class="text-success">
+											<span>. Avenant depuis le {{entrydate2}}</span>
+										</div>
+										<div class="text-muted">
+											<span>. Avenant du {{entrydate2}}</span>
+										</div>
+										<div class="text-muted">
+											<span>. Avenant du {{entrydate2}}</span>
+										</div>
+									</div>
+									<div class="d-flex align-items-center">
+										<i class="bi bi-arrow-up-right"></i>
+									</div>
+								</a>
+							</router-link>
+						</div>
 					</div>
-					<hr>
-					mlqsjfmljqm
+				</div>
 				</div>
 			</div>	
-			{{openedElement}}
+			{{openedElement.oContrat}}
 			
-					
-			<!-- <div class="row">
-				<h1 class="fw-light">{{openedElement.oPersonne.prenom}} {{openedElement.oPersonne.nom}}</h1>
-				<h2 class="fw-light">!!{{openedElement.oFonction.nom}}</h2>
-				<p class="lead text-muted">Structure {{openedElement.structure}} Id. #{{openedElement.id}}</p>
-				<div class="row justify-content-center" v-if="openedElement.oPersonne">
-					<span>{{openedElement.oPersonne.tel1.numero}}</span>
-					<span>{{openedElement.oPersonne.mail1.adresse}}</span>
-					<button class="btn btn-primary col-1 m-1"><i class="bi bi-envelope"></i></button>
-					<button class="btn btn-primary col-1 m-1"><i class="bi bi-telephone-outbound-fill"></i></button>
-				</div>
-			</div> -->
-			<!--<div v-else>
-			<div v-if="pending.extendedData">Chargement en cours...</div>
-			<div v-else class="text-danger">Erreur dans le chargement des données.</div>
-			</div>
-			-->
 		</section>
-	<!-- fin entête fiche personnel-->
-
-
-
-		
-		
-
-	<!-- DEBUT accordion avec Coordonnées, informations personnelles et contrats de travail-->
-		<!-- <div class="row"> -->
-			<!-- <div class="col-sm-12 col-xl-6">
-				<div class="accordion my-2">
-					<div class="accordion-item" id="accordionContact">
-						<p class="accordion-header" id="Contact">
-							<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseContact" aria-expanded="false" aria-controls="collapseInfo">
-								Coordonnées  
-							</button>
-						</p>
-						<div id="collapseContact" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionContact">
-							<div class="accordion-body list-group-flush">
-								<a href="#" class="list-group-item list-group-item-action" v-if="openedElement.oPersonne">
-									<div class="d-flex flex-row justify-content-start">
-										<span class="col-1"><i class="bi bi-telephone-outbound-fill"></i></span>
-										<span class="col"> {{openedElement.oPersonne.tel1.numero}}</span>
-									</div>
-								</a>
-								<a href="#" class="list-group-item list-group-item-action" v-if="openedElement.oPersonne">
-									<div class="d-flex flex-row justify-content-start">
-										<span class="col-1"><i class="bi bi-telephone-outbound-fill"></i></span>
-										<span class="col">{{openedElement.oPersonne.tel2.numero}}</span>
-									</div>
-								</a>
-								<a href="#"  class="list-group-item list-group-item-action" v-if="openedElement.oPersonne">
-									<div class="d-flex flex-row justify-content-start">
-										<span class="col-1"><i class="bi bi-envelope"></i></span>
-										<span class="col">{{openedElement.oPersonne.mail1.adresse}}</span>
-									</div>
-								</a>
-								<a href="#"  class="list-group-item list-group-item-action" v-if="openedElement.oPersonne">
-									<div class="d-flex flex-row justify-content-start">
-										<span class="col-1"><i class="bi bi-envelope"></i></span>
-										<span class="col">{{openedElement.oPersonne.mail2.adresse}}</span>
-									</div>AddPhoneNumber
-								<a href="#"  class="list-group-item list-group-item-action" v-if="openedElement.oPersonne">
-									<div class="d-flex flex-row justify-content-start">
-										<span class="col-1"><i class="bi bi-house"></i></span>
-										<span class="col">{{openedElement.oPersonne.adresse.adresse}}</span>
-									</div>
-								</a>
-								
-							</div>
-						</div>
-					</div>
-				</div>
-			</div> -->
-			
-			
-			<!-- <div class="col-sm-12 col-xl-6">
-				<div class="accordion my-2">
-					<div class="accordion-item" id="accordionContrats">
-						<p class="accordion-header" id="Contrats">
-							<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseContrats" aria-expanded="false" aria-controls="collapseContrats">
-							Contrats de travail
-							</button>
-						</p>
-						<div id="collapseContrats" class="accordion-collapse collapse show" aria-labelledby="headingThree" data-bs-parent="#accordionContrats">
-							<div class="accordion-body">								
-								<div class="list-group-flush">
-									<a href="" class="list-group-item list-group-item-action">
-										<div class="text-primary"><span class="text-success text-nowrap">Développeur et Gourou Fullstack Senior</span></div>
-										<div><i class="bi bi-file-text"></i><span class="m-1">CDI 22/04/2022<i class="bi bi-arrow-right m-1"></i>N.D.</span></div>
-									</a>
-									<a href="" class="list-group-item list-group-item-action">
-										<div><span class="text-muted text-nowrap">Créateur d'API</span></div>
-										<div><i class="bi bi-file-text"></i><span class="text-muted m-1">CDD 13/04/2020<i class="bi bi-arrow-right m-1"></i>terminé le 12/04/2022</span></div>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div> -->
-			<!-- <div class="row justify-content-center">
-				<div class="col-2">
-					<img src="../assets/facewoman.png" class="img-fluid rounded-5 rounded-circle"  alt="photo identité de l'agent">
-				</div>
-			</div> -->
-			<!-- fin documents joints au dossier -->
-		<!-- </div> -->
-	<!-- FIN accordion avec Coordonnées, informations personnelles et contrats de travail et docts joints au dossier-->
-
-
-	<!-- Fin de l'interface -->
-    
 
 	<!-- Ne pas toucher -->
         <router-view></router-view>
@@ -305,6 +228,7 @@
 import {mapState} from 'vuex'
 import UserImage from '../components/pebble-ui/UserImage.vue';
 import date from 'date-and-time';
+import fr from 'date-and-time/locale/fr'
 
 export default {
     data() {
@@ -318,8 +242,26 @@ export default {
         ...mapState(["openedElement"]),
 
 		birthdate() {
+			date.locale(fr);
 			return date.format(new Date(this.openedElement.oPersonne.dn)  , 'DD-MM-YYYY')
+		},
+		entrydate() {
+			date.locale(fr);
+			return date.format(new Date(this.openedElement.dentree)  , 'DD-MM-YYYY')
+		}, 
+		entrydate2() {
+			date.locale(fr);
+			return date.format(new Date(this.openedElement.dentree)  , 'DD MMM YYYY')
+		}, 
+		exitdate() {
+			date.locale(fr);
+			return date.format(new Date(this.openedElement.dsortie)  , 'DD-MM-YYYY')
+		},
+		exitdate2() {
+			date.locale(fr);
+			return date.format(new Date(this.openedElement.dsortie)  , 'DD MMM YYYY')
 		}
+		
     },
     methods: {
 
