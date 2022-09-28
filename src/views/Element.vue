@@ -213,7 +213,8 @@
 				</div>
 				</div>
 			</div>	
-			{{openedElement.oContrat}}
+			
+			
 			
 		</section>
 
@@ -325,7 +326,7 @@ export default {
         this.$store.dispatch("load", this.$route.params.id);
         this.loadData(this.$route.params.id);
     },
-    components: { UserImage, }
+    components: { UserImage,}
 }
 
 </script>

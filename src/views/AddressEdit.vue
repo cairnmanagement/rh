@@ -1,5 +1,5 @@
 <template>
-    <AppModal title="Ajouter une adresse postale" size="md" @modal-hide="routeToParent()" :submitBtn="true" :deleteBtn="true">
+    <AppModal title="Ajouter une adresse postale" size="md" @modal-hide="routeToParent()" :submitBtn="true" :cancelBtn="true">
         <add-postal-address></add-postal-address>
     </AppModal>
 </template>

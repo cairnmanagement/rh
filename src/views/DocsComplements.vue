@@ -436,11 +436,7 @@
 	</div>
 <!--fin de projet de vue du dossier agent-->
 </div>
-<div class="container">
-    <div v-for="abs in listabsence" :key="'absence'+abs.id">
-		test api absence {{abs.dc}}
-    </div> 
-</div> 
+
 
 </template>
 <script>
@@ -449,6 +445,7 @@
 		data() {
 			return {
 				listabsence: [],
+				dataTest:[]
 					
 				}
 				
@@ -458,6 +455,18 @@
 		
 	
 		methods: {
+
+			DisplayListTest() {
+				let apiUrl = 'structurePersonnel/GET/mari';
+				this.$app.apiGet(apiUrl)
+				.then( (data) => {
+					this.dataTest = data;
+					console.log(this.dataTest)
+				})
+				.catch(this.$app.catchError);
+			},
+
+
 			DisplayList() {
 				let apiUrl = 'structurePersonnel/GET/'+561+'/absence';
 				this.$app.apiGet(apiUrl)
@@ -470,6 +479,7 @@
 		},
 		mounted() {
 			this.DisplayList();
+			this.DisplayListTest();
 		},   
 	}
 		

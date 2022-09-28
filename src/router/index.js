@@ -30,30 +30,22 @@ const routes = [
   //   component: () => import(/* webpackChunkName: "about" */ '../views/.vue')
   // },
   // {
-    //   path: '/personnel/:id/contrat/:idContrat/edit',
-    //   name: 'formContrat',
+    //   path: '/personnel/extract',
+    //   name: 'configList',
     //   // route level code-splitting
     //   // this generates a separate chunk (about.[hash].js) for this route
     //   // which is lazy-loaded when the route is visited.
     //   component: () => import(/* webpackChunkName: "about" */ '../views/.vue')
     // },
-    // {
-      //   path: '/personnel/extract',
-      //   name: 'configList',
-      //   // route level code-splitting
-      //   // this generates a separate chunk (about.[hash].js) for this route
-      //   // which is lazy-loaded when the route is visited.
-      //   component: () => import(/* webpackChunkName: "about" */ '../views/.vue')
-      // },
-      
-      
-      
-      {
-        path: '/personnel-actif',
-        name: 'PersonnelActif',
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
+    
+    
+    
+    {
+      path: '/personnel-actif',
+      name: 'PersonnelActif',
+      // route level code-splitting
+      // this generates a separate chunk (about.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
         component: () => import(/* webpackChunkName: "about" */ '../views/PersonnelActif.vue')
       },
       {
@@ -139,13 +131,22 @@ const routes = [
             component: () => import(/* webpackChunkName: "about" */ '../views/AddressEdit.vue')
           },
           {
-              path: '/personnel/:id/contrat/:idContrat',
-              name: 'infoContrat',
-              //Affichage des informations d’un contrat dans une boite modale au-dessus de la fiche personnel.
+            path: '/personnel/:id/contrat/:idContrat',
+            name: 'infoContrat',
+            //Affichage des informations d’un contrat dans une boite modale au-dessus de la fiche personnel.
+            // route level code-splitting
+            // this generates a separate chunk (about.[hash].js) for this route
+            // which is lazy-loaded when the route is visited.
+            component: () => import(/* webpackChunkName: "about" */ '../views/ContractConsult.vue')
+          
+          },
+          {
+              path: '/personnel/:id/contrat/:idContrat/edit',
+              name: 'EditContrat',
               // route level code-splitting
               // this generates a separate chunk (about.[hash].js) for this route
               // which is lazy-loaded when the route is visited.
-              component: () => import(/* webpackChunkName: "about" */ '../views/ContractConsult.vue')
+              component: () => import(/* webpackChunkName: "about" */ '../views/ContractEdit.vue')
             },
             
         

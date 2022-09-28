@@ -1,5 +1,5 @@
 <template>
-    <AppModal title="Ajouter un numéro de téléphone" size="md" @modal-hide="routeToParent()" :submitBtn="true" :deleteBtn="true">
+    <AppModal title="Ajouter un numéro de téléphone" size="md" @modal-hide="routeToParent()" :submitBtn="true" :cancelBtn="true">
         <AddPhoneNumber></AddPhoneNumber>
     </AppModal>
 </template>

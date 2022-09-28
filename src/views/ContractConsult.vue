@@ -1,6 +1,6 @@
 <template>
-    <AppModal :title="'contrat numéro:this.route.params.id'" size="lg" @modal-hide="routeToParent()" >
-        <contract-consultation/>
+    <AppModal :title="'Contrat de travail' " size="lg" @modal-hide="routeToParent()" >
+            <contract-consultation/>
     </AppModal>
 </template>
 <script>
