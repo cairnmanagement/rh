@@ -54,49 +54,108 @@
 		<template v-slot:list>
 			
 			<AppMenu v-if="$route.path == '/' || $route.path == '/tous'">
-				
-				<div class="btn-group sticky-top m-2">
-					<!-- recherche dinamyque dans la liste affichée -->
+				<app-menu-item>
+
+					<div class="btn-group  m-2">
+						<!-- recherche dinamyque dans la liste affichée -->
 					<div class="search-wrapper input-group me-1">
 						<span   class="input-group-text" ><i class="bi bi-search"></i></span>
 						<input v-model="search" type="text" class="form-control" placeholder="recherche" aria-label="Username" aria-describedby="recherche">
 					</div>
 				</div>
-					<div class="dropdown">
-						<button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
-							<i class="bi bi-filter"></i>
-						</button>
-						<ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-							<li>
-								<select class="form-select mb-2" aria-label="Default select example">
-									<option selected value="0">Tous</option>
-									<option value="1">En contrat</option>
-									<option value="2">Hors contrat</option>
-								</select>
-							</li>
-							<li>
-								<select class="form-select mb-2" aria-label="Default select example">
-									<option selected value="0">Tous</option>
-									<option value="1">Avec matricule</option>
-									<option value="2">Sans matricule</option>
-								</select>
-							</li>
-							<li>
-								<select class="form-select mb-2" aria-label="Default select example">
-									<option selected value="0">Tous</option>
-									<option value="1">Employable</option>
-									<option value="2">Non employable</option>
-								</select>
-							</li>
-							<li>
-								<button class="btn btn-sm btn-outline-primary">appliquer</button>
-							</li>
-
+						<div class="">
+							<div class="d-flex flex-inline">
+								<button class="btn btn-light" type="button" id="dropdownMenu" data-bs-toggle="dropdown" >
+									<i class="bi bi-filter"></i>
+								</button>
+								<div class="d-flex flex-inline flex-wrap">
+									<p class="mx-1"> <span class="badge bg-info">hors contrat<i class="bi bi-x-lg ms-1"></i></span></p>
+									<p class="mx-1"> <span class="badge bg-info">immatriculé<i class="bi bi-x-lg ms-1"></i></span></p>
+									<p class="mx-1"> <span class="badge bg-info">non archivé<i class="bi bi-x-lg ms-1"></i></span></p>
+								</div>
+							</div>
+						</div>
+						<ul class="list-group">
+							<div class="list-group-item d-flex flex-inline">
+								<div class="border-end  border-primary">
+									<div class="form-check">
+										<input class="form-check-input" type="radio" name="contratRadio" id="contratOui" >
+										<label class="form-check-label" for="contratOui">
+											Contrat
+										</label>
+									</div>
+									<div class="form-check">
+										<input class="form-check-input" type="radio" name="contratRadio" id="contratNon">
+										<label class="form-check-label" for="contratNon">
+											Hors contrat
+										</label>
+									</div>
+								</div>
+								
+								<div class="border-end border-primary mx-1">
+									
+									<div class="form-check">
+										<input class="form-check-input" type="radio" name="matriculeRadio" id="matriculeRadio2">
+										<label class="form-check-label" for="matriculeRadio2">
+											Matricule
+										</label>
+									</div>
+									<div class="form-check">
+										<input class="form-check-input" type="radio" name="matriculeRadio" id="matriculeRadio3">
+										<label class="form-check-label" for="matriculeRadio3">
+											Sans matricule
+										</label>
+									</div>
+								</div>
+								
+								<div class="border-end border-primary me-1">
+									
+									<div class="form-check">
+										<input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
+										<label class="form-check-label" for="flexRadioDefault2">
+											Archivés
+										</label>
+									</div>
+									<div class="form-check">
+										<input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
+										<label class="form-check-label" for="flexRadioDefault2">
+											Non archivés
+										</label>
+									</div>
+								</div>
+							</div>
+							<li class="list-group-item d-flex justify-content-end"><button class="btn btn-outline-primary btn-sm">Appliquer</button></li>
 						</ul>
-					</div>
-				<div class="wrapper">
-					<AppMenuItem :href="'/personnel/'+personnel.id" v-for="personnel in filterElements" :key="personnel.id">
-						<div class="d-flex align-items-center justify-content-between">
+						
+					</app-menu-item>
+						<div class="card ms-1">
+							<div class=" d-flex flex-inline">
+								<div class="input-group">
+									<button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">contrat ?</button>
+									<ul class="dropdown-menu">
+										<li><a class="dropdown-item" href="#">OUI</a></li>
+										<li><a class="dropdown-item" href="#">NON</a></li>
+									</ul>
+								</div>
+								<div class="input-group">
+									<button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">matricule ?</button>
+									<ul class="dropdown-menu">
+										<li><a class="dropdown-item" href="#">OUI</a></li>
+										<li><a class="dropdown-item" href="#">NON</a></li>
+									</ul>
+								</div>
+								<div class="input-group">
+									<button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">archivé ?</button>
+									<ul class="dropdown-menu">
+										<li><a class="dropdown-item" href="#">OUI</a></li>
+										<li><a class="dropdown-item" href="#">NON</a></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					<div class="wrapper">
+						<AppMenuItem :href="'/personnel/'+personnel.id" v-for="personnel in filterElements" :key="personnel.id">
+							<div class="d-flex align-items-center justify-content-between">
 							<div class="d-flex align-items-center">
 								<div class="me-2">
 									<UserImage :name="personnel.cache_nom" />
@@ -133,41 +192,7 @@
 					<input v-model="search" type="text" class="form-control" placeholder="Rechercher dans la liste" aria-label="Username" aria-describedby="recherche">
 				</div>
 				
-				<div class="" role="group">
-					<form action="" class="form-control">
-
-					<div class="dropdown">
-						<button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenu3" data-bs-toggle="dropdown" aria-expanded="false">
-							contrat
-						</button>
-						<ul class="dropdown-menu" aria-labelledby="dropdownMenu3">
-							<li><button class="dropdown-item" type="button">tous</button></li>
-							<li><button class="dropdown-item" type="button">contrats en cours</button></li>
-							<li><button class="dropdown-item" type="button">hors contrat</button></li>
-						</ul>
-					</div>
-					<div class="dropdown">
-						<button class="btn btn-outline-secondary dropdown-toggle m-4" type="button" id="dropdownMenu4" data-bs-toggle="dropdown" aria-expanded="false">
-							matricule
-						</button>
-						<ul class="dropdown-menu" aria-labelledby="dropdownMenu4">
-							<li><button class="dropdown-item" type="button">tous</button></li>
-							<li><button class="dropdown-item" type="button">immatriculés</button></li>
-							<li><button class="dropdown-item" type="button">sans matricule</button></li>
-						</ul>
-					</div>
-					<div class="dropdown">
-						<button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenu5" data-bs-toggle="dropdown" aria-expanded="false">
-							blacklist
-						</button>
-						<ul class="dropdown-menu" aria-labelledby="dropdownMenu5">
-							<li><button class="dropdown-item" type="button">tous</button></li>
-							<li><button class="dropdown-item" type="button">blacklisté</button></li>
-							<li><button class="dropdown-item" type="button">non blacklistés</button></li>
-						</ul>
-					</div>
-					</form>
-				</div>
+				
 				<div class="wrapper">
 
 					<AppMenuItem :href="'/personnel/'+el.id" icon="bi bi-file-person" v-for="el in filterElements" :key="el.id">
@@ -201,6 +226,245 @@
 				</div>
 			</AppMenu>
 			<AppMenu v-else-if="$route.path == '/docs-complements'">
+				<AppMenuItem>
+
+					<div class="card bg-primary m-2">
+					<ul class="list-group">
+						<li class="list-group-item">
+							<div class="d-flex flex-inline">
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="contratRadio" id="contratRadio1" checked>
+									<label class="form-check-label" for="contratRadio1">
+									Tous
+									</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="contratRadio" id="contratRadio2" >
+									<label class="form-check-label" for="contratRadio2">
+									Contrat
+									</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="contratRadio" id="contratRadio3">
+									<label class="form-check-label" for="contratRadio3">
+									Hors contrat
+									</label>
+								</div>
+							</div>
+						</li>
+						<li class="list-group-item">
+							<div class="d-flex flex-inline">
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="matriculeRadio" id="matriculeRadio1" checked >
+									<label class="form-check-label" for="matriculeRadio1">
+									Tous
+									</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="matriculeRadio" id="matriculeRadio2">
+									<label class="form-check-label" for="matriculeRadio2">
+									Matricule
+									</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="matriculeRadio" id="matriculeRadio3">
+									<label class="form-check-label" for="matriculeRadio3">
+									Sans matricule
+									</label>
+								</div>
+							</div>
+						</li>
+						<li class="list-group-item">
+							<div class="d-flex flex-inline">
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+									<label class="form-check-label" for="flexRadioDefault1">
+									Tous
+									</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+									<label class="form-check-label" for="flexRadioDefault2">
+									Archivés
+									</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+									<label class="form-check-label" for="flexRadioDefault2">
+									Non archivés
+									</label>
+								</div>
+							</div>
+						</li>
+						<li class="list-group-item d-flex justify-content-end"><button class="btn btn-outline-primary btn-sm">Appliquer</button></li>
+					</ul>
+				</div>
+				</AppMenuItem>
+				<div class="card bg-primary m-2">
+					<ul class="list-group">
+						<li class="list-group-item">
+							<div class="d-flex flex-inline">
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="contratRadio" id="contratRadio1" checked>
+									<label class="form-check-label" for="contratRadio1">
+									Tous
+									</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="contratRadio" id="contratRadio2" >
+									<label class="form-check-label" for="contratRadio2">
+									Contrat
+									</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="contratRadio" id="contratRadio3">
+									<label class="form-check-label" for="contratRadio3">
+									Hors contrat
+									</label>
+								</div>
+							</div>
+						</li>
+						<li class="list-group-item">
+							<div class="d-flex flex-inline">
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="matriculeRadio" id="matriculeRadio1" checked >
+									<label class="form-check-label" for="matriculeRadio1">
+									Tous
+									</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="matriculeRadio" id="matriculeRadio2">
+									<label class="form-check-label" for="matriculeRadio2">
+									Matricule
+									</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="matriculeRadio" id="matriculeRadio3">
+									<label class="form-check-label" for="matriculeRadio3">
+									Sans matricule
+									</label>
+								</div>
+							</div>
+						</li>
+						<li class="list-group-item">
+							<div class="d-flex flex-inline">
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+									<label class="form-check-label" for="flexRadioDefault1">
+									Tous
+									</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+									<label class="form-check-label" for="flexRadioDefault2">
+									Archivés
+									</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+									<label class="form-check-label" for="flexRadioDefault2">
+									Non archivés
+									</label>
+								</div>
+							</div>
+						</li>
+						<li class="list-group-item d-flex justify-content-end"><button class="btn btn-outline-primary btn-sm">Appliquer</button></li>
+					</ul>
+				</div>
+					<ul class="list-group">
+						<li class="list-group-item d-flex flex-inline">
+							<div class=" dropdown bg-light">
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="contratRadio" id="contratRadio1" checked>
+									<label class="form-check-label" for="contratRadio1">
+									Tous
+									</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="contratRadio" id="contratRadio2" >
+									<label class="form-check-label" for="contratRadio2">
+									Contrat
+									</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="contratRadio" id="contratRadio3">
+									<label class="form-check-label" for="contratRadio3">
+									Hors contrat
+									</label>
+								</div>
+							</div>
+							
+							<div class="dropdown">
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="matriculeRadio" id="matriculeRadio1" checked >
+									<label class="form-check-label" for="matriculeRadio1">
+									Tous
+									</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="matriculeRadio" id="matriculeRadio2">
+									<label class="form-check-label" for="matriculeRadio2">
+									Matricule
+									</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="matriculeRadio" id="matriculeRadio3">
+									<label class="form-check-label" for="matriculeRadio3">
+									Sans matricule
+									</label>
+								</div>
+							</div>
+							
+							<div class="dropdown">
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+									<label class="form-check-label" for="flexRadioDefault1">
+									Tous
+									</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+									<label class="form-check-label" for="flexRadioDefault2">
+									Archivés
+									</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+									<label class="form-check-label" for="flexRadioDefault2">
+									Non archivés
+									</label>
+								</div>
+							</div>
+						</li>
+						<li class="list-group-item d-flex justify-content-end"><button class="btn btn-outline-primary btn-sm">Appliquer</button></li>
+					</ul>
+					<ul class="list-group">
+						<li class="list-group-item d-flex flex-inline">
+							<div class="input-group mb-3">
+								<button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">contrat</button>
+									<ul class="dropdown-menu">
+										<li><a class="dropdown-item" href="#">OUI</a></li>
+										<li><a class="dropdown-item" href="#">NON</a></li>
+									</ul>
+							</div>
+							<div class="input-group mb-3">
+								<button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">matricule</button>
+									<ul class="dropdown-menu">
+										<li><a class="dropdown-item" href="#">OUI</a></li>
+										<li><a class="dropdown-item" href="#">NON</a></li>
+									</ul>
+							</div>
+							<div class="input-group mb-3">
+								<button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">archivés</button>
+									<ul class="dropdown-menu">
+										<li><a class="dropdown-item" href="#">OUI</a></li>
+										<li><a class="dropdown-item" href="#">NON</a></li>
+									</ul>
+							</div>
+							
+						</li>
+					</ul>
+				
 				
 				<AppMenuItem :href="'/'" icon="bi bi-file-text"><strong class="search">Ambre Gaveau </strong><br><span class="text-success">OPS support et réseaux</span><br><span>CDD 10/10/2021<i class="bi bi-arrow-right m-1"></i>31-07-2023</span><br></AppMenuItem>
 				<AppMenuItem :href="'/'" icon="bi bi-file-text"><strong class="search">Sébastien Héligon</strong><br><span class="text-success">Développeur Web</span><br><span>CDD 11/09/2021<i class="bi bi-arrow-right m-1"></i>10-09-2023</span><br></AppMenuItem>

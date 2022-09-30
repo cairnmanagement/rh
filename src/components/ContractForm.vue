@@ -2,7 +2,7 @@
     <div>
 		<form>
             <div class="row">
-                <span>contrat {{openedElement.oContrat.id}}</span>
+                <p>Contrat {{openedElement.oContrat.id}}</p>
                 <h3>{{openedElement.cache_nom}}</h3>
             </div>
             <hr>
@@ -21,12 +21,12 @@
 				</div>
                 </div>
                 
-                <!-- <h3 class="mb-3" :class="{'text-muted':!contrat.contrat_duree_indeterminee}">
+                <div class="mb-3" :class="{'text-muted':!contrat.contrat_duree_indeterminee}">
                     <div class="form-check form-switch">
-                        <label class="form-check-label" for="contratDureeIndeterminee">CDI/CDD</label>
+                        <label class="form-check-label" for="contratDureeIndeterminee">Contrat à durée indéterminée</label>
                         <input class="form-check-input" type="checkbox" role="switch" id="contratDureeIndeterminee" name="contrat_duree_indeterminee" value="1" v-model="contrat.contrat_duree_indeterminee">
                     </div>
-                </h3> -->
+                </div>
                 <div class="row g-2 mb-3">
                     <div class="col">
                         <label for="dateEntree" class="form-label">Date d'entrée</label>
@@ -69,12 +69,12 @@
                 </div>
 			</div>
             <hr>
-			<h4 class="mb-3 text-start" :class="{'text-muted':!contrat.forfait_jour}">Contrat au forfait jour
+			<div class="mb-3 text-start" :class="{'text-muted':!contrat.forfait_jour}">
                 <div class="form-check form-switch text-start">
-					<label class="form-check-label" for="forfaitJour"></label>
+					<label class="form-check-label" for="forfaitJour">Contrat au forfait jour</label>
 					<input class="form-check-input" type="checkbox" role="switch" id="forfaitJour" name="forfait_jour" value="1" v-model="contrat.forfait_jour">
 				</div>
-            </h4>
+            </div>
 			<div class="row g-2 mb-3" v-if="contrat.forfait_jour">
 				<div class="col">
 					<label for="nbParSemaine" class="form-label">Nb unité semaine</label>
