@@ -1,8 +1,8 @@
 <template>
-    <div>
+    <div class="card">
         <div class="card-body">
             <h3>Évolution des effectifs</h3>
-            <div id="curve_chart"></div>
+            <div id="curve_chart" style="width: 99%"></div>
         </div>
     </div>
 </template>
@@ -68,23 +68,32 @@
                 chart.draw(visData, options);
             },
     
-            /**
-             * Charge un Chart google c
-             */
-            loadChart() {
-                let el = document.getElementById('curve_chart');
-                if (typeof el !== 'undefined') {
-                    GoogleCharts.load(this.drawChart);
-                }
-            }
+            // /**
+            //  * Charge un Chart google c
+            //  */
+            // loadChart() {
+            //     let el = document.getElementById('curve_chart');
+            //     if (typeof el !== 'undefined') {
+            //         GoogleCharts.load(this.drawChart);
+            //     }
+            // }
+        },
+        // watch: {
+
+        //     window.addEventListener ('resize', this.drawChart)
+
+        // },
+
+        beforeUnmount() {
+            window.removeEventListener("resize", this.drawChart);
         },
     
-        updated() {
-            this.loadChart();
-        },
+        // updated() {
+        //     this.drawChart();
+        // },
     
         mounted() {
-            this.loadChart();
+            // window.addEventListener ("resize", this.drawChart);
             GoogleCharts.load(this.drawChart);
             window.addEventListener("resize", this.drawChart);
         }

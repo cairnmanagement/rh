@@ -371,7 +371,7 @@
 		methods: {
 
 			DisplayListTest() {
-				let apiUrl = 'structurePersonnel/GET/mari';
+				let apiUrl = 'structurePersonnel/GET/list';
 				console.log('app', this.$app);
 				this.$app.apiGet(apiUrl)
 				.then( (data) => {

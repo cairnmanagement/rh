@@ -82,7 +82,7 @@ const routes = [
       },
       {
         path: '/personnel/:id',
-        name: 'Element',
+        name: 'Personnel',
         component: () => import(/* webpackChunkName: "about" */ '../views/Element.vue'),
         children: [
           {

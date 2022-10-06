@@ -1,15 +1,43 @@
 <template>
     <div>
-        <form method="post" class="border-bottom d-flex">
+        <form method="post" class="border-bottom d-flex" @submit.prevent="searchList()">
             <div class="input-group mb-3">
-                <input  type="text" class="form-control" placeholder="rechercher" >
-                <button @click="searchNom()" class="btn btn-outline-secondary input-group-text" ><i class="bi bi-search"></i></button>
-                <button @click.prevent="searchOptions = !searchOptions"  :class="filterButtonClass()" class="btn  input-group-text"><i class="bi bi-filter"></i> <span v-if="filterCheck"> VAR</span> </button>
+                <input  type="text" class="form-control" placeholder="rechercher" v-model="searchOptions.q" >
+                <button class="btn btn-outline-secondary input-group-text" type="submit"><i class="bi bi-search"></i></button>
+                <button @click.prevent="searchForm = !searchForm" type="button" :class="filterButtonClass()" class="btn  input-group-text"><i class="bi bi-filter"></i> <span v-if="filterCheck"> VAR</span> </button>
             </div>
         </form>
 					
-					<div v-if="searchOptions" id="searchOptions" class="card">
-						<div class="card-body form-group">
+					<div v-if="searchForm" id="searchOptions">
+
+                            <div class="mb-3">
+                                <label class="form-label">Contrat</label>
+                                <div class="btn-group d-flex" role="group">
+                                    <input type="radio" class="btn-check" name="actif" id="btnSearchActifTrue" autocomplete="off" value="1" v-model="searchOptions.actif">
+                                    <label class="btn btn-outline-secondary" for="btnSearchActifTrue">Actif</label>
+    
+                                    <input type="radio" class="btn-check" name="actif" id="btnSearchActifFalse" autocomplete="off" value="0" v-model="searchOptions.actif">
+                                    <label class="btn btn-outline-secondary" for="btnSearchActifFalse">Inactif</label>
+    
+                                    <input type="radio" class="btn-check" name="actif" id="btnSearchActifNull" autocomplete="off" value="null" v-model="searchOptions.actif">
+                                    <label class="btn btn-outline-secondary" for="btnSearchActifNull">Tous</label>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Matricule</label>
+                                <div class="btn-group d-flex" role="group">
+                                    <input type="radio" class="btn-check" name="matricule_status" id="btnSearchMatriculeStatusTrue" autocomplete="off" value="1" v-model="searchOptions.matricule_status">
+                                    <label class="btn btn-outline-secondary" for="btnSearchMatriculeStatusTrue">Avec</label>
+    
+                                    <input type="radio" class="btn-check" name="matricule_status" id="btnSearchMatriculeStatusFalse" autocomplete="off" value="0" v-model="searchOptions.matricule_status">
+                                    <label class="btn btn-outline-secondary" for="btnSearchMatriculeStatusFalse">Sans</label>
+    
+                                    <input type="radio" class="btn-check" name="matricule_status" id="btnSearchMatriculeStatusNull" autocomplete="off" value="null" v-model="searchOptions.matricule_status">
+                                    <label class="btn btn-outline-secondary" for="btnSearchMatriculeStatusNull">Tous</label>
+                                </div>
+                            </div>
+
 							<div class="form-row d-flex justify-content-between mx-2 mb-2">
 								<input type="radio" class="btn-check" name="contrat" id="sousContrat" autocomplete="off">
 								<label class="btn btn-sm btn-outline-secondary" for="sousContrat">Sous contrat</label>
@@ -33,37 +61,11 @@
 							</div>
 							<hr>
 							<div class="form-group  d-grid">
-								<button  type="submit" class="btn btn-primary">
+								<button  type="button" class="btn btn-primary" @click.prevent="searchList()">
 									<i class="bi bi-check-lg me-1"></i>
 									Appliquer
 								</button>
 							</div>
-                        </div>
-                    </div>
-                    <div class="card m-3">
-                        <div class="form-group  d-grid m-4">
-                            <button @click.prevent="searchList()" type="submit" class="btn btn-primary">
-                                <i class="bi bi-check-lg me-1"></i>
-                                test tri list
-                            </button>
-                        </div>
-                    </div>
-                    <div v-if="newList" class="card-body">
-                        <h4>Nouvelle liste</h4>
-
-                        <AppMenuItem :href="'/personnel/'+personnel.id" v-for="personnel in dataList" :key="personnel.id">
-                            <div class="d-flex align-items-center justify-content-between">
-                                <div class="d-flex align-items-center">
-                                    <div class="me-2">
-                                        <UserImage :name="personnel.cache_nom" />
-                                    </div>
-                                    <div>
-                                        {{personnel.cache_nom}}
-
-                                    </div>
-                                </div>
-                            </div>
-                        </AppMenuItem>
                     </div>
                 </div>
 					
@@ -90,8 +92,6 @@
     
 </template>
 <script>
-    import AppMenuItem from './pebble-ui/AppMenuItem.vue';
-    import UserImage from './pebble-ui/UserImage.vue';
     
     export default {
         props: {
@@ -100,10 +100,14 @@
     
         data() {
             return {
-                searchOptions: false,
-                filterCheck: false,
-                newList: false,
-                dataList:[],
+                searchForm: false,
+                searchOptions: {
+                    actif: "1",
+                    matricule_status: "null",
+                    archived: "0",
+                    q: ""
+                },
+                filterCheck: false
             }
         },
         methods: {
@@ -121,26 +125,27 @@
 
             searchList() {
                 this.filterCheck = true;
-                this.searchOptions = false;
-                let apiUrl = 'structurePersonnel/GET/list?actif=true';
-                this.$app.apiGet(apiUrl)
-                    .then((data) => {
-                        this.dataList = data;
-                        this.newList = 1;
-                        console.log('test searchList',this.dataList);
-                    })
-                    .catch ('erreur test searchList', this.$app.catchError);
+
+                let search = {};
+
+                for (const key in this.searchOptions) {
+                    if (this.searchOptions[key] != 'null') {
+                        search[key] = this.searchOptions[key];
+                    }
+                }
+
+                let apiUrl = 'structurePersonnel/GET/list';
+                this.$app.apiGet(apiUrl, search)
+                .then((data) => {
+                    this.$store.dispatch('refreshElements', {
+                        action: 'replace',
+                        elements: data
+                    });
+                })
+                .catch(this.$app.catchError);
 
             },
 
-            
-        },
-
-        components: {
-            AppMenuItem,UserImage,
-        },
-    
-        beforeMount() {
             
         }
     }

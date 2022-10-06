@@ -1,6 +1,7 @@
 <template>
     <div class="row row-cols-1 row-cols-lg-2 g-3">
         <div class="col">
+        
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex align-items-center justify-content-between">
