@@ -54,8 +54,9 @@
 		<template v-slot:list>
 			
 			<AppMenu v-if="$route.path == '/' || $route.path == '/tous' || $route.name =='Personnel'">
+				<AppMenuItem>
 				<search-personnel></search-personnel>
-					
+			</AppMenuItem>
 					<div class="wrapper">
 						<AppMenuItem :href="'/personnel/'+personnel.id" v-for="personnel in filterElements" :key="personnel.id">
 							<div class="d-flex align-items-center justify-content-between">

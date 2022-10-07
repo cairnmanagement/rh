@@ -82,9 +82,9 @@
 									</button>
 									<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="addRessource">
 										<li>
-											<router-link :to="{name:'ressourcePhone', params:{id:openedElement.id, idPhone:openedElement.oPersonne.tel1.id}}" v-slot="{navigate,href}" custom>
-												<a class="dropdown-item" :href="href" @click="navigate">Téléphone</a>
-											</router-link>
+											<!-- <router-link :to="{name:'ressourcePhone', params:{id:openedElement.oPersonne.tel1.id}}" v-slot="{navigate,href}" custom> -->
+												<!-- <a class="dropdown-item" :href="href" @click="navigate">Téléphone</a> -->
+											<!-- </router-link> -->
 										</li>
 										<li>
 											<router-link :to="{name:'ressourceMail', params:{id:openedElement.id, idMail:openedElement.oPersonne.mail1.id}}" v-slot="{navigate,href}" custom>
@@ -103,62 +103,58 @@
 							</div>
 						</div>
 						<ul class="list-group list-group-flush">
-							<li v-if="openedElement.oPersonne.tel1.numero" class="list-group-item d-flex align-items-baseline">
-								<div class="me-3"><i class="bi bi-phone"></i></div>
-								<div class="flex-fill">
-									<div class="d-flex align-items-center justify-content-between">
-										<a :href="'tel:'+openedElement.oPersonne.tel1.numero" class="text-decoration-none">{{openedElement.oPersonne.tel1.numero}}</a>
-										<div>
-											<button class=" btn btn-sm btn-link text-black-50 me-2"><i class="bi bi-pencil"></i></button>
-											<button class="btn btn-sm btn-link text-black-50"><i class="bi bi-trash3"></i></button>
-										</div>
-									</div>
-								</div>
-							</li>
-							<li v-if="openedElement.oPersonne.mail1.adresse" class="list-group-item d-flex align-items-baseline">
-								<div class="me-3"><i class="bi bi-envelope"></i></div>
-								<div class="d-flex flex-column flex-fill" >
-									<div class="d-flex align-items-center justify-content-between">
-										<a :href="'mail'+openedElement.oPersonne.mail1.adresse" class="text-decoration-none">{{openedElement.oPersonne.mail1.adresse}}</a>
-										<div>
-											<button class=" btn btn-sm btn-link text-black-50 me-2"><i class="bi bi-pencil"></i></button>
-											<button class="btn btn-sm btn-link text-black-50"><i class="bi bi-trash3"></i></button>
-										</div>
-									</div>
-									<div class="d-flex align-items-center justify-content-between" v-if="openedElement.oPersonne.mail2.adresse">
-										<a :href="'mail'+openedElement.oPersonne.mail2.adresse" class="text-decoration-none">{{openedElement.oPersonne.mail2.adresse}}</a>
-										<div>
-											<button class=" btn btn-sm btn-link text-black-50 me-2"><i class="bi bi-pencil"></i></button>
-											<button class="btn btn-sm btn-link text-black-50"><i class="bi bi-trash3"></i></button>
-										</div>
-									</div>
-								</div>
-							</li>
 							
-							<li v-if="openedElement.oPersonne.adresse" class="list-group-item d-flex align-items-baseline">
+							<li v-if="!openedElement.oPersonne.telephones" class="list-group-item d-flex align-items-between text-warning">Pas de numéro de téléphone enregistré</li>
+							<li v-else class="list-group-item d-flex align-items-baseline">
+								<div class="me-3"><i class="bi bi-phone"></i></div>
+								<div class="d-flex flex-column flex-fill">
+									<div v-for="item in openedElement.oPersonne.telephones" :key="item.id" class="d-flex flex-row align-items-center justify-content-between">
+										<a :href="'tel'+item.numero" class="text-decoration-none">{{item.numero}}</a>
+										<span v-if="item.type" class="badge bg-secondary">{{item.type}}</span>
+										<div>
+											<router-link :to="{name:'ressourcePhone', params:{id:openedElement.id, idPhone:item.id}}" v-slot="{navigate,href}" custom>
+												<a @click="navigate" :href="href" class=" btn btn-sm btn-light rounded-pill me-2"><i class="bi bi-pencil"></i></a>
+											</router-link>
+											<a class="btn btn-sm btn-light rounded-pill text-black-50"><i class="bi bi-trash3"></i></a>
+										</div>
+									</div>
+								</div>
+							</li>
+							<li v-if="!openedElement.oPersonne.emails" class="list-group-item d-flex align-items-between text-warning">Pas d'adresse email enregistrée</li>
+							<li v-else class="list-group-item d-flex align-items-baseline">
+								<div class="me-3"><i class="bi bi-envelope"></i></div>
+								<div class="d-flex flex-column flex-fill">
+									<div v-for="item in openedElement.oPersonne.emails" :key="item.id" class="d-flex flex-row align-items-center justify-content-between">
+											<a :href="'mail'+item.adresse" class="text-decoration-none">{{item.adresse}}</a>
+										<span v-if="item.type" class="badge bg-secondary">{{item.type}}</span>
+										<div>
+										<router-link :to="{name:'ressourceMail', params:{id:openedElement.id, idMail:item.id}}" v-slot="{navigate,href}" custom>
+											<a @click="navigate" :href="href" class=" btn btn-sm btn-light rounded-pill me-2"><i class="bi bi-pencil"></i></a>
+										</router-link>
+
+											<a class="btn btn-sm btn-light rounded-pill text-black-50"><i class="bi bi-trash3"></i></a>
+										</div>
+									</div>
+								</div>
+							</li>
+
+							
+							<li  v-for="item in openedElement.oPersonne.adresses" :key="item.id" class="list-group-item d-flex align-items-baseline">
 									<div class="me-3"><i class="bi bi-geo-alt"></i></div>
 									<div class="d-flex flex-column flex-fill" >
 										<div class="d-flex align-items-center justify-content-between">
-											<span class="text-muted">Contrat</span>
+											<span v-if="item.type" class="text-muted">{{item.type}}</span>
+											<span v-else class="text-muted">Contractuelle</span>
 											<div>
-												<button class=" btn btn-sm btn-link text-black-50 me-2"><i class="bi bi-pencil"></i></button>
-												<button class="btn btn-sm btn-link text-black-50"><i class="bi bi-trash3"></i></button>
+												<router-link :to="{name:'ressourceAddress', params:{id:openedElement.id, idAdress:item.id}}" v-slot="{navigate,href}" custom>
+													<a @click="navigate" :href="href" class=" btn btn-sm btn-light rounded-pill me-2"><i class="bi bi-pencil"></i></a>
+												</router-link>
+												<a class="btn btn-sm btn-light rounded-pill text-black-50"><i class="bi bi-trash3"></i></a>
 											</div>
 										</div>
 										<div class="d-flex flex-column align-items-start justify-content-between">
-											<span>{{openedElement.oPersonne.adresse.voie}}</span>
-											<span>{{openedElement.oPersonne.adresse.cp}} {{openedElement.oPersonne.adresse.localite}}</span>
-										</div>
-										<div class="d-flex align-items-center justify-content-between">
-											<span class="text-muted">Domicile</span>
-											<div>
-												<button class=" btn btn-sm btn-link text-black-50 me-2"><i class="bi bi-pencil"></i></button>
-												<button class="btn btn-sm btn-link text-black-50"><i class="bi bi-trash3"></i></button>
-											</div>
-										</div>
-										<div class="d-flex flex-column align-items-start justify-content-between">
-											<span>{{openedElement.oPersonne.adresse.voie}}</span>
-											<span>{{openedElement.oPersonne.adresse.cp}} {{openedElement.oPersonne.adresse.localite}}</span>
+											<span>{{item.voie}}</span>
+											<span>{{item.cp}} {{item.localite}}</span>
 										</div>
 									</div>
 							</li>
@@ -211,6 +207,15 @@
 						</div>
 					</div>
 				</div>
+				
+				
+				<div class="card">
+					{{openedElement.oPersonne.adresses}}
+				</div>
+				<div class="card">
+					{{openedElement.oContrat}}
+				</div>
+				
 				</div>
 			</div>	
 			
@@ -237,6 +242,7 @@ export default {
             pending: {
                 extendedData: true
             }
+			
         };
     },
     computed: {
@@ -293,6 +299,7 @@ export default {
 						personnelData.extendedData = true;
 						this.$store.dispatch("refreshOpened", personnelData);
 						this.pending.extendedData = false;
+						console.log('result api', personnelData)
 					})
 						.catch(this.$app.catchError);
 				}
