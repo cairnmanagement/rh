@@ -53,42 +53,50 @@
 
 		<template v-slot:list>
 			
-			<AppMenu v-if="$route.path == '/' || $route.path == '/tous' || $route.name =='Personnel'">
+			<AppMenu v-if="$route.path == '/' || $route.path == '/tous' ||  $route.name =='Personnel'">
 				<AppMenuItem>
-				<search-personnel></search-personnel>
-			</AppMenuItem>
+					<search-personnel></search-personnel>
+				</AppMenuItem>
 					<div class="wrapper">
 						<AppMenuItem :href="'/personnel/'+personnel.id" v-for="personnel in filterElements" :key="personnel.id">
 							<div class="d-flex align-items-center justify-content-between">
-							<div class="d-flex align-items-center">
-								<div class="me-2">
-									<UserImage :name="personnel.cache_nom" />
+								<div class="d-flex align-items-center">
+									<div class="me-2">
+										<UserImage :name="personnel.cache_nom" />
+									</div>
+									<div class="align-items-center justify-content-between">
+										<div class="d-flex justify-content-between align-items-center"> {{personnel.cache_nom}}</div>
+									</div>
 								</div>
-								<!--
-									Un seul bloc utile. Utiliser une méthode pour générer le libeller. La méthode reprend les 3 conditions
-									- !dentree (= "Sans contrat")
-									- dsortie < date du jour (new Date()) (= "terminé le")
-									- sinon : (= "depuis le...")
-									La méthode est appelée dans l'élément html comme suit :
-									<div>{{personnelContratLabel(personnel) }}</div>
-								-->
-								<div class="align-items-center justify-content-between" v-if="!personnel.dsortie">
-									<div class="d-flex justify-content-between align-items-center"> {{personnel.cache_nom}}</div>
-									<!-- <div>CDI depuis le {{ formatDateFr(personnel.dentree)}}</div> -->
-								</div>
-								<div class="align-items-center justify-content-between" v-else-if="personnel.dsortie < '2022-03-09 00:00:00'">
-									<div class="d-flex justify-content-between align-items-center">{{personnel.cache_nom}}</div>
-									<!-- <div>CDD terminé le {{ formatDateFr(personnel.dsortie)}}</div> -->
-								</div>
-								<div class="align-items-center justify-content-between" v-else>
-									<div class="d-flex justify-content-between align-items-center">{{personnel.cache_nom}}</div>
-									<!-- <div>CDD depuis le {{ formatDateFr(personnel.dentree)}}</div> -->
-								</div>
+								
+									<!--
+										Un seul bloc utile. Utiliser une méthode pour générer le libeller. La méthode reprend les 3 conditions
+										- !dentree (= "Sans contrat")
+										- dsortie < date du jour (new Date()) (= "terminé le")
+										- sinon : (= "depuis le...")
+										La méthode est appelée dans l'élément html comme suit :
+										<div>{{personnelContratLabel(personnel) }}</div>
+									-->
+									<!-- <div class="align-items-center justify-content-between" v-if="!personnel.dsortie">
+										<div class="d-flex justify-content-between align-items-center"> {{personnel.cache_nom}}</div>
+										<div>CDI depuis le {{ formatDateFr(personnel.dentree)}}</div>
+									</div>
+									<div class="align-items-center justify-content-between" v-else-if="personnel.dsortie < '2022-03-09 00:00:00'">
+										<div class="d-flex justify-content-between align-items-center">{{personnel.cache_nom}}</div>
+										<div>CDD terminé le {{ formatDateFr(personnel.dsortie)}}</div>
+									</div>
+									<div class="align-items-center justify-content-between" v-else>
+										<div class="d-flex justify-content-between align-items-center">{{personnel.cache_nom}}</div>
+										<div>CDD depuis le {{ formatDateFr(personnel.dentree)}}</div>
+									</div> -->
+									<!-- <span v-if="personnel.dsortie =='0000-00-00 00:00:00'">pas de date sortie</span> -->
+								<i class="rounded-circle bg-dark" style="width:8px; height:8px;"></i>
 							</div>
-							<i class="rounded-circle bg-success" style="width:8px; height:8px;"></i>
-						</div>
-					</AppMenuItem>
-				</div>
+						</AppMenuItem>
+					</div>
+					<div>
+						{{filterElements}}
+					</div>
 			</AppMenu>
 			<AppMenu v-else-if="$route.path == '/personnel-actif'">
 				<div class="search-wrapper input-group sticky-top">

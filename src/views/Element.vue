@@ -24,11 +24,14 @@
 							</div>
 							<h3>{{openedElement.oPersonne.prenom}} {{openedElement.oPersonne.nom}}</h3>
 							<div class="align-items-center justify-content-between" >
-								<div class="d-flex align-items-center justify-content-between">
-									{{ formatDateFr(openedElement.dentree)}} > {{formatDateFr(openedElement.dsortie)}}
-									<span v-if="openedElement.dentree <= '2019-12-31 00:00:00'" class="badge bg-warning">inactif</span> 
+								<div class="d-flex align-items-center justify-content-center">
+									<span v-if="openedElement.oContrat.duree_indeterminee == 'OUI'">CDI depuis le {{formatDateFr(openedElement.dentree)}}</span>
+									<span v-if="openedElement.oContrat.duree_indeterminee == 'NON'">CDD jusqu'au {{formatDateFr(openedElement.dsortie)}}</span>
+
+									<!-- {{ formatDateFr(openedElement.dentree)}} > {{formatDateFr(openedElement.dsortie)}} -->
+									<!-- <span v-if="openedElement.dentree <= '2019-12-31 00:00:00'" class="badge bg-warning">inactif</span> 
 									<span v-else-if="openedElement.dentree > '2019-12-31 00:00:00'" class="badge bg-success">actif</span> 
-									<span v-else class="badge bg-danger">Erreur</span>
+									<span v-else class="badge bg-danger">Erreur</span> -->
 								</div>
 							</div>
 						</div>
@@ -209,13 +212,21 @@
 				</div>
 				
 				
-				<div class="card">
-					{{openedElement.oPersonne.adresses}}
-				</div>
-				<div class="card">
+				<div class="row">
+					<div class="col-12">
+
+						<div class="card">
+					<h5>oContrat</h5>
 					{{openedElement.oContrat}}
 				</div>
+					</div>
+
+				</div>
 				
+				<div class="card">
+					<h5>openedElement</h5>
+					{{openedElement}}
+				</div>
 				</div>
 			</div>	
 			

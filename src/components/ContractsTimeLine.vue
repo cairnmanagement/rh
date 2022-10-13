@@ -68,15 +68,20 @@
                 chart.draw(visData, options);
             },
     
-            // /**
-            //  * Charge un Chart google c
-            //  */
-            // loadChart() {
-            //     let el = document.getElementById('curve_chart');
-            //     if (typeof el !== 'undefined') {
-            //         GoogleCharts.load(this.drawChart);
-            //     }
-            // }
+            /**
+             * Charge un  diagramme
+             */
+            loadChart() {
+                let el = document.getElementById('curve_chart');
+                if (typeof el !== 'undefined') {
+                    GoogleCharts.load(this.drawChart);
+                }
+            }
+        },
+
+        updated() {
+
+            this.loadChart();
         },
         // watch: {
 
@@ -84,18 +89,21 @@
 
         // },
 
-        beforeUnmount() {
-            window.removeEventListener("resize", this.drawChart);
-        },
+        // beforeUnmount() {
+        //     window.removeEventListener("resize", this.drawChart);
+        // },
     
         // updated() {
         //     this.drawChart();
         // },
+
+        
     
         mounted() {
+            this.loadChart();
             // window.addEventListener ("resize", this.drawChart);
-            GoogleCharts.load(this.drawChart);
-            window.addEventListener("resize", this.drawChart);
+            // GoogleCharts.load(this.drawChart);
+            // window.addEventListener("resize", this.drawChart);
         }
     }
     </script>

@@ -10,23 +10,26 @@
 					</button>
 				</div>
 			</HeaderToolbar>
-			<div class="card">
-				<h1 class="my-3">Module de gestion du personnel</h1>
-				<div class="mb-3">
-					<StaffManagementCard :display-mode="displayMode"/>
-				</div>
-				<div class="row">
-					<div class="col">
-						<ContractsTimeLine/>
-					</div>
-				</div>
-				<hr>
+			<div class="container">
 				
-			</div> 
-			<router-view/>
-			
+				<div class="">
+					<h1 class="my-3 ms-2">Module de gestion du personnel</h1>
+					<div class="row mb-3">
+						<StaffManagementCard :display-mode="displayMode"/>
+					</div>
+					<div class="row mb-3">
+						<div class="col">
+							<ContractsTimeLine/>
+						</div>
+					</div>
+					<hr>
+					
+				</div> 
+				<!-- <router-view/> -->
+			</div>	
 		</div>
 	</div>
+
 <!-- fin de modif-->
 </template>
 

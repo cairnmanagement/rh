@@ -4,9 +4,14 @@
             <div class="input-group mb-3">
                 <input  type="text" class="form-control" placeholder="rechercher" v-model="searchOptions.q" >
                 <button class="btn btn-outline-secondary input-group-text" type="submit"><i class="bi bi-search"></i></button>
-                <button @click.prevent="searchForm = !searchForm" type="button" :class="filterButtonClass()" class="btn  input-group-text"><i class="bi bi-filter"></i> <span v-if="filterCheck"> VAR</span> </button>
+                <button @click.prevent="searchForm = !searchForm" type="button" :class="filterButtonClass()" class="btn  input-group-text"><i class="bi bi-filter"></i> <span v-if="filterCheck">{{filterNumber}}</span> </button>
             </div>
         </form>
+        <div class="card">
+            <span v-if="searchOptions">Critères actifs de la recherche</span>
+        
+        </div>
+
         <div v-if="searchForm" id="searchOptions">
             <div class="mb-3">
                 <label class="form-label">Contrat</label>
@@ -38,13 +43,13 @@
                 <label class="form-label">Archivé</label>
                 <div class="btn-group d-flex" role="group">
                     <input type="radio" class="btn-check" name="archived_status" id="btnSearchArchivedStatusTrue" autocomplete="off" value="1" v-model="searchOptions.archived_status">
-                    <label class="btn btn-outline-secondary" for="btnSearcharchivedStatusTrue">Oui</label>
+                    <label class="btn btn-outline-secondary" for="btnSearchArchivedStatusTrue">Oui</label>
 
                     <input type="radio" class="btn-check" name="archived_status" id="btnSearchArchivedStatusFalse" autocomplete="off" value="0" v-model="searchOptions.archived_status">
-                    <label class="btn btn-outline-secondary" for="btnSearcharchivedStatusFalse">Non</label>
+                    <label class="btn btn-outline-secondary" for="btnSearchArchivedStatusFalse">Non</label>
 
                     <input type="radio" class="btn-check" name="archived_status" id="btnSearchArchivedStatusNull" autocomplete="off" value="null" v-model="searchOptions.archived_status">
-                    <label class="btn btn-outline-secondary" for="btnSearchMatriculeStatusNull">Tous</label>
+                    <label class="btn btn-outline-secondary" for="btnSearchArchivedStatusNull">Tous</label>
                 </div>
             </div>
             <hr>
@@ -113,10 +118,11 @@
                 searchOptions: {
                     actif: "1",
                     matricule_status: "null",
-                    archived: "0",
+                    archived_status: "null",
                     q: ""
                 },
-                filterCheck: false
+                filterCheck: false,
+                filterNumber: 0
             }
         },
         methods: {
@@ -128,8 +134,9 @@
             filterButtonClass() {
                 let type = this.filterCheck ? 'warning' : 'secondary';
                 let outline = this.searchOptions ? 'outline-': 'outline-';
-
                 return 'btn-'+outline+type;
+
+                //return 'btn-'+outline+type;
             }, 
 
             searchList() {
@@ -140,6 +147,7 @@
                 for (const key in this.searchOptions) {
                     if (this.searchOptions[key] != 'null') {
                         search[key] = this.searchOptions[key];
+                        console.log('search', this.searchOptions);
                     }
                 }
 
@@ -148,10 +156,13 @@
                 .then((data) => {
                     this.$store.dispatch('refreshElements', {
                         action: 'replace',
-                        elements: data
+                        elements: data,
                     });
                 })
-                .catch(this.$app.catchError);
+                .catch(this.$app.catchError)
+				.finally(() => this.searchForm = false);
+
+                // this.searchForm = false;
 
 
             },

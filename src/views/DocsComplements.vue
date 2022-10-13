@@ -343,6 +343,7 @@
 				</div>
 			</div>
 			<div>
+				{{tabStats}}
 				{{dataTest}}
 				{{listabsence}}
 			</div>
@@ -359,7 +360,8 @@
 		data() {
 			return {
 				listabsence: [],
-				dataTest:[]
+				dataTest:[],
+				tabStats: [],
 					
 				}
 				
@@ -391,10 +393,21 @@
 				})
 				.catch(this.$app.catchError);
 			},
+
+			DisplayStats (){
+				let apiUrl = 'structurePersonnel/GET/stats';
+				this.$app.apiGet(apiUrl)
+				.then((data) => {
+					this.tabStats = data;
+					console.log(this.tabStats);
+				})
+				.catch(this.$app.catchError);
+			}
 		},
 		mounted() {
 			this.DisplayList();
 			this.DisplayListTest();
+			this.DisplayStats();
 		},   
 	}
 		

@@ -10,6 +10,9 @@
                             <a :href="href" @click="navigate" class="btn btn-light">Nouveau<i class="bi bi-plus-lg ms-1"></i></a>
                         </router-link>
                     </div>
+                    <div>
+                        {{tabStats}}
+                    </div>
                     <PersonalList/>
                 </div>
             </div>
@@ -44,16 +47,33 @@ export default {
 
     data() {
 		return {
-			chartMode: false
+			chartMode: false,
+            tabStats:{}
 		}
 	},
+
+    methods:{
+        DisplayStats (){
+            let apiUrl = 'structurePersonnel/GET/stats';
+            this.$app.apiGet(apiUrl)
+            .then((data) => {
+                this.tabStats = data;
+                console.log('staff',this.tabStats);
+            })
+            .catch(this.$app.catchError);
+        }
+
+    },
 
     
     computed: {
         displayMode() {
                 return this.chartMode ? 'chart' : 'list';
         },
+    },
 
+    mounted() {
+        this.DisplayStats();
     },
 
 
