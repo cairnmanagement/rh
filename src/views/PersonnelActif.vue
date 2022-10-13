@@ -1,5 +1,11 @@
 <template>
-<div class="container">
+    
+    <div class="mb-3">
+        <structure-contrat-form></structure-contrat-form>
+    </div>
+    <div class="mb-3">
+        <structure-personnel-form></structure-personnel-form>
+    </div>
     <div class="card mb-3">
         <h3> personnel actif: zone de test et affichage</h3>
     </div>
@@ -14,15 +20,6 @@
                 this.$route.params.id
             </div>
     </div>
-    <div class="mb-3">
-        <structure-contrat-form></structure-contrat-form>
-    </div>
-    <div class="mb-3">
-        <structure-personnel-form></structure-personnel-form>
-        </div>
-
-        
-</div>  
 </template>
 <script>
 import StructureContratForm from '../components/StructureContratForm.vue';

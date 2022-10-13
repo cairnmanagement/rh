@@ -1,13 +1,17 @@
 <template>
     <div class="row row-cols-1 row-cols-lg-2 g-3">
         <div class="col">
+        
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex align-items-center justify-content-between">
                         <h3>12! personnels actifs</h3>
                         <router-link :to="{name:'PersonnelNew'}" v-slot="{navigate,href}" custom>
-                            <a :href="href" @click="navigate" class="btn btn-lg btn-light">Ajouter<i class="bi bi-plus-lg ms-1"></i></a>
+                            <a :href="href" @click="navigate" class="btn btn-light">Nouveau<i class="bi bi-plus-lg ms-1"></i></a>
                         </router-link>
+                    </div>
+                    <div>
+                        {{tabStats}}
                     </div>
                     <PersonalList/>
                 </div>
@@ -43,16 +47,33 @@ export default {
 
     data() {
 		return {
-			chartMode: false
+			chartMode: false,
+            tabStats:{}
 		}
 	},
+
+    methods:{
+        DisplayStats (){
+            let apiUrl = 'structurePersonnel/GET/stats';
+            this.$app.apiGet(apiUrl)
+            .then((data) => {
+                this.tabStats = data;
+                console.log('staff',this.tabStats);
+            })
+            .catch(this.$app.catchError);
+        }
+
+    },
 
     
     computed: {
         displayMode() {
                 return this.chartMode ? 'chart' : 'list';
         },
+    },
 
+    mounted() {
+        this.DisplayStats();
     },
 
 

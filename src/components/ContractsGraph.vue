@@ -16,7 +16,7 @@ export default {
     
     data() {
         return {
-            displayMode: false
+            displayMode: 'chart'
         }
     },
 

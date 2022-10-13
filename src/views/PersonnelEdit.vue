@@ -1,7 +1,7 @@
 <template>
     <AppModal :title="this.$route.params.id ?'Modification Contact' :'Nouveau Contact'" size="lg" @modal-hide="routeToParent()" :submitBtn="true" :cancelBtn="true">
         <ContactForm></ContactForm>
-</AppModal>
+    </AppModal>
 </template>
 <script>
 import AppModal from '../components/pebble-ui/AppModal.vue';

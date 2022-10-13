@@ -27,6 +27,13 @@
 <script>
 
     export default {
+        
+        data() {
+        return {
+            displayMode: false
+        }
+    },
+
 
 
 

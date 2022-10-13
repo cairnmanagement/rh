@@ -132,6 +132,28 @@ export default createStore({
 		 */
 		tmpElement(state, data) {
 			state.tmpElement = data;
+		},
+
+		/**
+		 * Met à jour les informations d'une ressource sur le personnel ouvert.
+		 * 
+		 * @param {Object} state State de VueX
+		 * @param {Object} ressourceOptions 
+		 * - ressource		Nom de la ressource : telephones, emails, adresses
+		 * - data			Données à mettre à jour
+		 */
+		personnelRessource(state, ressourceOptions) {
+			let key = ressourceOptions.ressource;
+			let data = ressourceOptions.data;
+
+			let ressource = state.openedElement.oPersonne[key].find(e => e.id == data.id);
+
+			if (ressource) {
+				for (const k in data) {
+					ressource[k] = data[k];
+				}
+			}
+			else state.openedElement.oPersonne[key].push(data);
 		}
 	},
 	actions: {
@@ -212,6 +234,18 @@ export default createStore({
 		logout(context) {
 			context.commit('setLogin', null);
 			context.commit('setStructures', []);
+		},
+
+		/**
+		 * Met à jour les informations d'une ressource liée au personnel dans le store
+		 * 
+		 * @param {Object} context Instance VueX
+		 * @param {Object} ressourceOptions Données à enregistrer sur le store
+		 * - ressource			telephones, emails, adresses
+		 * - data				objet contenant les informations à actualiser
+		 */
+		updateRessource(context, ressourceOptions) {
+			context.commit('personnelRessource', ressourceOptions);
 		}
 	},
 	modules: {

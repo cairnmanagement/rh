@@ -1,99 +1,10 @@
 <template>
 <div>
-	<div class="container">
-<!--modale edition téléphone	 -->
-			<h3>Ajouter un numéro de téléphone</h3>
-			<div class="row g-2">
-				<div class="col mb-3">
-				<label for="type" class="form-label me-3">Type:</label>
-				<div class="form-check form-check-inline">
-					<input class="form-check-input" type="radio" name="typemail" id="inlineCheckbox1" value="option1">
-					<label class="form-check-label" for="inlineCheckbox1">Professionnel</label>
-				</div>
-				<div class="form-check form-check-inline">
-					<input class="form-check-input" type="radio" name="typemail" id="inlineCheckbox2" value="option2">
-					<label class="form-check-label" for="inlineCheckbox2">Personnel</label>
-				</div>
-				</div>
-			</div>
-			<div class="row g-2">
-				<div class="col mb-3">
-                    <label for="tel" class="form-label">Numéro</label>
-                    <input type="tel" class="form-control" id="tel" name="tel">
-                </div>
-			</div>
-<!-- modale edition adresse mail -->
-			<h3>Ajouter une adresse mail</h3>
-			<div class="row g-2">
-				<div class="col mb-3">
-				<label for="type" class="form-label me-3">Type:</label>
-				<div class="form-check form-check-inline">
-					<input class="form-check-input" type="radio" name="typemail" id="inlineCheckbox1" value="option1">
-					<label class="form-check-label" for="inlineCheckbox1">Professionnelle</label>
-				</div>
-				<div class="form-check form-check-inline">
-					<input class="form-check-input" type="radio" name="typemail" id="inlineCheckbox2" value="option2">
-					<label class="form-check-label" for="inlineCheckbox2">Personnelle</label>
-				</div>
-				</div>
-			</div>
-			<div class="row g-2">
-				<div class="col mb-3">
-                    <label for="mail" class="form-label">Adresse mail</label>
-                    <input type="mail" class="form-control" id="mail" name="mail">
-                </div>
-			</div>
-<!-- modale edition adresse -->
-			<h3>Ajouter une adresse postale</h3>
-			<div class="row g-2">
-				<div class="col mb-3">
-				<label for="type" class="form-label me-3">Type:</label>
-				<div class="form-check form-check-inline">
-					<input class="form-check-input" type="radio" name="typeadress" id="inlineCheckbox1" value="option1">
-					<label class="form-check-label" for="inlineCheckbox1">Contrat</label>
-				</div>
-				<div class="form-check form-check-inline">
-					<input class="form-check-input" type="radio" name="typeadress" id="inlineCheckbox2" value="option2">
-					<label class="form-check-label" for="inlineCheckbox2">Domicile</label>
-				</div>
-				</div>
-			</div>
-            <div class="row g-2">
-                <div class="col-2 mb-3">
-                    <label for="voie_numero" class="form-label">n°</label>
-                    <input type="number" class="form-control" id="voie_numero" name="voieNumero">
-                </div>
-                <div class="col mb-3">
-                    <label for="voie" class="form-label">Voie</label>
-                    <input type="text" class="form-control" id="voie_nom" name="voie">
-                </div>
-            </div>
-			<div class="row g-2">
-				<div class="col mb-3">
-                    <label for="localite" class="form-label">Complément</label>
-                    <input type="text" class="form-control" id="complement" name="complement">
-                </div>
-			</div>
-            <div class="row g-2">
-                <div class="col-3 mb-3">
-                    <label for="code_postal" class="form-label">Code postal</label>
-                    <input type="number" class="form-control" id="code_postal" name="cp">
-                </div>
-                <div class="col mb-3">
-                    <label for="localite" class="form-label">Localité</label>
-                    <input type="text" class="form-control" id="localite" name="localite">
-                </div>
-            </div> 
-			<div class="row g-2">
-				<div class="col mb-3">
-                    <label for="localite" class="form-label">Pays</label>
-                    <input type="text" class="form-control" id="pays" name="pays">
-                </div>
-			</div>	
-<!-- fin modale edition adresse -->
+	<div class="card">
+
 
 <!--projet de vue du dossier agent-->
-		<h3>Projet dosssier agent</h3>
+		<h3 class="m-2">Projets dossier agent</h3>
 		<div class="album py-2 bg-light">
 			<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
 				<div class="col">
@@ -313,7 +224,7 @@
 	<hr>
 	<div>
 		sauvegarde
-		<div class="accordion my-2 col-sm-12 col-xl-6">
+		<div class="accordion my-2 col-sm-12">
 				<div class="accordion-item" id="accordionDocuments">
 					<p class="accordion-header" id="Documents">
 						<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDocuments" aria-expanded="false" aria-controls="collapseDocuments">
@@ -431,16 +342,16 @@
 					</div>
 				</div>
 			</div>
-			
+			<div>
+				{{tabStats}}
+				{{dataTest}}
+				{{listabsence}}
+			</div>
 
 	</div>
 <!--fin de projet de vue du dossier agent-->
 </div>
-<div class="container">
-    <div v-for="abs in listabsence" :key="'absence'+abs.id">
-		test api absence {{abs.dc}}
-    </div> 
-</div> 
+
 
 </template>
 <script>
@@ -449,6 +360,8 @@
 		data() {
 			return {
 				listabsence: [],
+				dataTest:[],
+				tabStats: [],
 					
 				}
 				
@@ -458,6 +371,19 @@
 		
 	
 		methods: {
+
+			DisplayListTest() {
+				let apiUrl = 'structurePersonnel/GET/list';
+				console.log('app', this.$app);
+				this.$app.apiGet(apiUrl)
+				.then( (data) => {
+					this.dataTest = data;
+					console.log(this.dataTest);
+				})
+				.catch(this.$app.catchError);
+			},
+
+
 			DisplayList() {
 				let apiUrl = 'structurePersonnel/GET/'+561+'/absence';
 				this.$app.apiGet(apiUrl)
@@ -467,9 +393,21 @@
 				})
 				.catch(this.$app.catchError);
 			},
+
+			DisplayStats (){
+				let apiUrl = 'structurePersonnel/GET/stats';
+				this.$app.apiGet(apiUrl)
+				.then((data) => {
+					this.tabStats = data;
+					console.log(this.tabStats);
+				})
+				.catch(this.$app.catchError);
+			}
 		},
 		mounted() {
 			this.DisplayList();
+			this.DisplayListTest();
+			this.DisplayStats();
 		},   
 	}
 		
