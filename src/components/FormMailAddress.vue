@@ -1,19 +1,19 @@
 <template>
-    <div v-if="mailEdit">
+    <div v-if="mail">
             <div class="row g-2">
                 <div class="col mb-3">
                     <label for="type" class="form-label">Type:</label>
-                    <select class="form-select" v-model="mailEdit.type">
+                    <select class="form-select" v-model="type">
                         <option selected></option>
-                        <option value="1">Personnel</option>
-                        <option value="2">Professionnel</option>
+                        <option value="Personnel">Personnel</option>
+                        <option value="Professionnel">Professionnel</option>
                     </select>
                 </div>
             </div>
             <div class="row g-2">
                 <div class="col mb-3">
-                    <label for="mail" class="form-label">Adresse mail</label>
-                    <input type="mail" class="form-control" id="mail" name="mail" v-model="mailEdit.adresse">
+                    <label for="email" class="form-label">Adresse mail</label>
+                    <input type="mail" class="form-control" id="adressemail" name="email" v-model="adresse">
                 </div>
             </div>
     </div>   
@@ -27,16 +27,40 @@
     
             mail: Object
         },
+
+        emits: ['edit-type', 'edit-adresse'],
     
         data() {
     
             return {
-                mailEdit: null
+                type: null,
+                adresse: null
             }
         },
+
+        watch: {
+        /**
+         * Envoie un événement à l'élément parent lorsque le type est modifié.
+         * 
+         * @param {String} newVal Nouveau type
+         */
+        type(newVal) {
+            this.$emit('edit-type', newVal);
+        },
+
+        /**
+         * Envoie un événement à l'élément parent lorsque l'adresse mail est  modifiée.
+         * 
+         * @param {String} newVal Nouvelle adresse mail
+         */
+        adresse(newVal) {
+            this.$emit('edit-adresse', newVal);
+        }
+    },
     
         mounted() {
-            this.mailEdit = JSON.parse(JSON.stringify(this.mail))
+            this.type = this.mail.type;
+            this.adresse = this.mail.adresse
         }
     }
     

@@ -128,13 +128,12 @@
 								<div class="me-3"><i class="bi bi-envelope"></i></div>
 								<div class="d-flex flex-column flex-fill">
 									<div v-for="item in openedElement.oPersonne.emails" :key="item.id" class="d-flex flex-row align-items-center justify-content-between">
-											<a :href="'mail'+item.adresse" class="text-decoration-none">{{item.adresse}}</a>
-										<span v-if="item.type" class="badge bg-secondary">{{item.type}}</span>
+										<a :href="'mail'+item.adresse" class="text-decoration-none">{{item.adresse}}{{item.type}}</a>
+										<span v-if="item.type" class="badge bg-secondary">{{item.type}}BBB</span>
 										<div>
-										<router-link :to="{name:'ressourceMail', params:{id:openedElement.id, idMail:item.id}}" v-slot="{navigate,href}" custom>
-											<a @click="navigate" :href="href" class=" btn btn-sm btn-light rounded-pill me-2"><i class="bi bi-pencil"></i></a>
-										</router-link>
-
+											<router-link :to="{name:'ressourceMail', params:{id:openedElement.id, idMail:item.id}}" v-slot="{navigate,href}" custom>
+												<a @click="navigate" :href="href" class=" btn btn-sm btn-light rounded-pill me-2"><i class="bi bi-pencil"></i></a>
+											</router-link>
 											<a class="btn btn-sm btn-light rounded-pill text-black-50"><i class="bi bi-trash3"></i></a>
 										</div>
 									</div>
@@ -161,6 +160,18 @@
 										</div>
 									</div>
 							</li>
+							<div>
+								<p>ressource Phone</p>
+								<p>{{openedElement.oPersonne.telephones}}</p>
+							</div>
+							<div>
+								<p>ressource mail</p>
+								<p>{{openedElement.oPersonne.emails}}</p>
+							</div>
+							<div>
+								<p>ressource adresse postale</p>
+								<p>{{openedElement.oPersonne.adresses}}</p>
+							</div>
 						</ul>
 					</div>
 					<hr>
@@ -223,10 +234,7 @@
 
 				</div>
 				
-				<div class="card">
-					<h5>openedElement</h5>
-					{{openedElement}}
-				</div>
+				
 				</div>
 			</div>	
 			

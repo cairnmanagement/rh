@@ -1,7 +1,19 @@
 <template>
-    <AppModal :title="this.$route.params.idPhone ?'Modification numéro' :'Nouveau numéro'" size="md" @submit="record()" @modal-hide="routeToParent()" :submitBtn="true" :cancelBtn="true" :pending="pending.telephone">
-        <FormPhone :telephone="ressource" @edit-type="editType" @edit-numero="editNumero" v-if="ressource"></FormPhone>
-        <div class="alert-alert-warning" v-else>Aucun élément trouvé</div>
+    <AppModal 
+        :title="this.$route.params.idPhone ?'Modification numéro' :'Nouveau numéro'"
+        size="md" 
+        @submit="record()" 
+        @modal-hide="routeToParent()" 
+        :submitBtn="true" 
+        :cancelBtn="true" 
+        :pending="pending.telephone">
+            <FormPhone
+                :telephone="ressource"
+                @edit-type="editType"
+                @edit-numero="editNumero"
+                v-if="ressource">
+            </FormPhone>
+            <div class="alert alert-warning" v-else>Aucun élément trouvé</div>
     </AppModal>
 </template>
 <script>
@@ -57,7 +69,7 @@ export default {
         },
 
         /**
-         * Enregistre les informations sur la base de données
+         * Enregistre les informations soumises sur la base de données
          */
         record() {
             // Verrouille le status de chargement
@@ -74,6 +86,7 @@ export default {
                     ressource: 'telephones',
                     data
                 });
+                console.log(data)
                 this.routeToParent();
             })
             .catch(this.$app.catchError)

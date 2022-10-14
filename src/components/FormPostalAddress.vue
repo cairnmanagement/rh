@@ -1,13 +1,13 @@
 <template>
-    <div v-if="adresseEdit">
+    <div v-if="adresse">
         
             <div class="row g-2">
                 <div class="col mb-3">
                         <label for="type" class="form-label">Type:</label>
-                        <select class="form-select" v-model="adresseEdit.type">
-                            <option selected></option>
-                            <option value="1">Contrat</option>
-                            <option value="2">Domicile</option>
+                        <select class="form-select" v-model="type">
+                            <option selectedvalue="''"></option>
+                            <option value="Contrat">Contrat</option>
+                            <option value="Domicile">Domicile</option>
                         </select>
                     </div>
             </div>
@@ -15,29 +15,29 @@
                 
                 <div class="col mb-3">
                     <label for="voie" class="form-label">Adresse:  n° et voie</label>
-                    <input type="text" class="form-control" id="voie_nom" name="voie" v-model="adresseEdit.voie">
+                    <input type="text" class="form-control" id="voie" name="voie" v-model="voie">
                 </div>
             </div>
             <div class="row g-2">
                 <div class="col mb-3">
                     <label for="complement" class="form-label">Complément</label>
-                    <input type="text" class="form-control" id="complement" name="complement" v-model="adresseEdit.complement">
+                    <input type="text" class="form-control" id="complement" name="complement" v-model="complement">
                 </div>
             </div>
             <div class="row g-2">
                 <div class="col-3 mb-3">
                     <label for="cp" class="form-label">Code postal</label>
-                    <input type="number" class="form-control" id="code_postal" name="cp" v-model="adresseEdit.cp">
+                    <input type="number" class="form-control" id="cp" name="cp" v-model="cp">
                 </div>
                 <div class="col mb-3">
                     <label for="localite" class="form-label">Localité</label>
-                    <input type="text" class="form-control" id="localite" name="localite" v-model="adresseEdit.localite">
+                    <input type="text" class="form-control" id="localite" name="localite" v-model="localite">
                 </div>
             </div> 
             <div class="row g-2">
                 <div class="col mb-3">
                     <label for="pays" class="form-label">Pays</label>
-                    <input type="text" class="form-control" id="pays" name="pays" v-model="adresseEdit.pays">
+                    <input type="text" class="form-control" id="pays" name="pays" v-model="pays">
                 </div>
             </div>
         
@@ -52,16 +52,71 @@
     
             adresse: Object
         },
+
+        emits: ['edit-type', 'edit-voie', 'edit-complement','edit-cp','edit-localite',],
     
         data() {
     
             return {
-                adresseEdit: null
+                type: null,
+                voie: null,
+                complement: null,
+                cp: null,
+                localite: null,
+                pays: null
             }
         },
-    
+        
+        watch: {
+            /**
+             * Envoie un événement à l'élément parent lorsque le type est modifié.
+             * 
+             * @param {String} newVal Nouveau type
+             */
+            type(newVal) {
+                this.$emit('edit-type', newVal);
+            },
+
+            /**
+             * Envoie un événement à l'élément parent lorsque la voie est modifiée.
+             * 
+             * @param {String} newVal Nouvelle voie
+             */
+            voie(newVal) {
+                this.$emit('edit-voie', newVal);
+            },
+            /**
+             * Envoie un événement à l'élément parent lorsque le complément d'adresse est modifié.
+             * 
+             * @param {String} newVal Nouveau complément d'adresse
+             */
+            complement(newVal) {
+                this.$emit('edit-complement', newVal);
+            },
+            /**
+             * Envoie un événement à l'élément parent lorsque le code postal est modifié.
+             * 
+             * @param {String} newVal Nouveau code postal
+             */
+            cp(newVal) {
+                this.$emit('edit-cp', newVal);
+            },
+            /**
+             * Envoie un événement à l'élément parent lorsque la localité est modifiée.
+             * 
+             * @param {String} newVal Nouvelle localité
+             */
+            localite(newVal) {
+                this.$emit('edit-localite', newVal);
+            },
+            
+        },
         mounted() {
-            this.adresseEdit = JSON.parse(JSON.stringify(this.adresse))
+            this.type = this.adresse.type;
+            this.voie = this.adresse.voie;
+            this.complement = this.adresse.complement;
+            this.cp = this.adresse.cp;
+            this.localite = this.adresse.localite;
         }
     }
     
