@@ -1,12 +1,18 @@
 <template>
     <AppModal 
-        :title="this.$route.params.idMail ?'Modification de l\'adresse mail' :'Nouvelle adresse mail'" 
+        :title="this.$route.params.idMail == 0 ?'Nouvelle adresse mail' :' Modification adresse mail'" 
         size="md"
         @submit="record()" 
         @modal-hide="routeToParent()" 
         :submitBtn="true" 
         :cancelBtn="true">
-            <FormMailAddress :mail="ressource" @edit-type="editType" @edit-adresse="editAdresse" v-if="ressource"></FormMailAddress>
+            <FormMailAddress 
+                :mail="ressource" 
+                @edit-type="editType" 
+                @edit-adresse="editAdresse" 
+                v-if="ressource">
+            </FormMailAddress>
+            
             <div class="alert alert-warning" v-else>Aucun élement trouvé</div>
     </AppModal>
 </template>
@@ -24,7 +30,12 @@ export default {
             pending: {
                 mail: false
             },
-            ressource: null
+            ressource: null,
+
+            defaultRessource: {
+                type: '',
+                adresse: ''
+            }
         }
     },
 
@@ -82,12 +93,12 @@ export default {
             })
             .then((data) => {
                 // Met à jour le store avec les nouvelles informations
-                console.log('avantstore', this.ressource)
+                console.log('avantupdateRessource', this.ressource)
                 this.updateRessource({
                     ressource: 'emails',
                     data
                 });
-                console.log('après Update: data, this ressource',data,this.ressource);
+                console.log('aprèsUpdateDataetressource',data,this.ressource);
                 
                 this.routeToParent();
             })
@@ -108,7 +119,7 @@ export default {
          */
         getRessource(idMail) {
             let ressource = this.openedElement.oPersonne.emails.find(e => e.id == idMail);
-            this.ressource = ressource ? JSON.parse(JSON.stringify(ressource)) : null;
+            this.ressource = ressource ? JSON.parse(JSON.stringify(ressource)) : this.defaultRessource;
             console.log('getRessource', idMail, this.ressource)
         }
     },

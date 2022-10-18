@@ -5,7 +5,7 @@
                 <div class="col mb-3">
                         <label for="type" class="form-label">Type:</label>
                         <select class="form-select" v-model="type">
-                            <option selectedvalue="''"></option>
+                            <option selected ></option>
                             <option value="Contrat">Contrat</option>
                             <option value="Domicile">Domicile</option>
                         </select>
@@ -34,12 +34,12 @@
                     <input type="text" class="form-control" id="localite" name="localite" v-model="localite">
                 </div>
             </div> 
-            <div class="row g-2">
+            <!-- <div class="row g-2">
                 <div class="col mb-3">
                     <label for="pays" class="form-label">Pays</label>
                     <input type="text" class="form-control" id="pays" name="pays" v-model="pays">
                 </div>
-            </div>
+            </div> -->
         
     </div>
 </template>
@@ -53,7 +53,7 @@
             adresse: Object
         },
 
-        emits: ['edit-type', 'edit-voie', 'edit-complement','edit-cp','edit-localite',],
+        emits: ['edit-type', 'edit-voie', 'edit-complement','edit-cp','edit-localite'],
     
         data() {
     
@@ -63,7 +63,6 @@
                 complement: null,
                 cp: null,
                 localite: null,
-                pays: null
             }
         },
         
@@ -117,6 +116,7 @@
             this.complement = this.adresse.complement;
             this.cp = this.adresse.cp;
             this.localite = this.adresse.localite;
+            console.log(this.data)
         }
     }
     

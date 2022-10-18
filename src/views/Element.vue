@@ -85,21 +85,19 @@
 									</button>
 									<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="addRessource">
 										<li>
-											<!-- <router-link :to="{name:'ressourcePhone', params:{id:openedElement.oPersonne.tel1.id}}" v-slot="{navigate,href}" custom> -->
-												<!-- <a class="dropdown-item" :href="href" @click="navigate">Téléphone</a> -->
-											<!-- </router-link> -->
+											<router-link :to="{name:'ressourcePhone', params:{id:openedElement.id, idPhone: 0}}" v-slot="{navigate,href}" custom>
+												<a class="dropdown-item" :href="href" @click="navigate">Téléphone</a>
+											</router-link>
 										</li>
 										<li>
-											<router-link :to="{name:'ressourceMail', params:{id:openedElement.id, idMail:openedElement.oPersonne.mail1.id}}" v-slot="{navigate,href}" custom>
+											<router-link :to="{name:'ressourceMail', params:{id:openedElement.id, idMail: 0}}" v-slot="{navigate,href}" custom>
 												<a class="dropdown-item" :href="href" @click="navigate">Mail</a>
 											</router-link>
 										</li>
 										<li>
-											<router-link :to="{name:'ressourceAddress', params:{id:openedElement.id, idAdress:openedElement.oPersonne.adresse.id}}" v-slot="{navigate,href}" custom>
+											<router-link :to="{name:'ressourceAddress', params:{id:openedElement.id, idAdress: 0}}" v-slot="{navigate,href}" custom>
 												<a class="dropdown-item" :href="href" @click="navigate">Adresse</a>
 											</router-link>
-
-
 										</li>
 									</ul>
 								</div>
@@ -112,13 +110,17 @@
 								<div class="me-3"><i class="bi bi-phone"></i></div>
 								<div class="d-flex flex-column flex-fill">
 									<div v-for="item in openedElement.oPersonne.telephones" :key="item.id" class="d-flex flex-row align-items-center justify-content-between">
-										<a :href="'tel'+item.numero" class="text-decoration-none">{{item.numero}}</a>
-										<span v-if="item.type" class="badge bg-secondary">{{item.type}}</span>
+										<div>
+											<a :href="'tel'+item.numero" class="text-decoration-none me-2">{{item.numero}}</a>
+											<span v-if="item.type" class="badge bg-secondary me-2">{{item.type}}</span>
+											<span v-if="item.id">id{{item.id}}</span>
+
+										</div>
 										<div>
 											<router-link :to="{name:'ressourcePhone', params:{id:openedElement.id, idPhone:item.id}}" v-slot="{navigate,href}" custom>
 												<a @click="navigate" :href="href" class=" btn btn-sm btn-light rounded-pill me-2"><i class="bi bi-pencil"></i></a>
 											</router-link>
-											<a class="btn btn-sm btn-light rounded-pill text-black-50"><i class="bi bi-trash3"></i></a>
+												<button class="btn btn-sm btn-light rounded-pill text-black-50"><i class="bi bi-trash3"></i></button>
 										</div>
 									</div>
 								</div>
@@ -128,50 +130,43 @@
 								<div class="me-3"><i class="bi bi-envelope"></i></div>
 								<div class="d-flex flex-column flex-fill">
 									<div v-for="item in openedElement.oPersonne.emails" :key="item.id" class="d-flex flex-row align-items-center justify-content-between">
-										<a :href="'mail'+item.adresse" class="text-decoration-none">{{item.adresse}}{{item.type}}</a>
-										<span v-if="item.type" class="badge bg-secondary">{{item.type}}BBB</span>
+										<div>
+											<a :href="'mail'+item.adresse" class="text-decoration-none me-2">{{item.adresse}}</a>
+											<span v-if="item.type" class="badge bg-secondary me-2">{{item.type}}</span>
+											<span v-if="item.id">id{{item.id}}</span>
+										</div>
 										<div>
 											<router-link :to="{name:'ressourceMail', params:{id:openedElement.id, idMail:item.id}}" v-slot="{navigate,href}" custom>
 												<a @click="navigate" :href="href" class=" btn btn-sm btn-light rounded-pill me-2"><i class="bi bi-pencil"></i></a>
 											</router-link>
-											<a class="btn btn-sm btn-light rounded-pill text-black-50"><i class="bi bi-trash3"></i></a>
+											<button class="btn btn-sm btn-light rounded-pill text-black-50"><i class="bi bi-trash3"></i></button>
 										</div>
 									</div>
 								</div>
 							</li>
-
 							
 							<li  v-for="item in openedElement.oPersonne.adresses" :key="item.id" class="list-group-item d-flex align-items-baseline">
-									<div class="me-3"><i class="bi bi-geo-alt"></i></div>
-									<div class="d-flex flex-column flex-fill" >
-										<div class="d-flex align-items-center justify-content-between">
-											<span v-if="item.type" class="text-muted">{{item.type}}</span>
+								<div class="me-3"><i class="bi bi-geo-alt"></i></div>
+								<div class="d-flex flex-column flex-fill" >
+									<div class="d-flex align-items-center justify-content-between">
+										<div>
+											<span v-if="item.type" class="text-muted">{{item.type}} id: {{item.id}} </span>
 											<span v-else class="text-muted">Contractuelle</span>
-											<div>
-												<router-link :to="{name:'ressourceAddress', params:{id:openedElement.id, idAdress:item.id}}" v-slot="{navigate,href}" custom>
-													<a @click="navigate" :href="href" class=" btn btn-sm btn-light rounded-pill me-2"><i class="bi bi-pencil"></i></a>
-												</router-link>
-												<a class="btn btn-sm btn-light rounded-pill text-black-50"><i class="bi bi-trash3"></i></a>
-											</div>
 										</div>
-										<div class="d-flex flex-column align-items-start justify-content-between">
-											<span>{{item.voie}}</span>
-											<span>{{item.cp}} {{item.localite}}</span>
+										<div>
+											<router-link :to="{name:'ressourceAddress', params:{id:openedElement.id, idAdress:item.id}}" v-slot="{navigate,href}" custom>
+												<a @click="navigate" :href="href" class=" btn btn-sm btn-light rounded-pill me-2"><i class="bi bi-pencil"></i></a>
+											</router-link>
+											<button class="btn btn-sm btn-light rounded-pill text-black-50"><i class="bi bi-trash3"></i></button>
 										</div>
 									</div>
+									<div class="d-flex flex-column align-items-start justify-content-between">
+										<span>{{item.voie}}</span>
+										<span> {{item.complement}} </span>
+										<span>{{item.cp}} {{item.localite}}</span>
+									</div>
+								</div>
 							</li>
-							<div>
-								<p>ressource Phone</p>
-								<p>{{openedElement.oPersonne.telephones}}</p>
-							</div>
-							<div>
-								<p>ressource mail</p>
-								<p>{{openedElement.oPersonne.emails}}</p>
-							</div>
-							<div>
-								<p>ressource adresse postale</p>
-								<p>{{openedElement.oPersonne.adresses}}</p>
-							</div>
 						</ul>
 					</div>
 					<hr>
@@ -290,6 +285,21 @@ export default {
 		
     },
     methods: {
+
+		/**
+		 * Supprime les données d'une adresse postale dans la base de données 
+		 * et met à jour le store
+		 * @param	{string}	idopenedElement	identifiant du personnel concerné
+		 * @param	{string}	idAdress identifiant de l'adresse à supprimer
+		 */
+		deleteAdress() {
+			// let idPersonnel = this.openedElement.id;
+			// let idAdress = this.item.id;
+			// this.$app.apiDelete("structurePersonnel/DELETE/idPersonnel/'adresse'/idAdress")
+			
+
+
+		},
 
 		/**
 		 * Modifie le format de la date entrée en paramètre et la retourne 

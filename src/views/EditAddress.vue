@@ -1,6 +1,6 @@
 <template>
     <AppModal
-        :title="this.$route.params.idAdress ?'Modifier l\'adresse postale' :'Ajouter une adresse postale'"
+        :title="this.$route.params.idAdress == 0 ?'Nouvelle adresse postale' :'Modification adresse postale'"
         size="md"
         @submit="record()"
         @modal-hide="routeToParent()"
@@ -14,9 +14,10 @@
                 @edit-cp="editCP"
                 @edit-localite="editLocalite"
                 @edit-type="editType"
+                v-if="ressource"
                 >
             </FormPostalAddress>
-        <div class="alert alert-warning" >Aucun élément trouvé</div>
+        <div v-else class="alert alert-warning" >Aucun élément trouvé </div>
     </AppModal>
 </template>
 <script>
@@ -33,7 +34,16 @@ export default {
             pending: {
                 adresse : false
             },
-            ressource: null
+            ressource: null,
+
+            defaultRessource: {
+
+                type: '',
+                voie: '',
+                complement: '',
+                cp: '',
+                localite: '',
+            }
         }
     },
 
@@ -56,6 +66,7 @@ export default {
         routeToParent() {
             this.$router.go(-1);
         },
+
         /**
          * Affecte la valeur du type à la ressource stockée dans data
          * 
@@ -63,15 +74,18 @@ export default {
          */
         editType(val) {
             this.ressource.type = val;
+            console.log('edittype', this.ressource.type);
         },
+
         /**
          * Affecte la valeur de la voie à la ressource stockée dans data
          * 
-         * @param {String} val Nouveau numéro de téléphone
+         * @param {String} val Nouvelle voie
          */
         editVoie(val) {
             this.ressource.voie = val;
         },
+
         /**
          * Affecte la valeur du complément d'adresse à la ressource stockée dans data
          * 
@@ -80,6 +94,7 @@ export default {
         editComplement(val) {
             this.ressource.complement = val;
         },
+
         /**
          * Affecte la valeur du code postal à la ressource stockée dans data
          * 
@@ -88,6 +103,7 @@ export default {
         editCP(val) {
             this.ressource.cp= val;
         },
+
         /**
          * Affecte la valeur de la localité à la ressource stockée dans data
          * 
@@ -96,14 +112,8 @@ export default {
         editLocalite(val) {
             this.ressource.localite= val;
         },
-        // /**
-        //  * Affecte la valeur du pays à la ressource stockée dans data
-        //  * 
-        //  * @param {String} val Nouveau numéro de téléphone
-        //  */
-        // // editPays(val) {
-        // //     this.ressource.pays= val;
-        // // },
+
+        
         record() {
             // Verrouille le status de chargement
             this.pending.adresse = true;
@@ -115,7 +125,6 @@ export default {
                 complement: this.ressource.complement,
                 cp: this.ressource.cp,
                 localite: this.ressource.localite,
-
             })
             .then((data) => {
                 // Met à jour le store avec les nouvelles informations
@@ -135,24 +144,32 @@ export default {
         },
 
         /**
-         * Récupère les informations de la ressource au niveau du store depuis l'idPhone passé dans l'URL.
+         * Récupère les informations de la ressource au niveau du store depuis l'idAdress passé dans l'URL.
          * 
          * @returns {Object}
          */
         getRessource(idAdress) {
             let ressource = this.openedElement.oPersonne.adresses.find(e => e.id == idAdress);
-            this.ressource = ressource ? JSON.parse(JSON.stringify(ressource)) : null;
+            this.ressource = ressource ? JSON.parse(JSON.stringify(ressource)) : this.defaultRessource;
+            console.log('getRessource', idAdress, this.ressource)
+            
         },
+    },
         
-        beforeRouteUpdate(to) {
+    beforeRouteUpdate(to) {
         this.getRessource(to.params.idAdress);
-        },
+        console.log('idAdress', this.idAdress)
+    },
 
-        mounted() {
-            this.getRessource(this.$route.params.idAdress);
-        }
+
+
+    mounted() {
+
+        this.getRessource(this.$route.params.idAdress);
+        console.log('mounted', this.ressource)
+    }
 
         
-    }
+    
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
     <AppModal 
-        :title="this.$route.params.idPhone ?'Modification numéro' :'Nouveau numéro'"
+        :title="this.$route.params.idPhone == 0 ?'Nouveau téléphone' :'Modification téléphone'"
         size="md" 
         @submit="record()" 
         @modal-hide="routeToParent()" 
@@ -29,7 +29,13 @@ export default {
             pending: {
                 telephone: false
             },
-            ressource: null
+            ressource: null,
+
+            defaultRessource: {
+
+                type : '',
+                numero: '',
+            }
         }
     },
 
@@ -104,7 +110,7 @@ export default {
          */
         getRessource(idPhone) {
             let ressource = this.openedElement.oPersonne.telephones.find(e => e.id == idPhone);
-            this.ressource = ressource ? JSON.parse(JSON.stringify(ressource)) : null;
+            this.ressource = ressource ? JSON.parse(JSON.stringify(ressource)) : this.defaultRessource;
         }
     },
 
