@@ -93,12 +93,12 @@ export default {
             })
             .then((data) => {
                 // Met à jour le store avec les nouvelles informations
-                console.log('avantupdateRessource', this.ressource)
+                console.log('avantupdateRessource', this.ressource, this.ressource.id)
                 this.updateRessource({
                     ressource: 'emails',
                     data
                 });
-                console.log('aprèsUpdateDataetressource',data,this.ressource);
+                console.log('aprèsUpdateDataetressource',data,this.ressource, data.id);
                 
                 this.routeToParent();
             })
@@ -108,7 +108,7 @@ export default {
                 // Déverouille le status de chargement
                 this.pending.mail = false;
             });
-            console.log('ressources finally update',this.ressource)
+            console.log('ressources finally update',this.ressource, this.ressource.id)
 
         },
 
@@ -118,9 +118,15 @@ export default {
          * @returns {Object}
          */
         getRessource(idMail) {
-            let ressource = this.openedElement.oPersonne.emails.find(e => e.id == idMail);
-            this.ressource = ressource ? JSON.parse(JSON.stringify(ressource)) : this.defaultRessource;
-            console.log('getRessource', idMail, this.ressource)
+            if(!this.openedElement.oPersonne.emails){
+                this.ressource = this.defaultRessource;
+                alert('pas d\'emails')
+            }
+            else { 
+                let ressource = this.openedElement.oPersonne.emails.find(e => e.id == idMail);
+                this.ressource = ressource ? JSON.parse(JSON.stringify(ressource)) : this.defaultRessource;
+                console.log('getRessource', idMail, this.ressource)
+            }
         }
     },
 

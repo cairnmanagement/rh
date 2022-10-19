@@ -120,7 +120,7 @@
 											<router-link :to="{name:'ressourcePhone', params:{id:openedElement.id, idPhone:item.id}}" v-slot="{navigate,href}" custom>
 												<a @click="navigate" :href="href" class=" btn btn-sm btn-light rounded-pill me-2"><i class="bi bi-pencil"></i></a>
 											</router-link>
-												<button class="btn btn-sm btn-light rounded-pill text-black-50"><i class="bi bi-trash3"></i></button>
+												<button @click.prevent="deletePhone(item.id)"   class="btn btn-sm btn-light rounded-pill text-black-50"><i class="bi bi-trash3"></i></button>
 										</div>
 									</div>
 								</div>
@@ -139,7 +139,7 @@
 											<router-link :to="{name:'ressourceMail', params:{id:openedElement.id, idMail:item.id}}" v-slot="{navigate,href}" custom>
 												<a @click="navigate" :href="href" class=" btn btn-sm btn-light rounded-pill me-2"><i class="bi bi-pencil"></i></a>
 											</router-link>
-											<button class="btn btn-sm btn-light rounded-pill text-black-50"><i class="bi bi-trash3"></i></button>
+											<button @click.prevent="deleteMail(item.id)"  class="btn btn-sm btn-light rounded-pill text-black-50"><i class="bi bi-trash3"></i></button>
 										</div>
 									</div>
 								</div>
@@ -157,7 +157,7 @@
 											<router-link :to="{name:'ressourceAddress', params:{id:openedElement.id, idAdress:item.id}}" v-slot="{navigate,href}" custom>
 												<a @click="navigate" :href="href" class=" btn btn-sm btn-light rounded-pill me-2"><i class="bi bi-pencil"></i></a>
 											</router-link>
-											<button class="btn btn-sm btn-light rounded-pill text-black-50"><i class="bi bi-trash3"></i></button>
+											<button @click.prevent="deleteAdress(item.id)" class="btn btn-sm btn-light rounded-pill text-black-50"><i class="bi bi-trash3"></i></button>
 										</div>
 									</div>
 									<div class="d-flex flex-column align-items-start justify-content-between">
@@ -248,7 +248,7 @@
 import {mapState} from 'vuex'
 import UserImage from '../components/pebble-ui/UserImage.vue';
 import date from 'date-and-time';
-import fr from 'date-and-time/locale/fr'
+import fr from 'date-and-time/locale/fr';
 
 export default {
     data() {
@@ -286,19 +286,91 @@ export default {
     },
     methods: {
 
-		/**
-		 * Supprime les données d'une adresse postale dans la base de données 
-		 * et met à jour le store
-		 * @param	{string}	idopenedElement	identifiant du personnel concerné
-		 * @param	{string}	idAdress identifiant de l'adresse à supprimer
-		 */
-		deleteAdress() {
-			// let idPersonnel = this.openedElement.id;
-			// let idAdress = this.item.id;
-			// this.$app.apiDelete("structurePersonnel/DELETE/idPersonnel/'adresse'/idAdress")
-			
+		deleteAdress(data) {
+			if (confirm('Souhaitez vous supprimer cette adresse ?')) {
+				let idElement= this.openedElement.id;
+				let adresses = this.openedElement.oPersonne.adresses
+				console.log(idElement,data);
+				let apiUrl = 'structurePersonnel/DELETE/' +idElement+ '/adresse/' +data;
+				this.$app.apiPost(apiUrl)
 
+                .then((resp) => {
+					console.log(data);
+					console.log(resp);
 
+                    if (resp) {
+                        alert('adresse supprimée');
+						console.log('1',resp);
+						console.log('2',adresses);
+						console.log('3',data);
+                    }
+					// suprimer dans le store l'item dans le tableau adresses, dont l'id == data
+                    
+                })
+                .catch(this.catchError);
+			}
+			else {
+				alert ('Cette adresse ne sera pas supprimée');
+				console.log('Cette adresse ne sera pas supprimée');
+			}
+		},
+
+		deletePhone(data) {
+			if (confirm('Souhaitez vous supprimer ce contact téléphonique ?')) {
+				let idElement= this.openedElement.id;
+				let telephones = this.openedElement.oPersonne.telephones
+				console.log(idElement,data);
+				let apiUrl = 'structurePersonnel/DELETE/' +idElement+ '/telephone/' +data;
+				this.$app.apiPost(apiUrl)
+
+                .then((resp) => {
+					console.log(data);
+					console.log(resp);
+
+                    if (resp) {
+                        alert('adresse supprimée');
+						console.log('1',resp);
+						console.log('2',telephones);
+						console.log('3',data);
+                    }
+					// suprimer dans le store l'item dans le tableau telephones, dont l'id == data
+
+                })
+                .catch(this.catchError);
+			}
+			else {
+				alert ('Ce contact télphonique ne sera pas supprimé');
+				console.log('téléphone non supprimé');
+			}
+		},
+
+		deleteMail(data) {
+			if (confirm('Souhaitez vous supprimer cette adresse mail ?')) {
+				let idElement= this.openedElement.id;
+				let emails = this.openedElement.oPersonne.emails
+				console.log(idElement,data);
+				let apiUrl = 'structurePersonnel/DELETE/' +idElement+ '/email/' +data;
+				this.$app.apiPost(apiUrl)
+
+                .then((resp) => {
+					console.log(data);
+					console.log(resp);
+
+                    if (resp) {
+                        alert('adresse mail supprimée');
+						console.log('1',resp);
+						console.log('2',emails);
+						console.log('3',data);
+                    }
+
+					// suprimer dans le store l'item dans le tableau emails, dont l'id == data
+                })
+                .catch(this.catchError);
+			}
+			else {
+				alert ('Cette adresse mail ne sera pas supprimée');
+				console.log('téléphone non supprimée');
+			}
 		},
 
 		/**

@@ -5,15 +5,14 @@
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex align-items-center justify-content-between">
-                        <h3>12! personnels actifs</h3>
+                        <h3><span class="me-2">{{tabStats.actifs}}</span> personnels actifs</h3>
                         <router-link :to="{name:'PersonnelNew'}" v-slot="{navigate,href}" custom>
                             <a :href="href" @click="navigate" class="btn btn-light">Nouveau<i class="bi bi-plus-lg ms-1"></i></a>
                         </router-link>
                     </div>
                     <div>
-                        {{tabStats}}
                     </div>
-                    <PersonalList/>
+                    <PersonalList :tab = "tabStats"></PersonalList>
                 </div>
             </div>
         </div>
