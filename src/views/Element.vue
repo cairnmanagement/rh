@@ -125,7 +125,7 @@
 									</div>
 								</div>
 							</li>
-							<li v-if="!openedElement.oPersonne.emails" class="list-group-item d-flex align-items-between text-warning">Pas d'adresse email enregistrée</li>
+							<li v-if="!openedElement.oPersonne.emails?.length" class="list-group-item d-flex align-items-between text-warning">Pas d'adresse email enregistrée</li>
 							<li v-else class="list-group-item d-flex align-items-baseline">
 								<div class="me-3"><i class="bi bi-envelope"></i></div>
 								<div class="d-flex flex-column flex-fill">
@@ -245,7 +245,7 @@
 
 <script>
 
-import {mapState} from 'vuex'
+import {mapActions, mapState} from 'vuex'
 import UserImage from '../components/pebble-ui/UserImage.vue';
 import date from 'date-and-time';
 import fr from 'date-and-time/locale/fr';
@@ -285,6 +285,8 @@ export default {
 		
     },
     methods: {
+
+		...mapActions(['removeRessource']),
 
 		deleteAdress(data) {
 			if (confirm('Souhaitez vous supprimer cette adresse ?')) {
@@ -344,28 +346,28 @@ export default {
 			}
 		},
 
-		deleteMail(data) {
+		deleteMail(ressourceId) {
 			if (confirm('Souhaitez vous supprimer cette adresse mail ?')) {
 				let idElement= this.openedElement.id;
-				let emails = this.openedElement.oPersonne.emails
-				console.log(idElement,data);
-				let apiUrl = 'structurePersonnel/DELETE/' +idElement+ '/email/' +data;
+				console.log(idElement,ressourceId);
+				let apiUrl = 'structurePersonnel/DELETE/' +idElement+ '/email/' +ressourceId;
 				this.$app.apiPost(apiUrl)
 
                 .then((resp) => {
-					console.log(data);
-					console.log(resp);
 
-                    if (resp) {
-                        alert('adresse mail supprimée');
-						console.log('1',resp);
-						console.log('2',emails);
-						console.log('3',data);
-                    }
+					if (resp === 'OK') {
+						this.removeRessource({
+							ressource: 'emails',
+							id: ressourceId
+						});
+					}
+					else {
+						alert('Erreur inconnue!');
+					}
 
 					// suprimer dans le store l'item dans le tableau emails, dont l'id == data
                 })
-                .catch(this.catchError);
+                .catch(this.$app.catchError);
 			}
 			else {
 				alert ('Cette adresse mail ne sera pas supprimée');

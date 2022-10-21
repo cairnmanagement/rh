@@ -146,6 +146,10 @@ export default createStore({
 			let key = ressourceOptions.ressource;
 			let data = ressourceOptions.data;
 
+			if (!(key in state.openedElement.oPersonne)) {
+				state.openedElement.oPersonne[key] = [];
+			}
+
 			let ressource = state.openedElement.oPersonne[key].find(e => e.id == data.id);
 
 			if (ressource) {
@@ -154,6 +158,25 @@ export default createStore({
 				}
 			}
 			else state.openedElement.oPersonne[key].push(data);
+		},
+
+		/**
+		 * Supprimer une ressource liée au personnel ouvert.
+		 * 
+		 * @param {Object} state State de VueX
+		 * @param {Object} ressourceOptions 
+		 * - ressource Nom de la ressource : telephones, emails, adresses
+		 * - id ID de la ressource à supprimer du store
+		 */
+		removePersonnelRessource(state, ressourceOptions) {
+			let key = ressourceOptions.ressource;
+			let id = ressourceOptions.id;
+
+			let index = state.openedElement.oPersonne[key].findIndex(e => e.id == id);
+
+			if (index !== -1) {
+				state.openedElement.oPersonne[key].splice(index, 1);
+			}
 		}
 	},
 	actions: {
@@ -246,6 +269,18 @@ export default createStore({
 		 */
 		updateRessource(context, ressourceOptions) {
 			context.commit('personnelRessource', ressourceOptions);
+		},
+
+		/**
+		 * Supprimer une ressource liée au personnel actif dans le store
+		 * 
+		 * @param {Object} context Instance VueX
+		 * @param {Object} ressourceOptions Données à enregistrer sur le store
+		 * - ressource			telephones, emails, adresses
+		 * - id					id de la ressource  supprimer
+		 */
+		removeRessource(context, ressourceOptions) {
+			context.commit('removePersonnelRessource', ressourceOptions);
 		}
 	},
 	modules: {
