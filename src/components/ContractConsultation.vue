@@ -13,7 +13,8 @@
                     <router-link :to="{name:'EditContrat', params:{id:openedElement.id, idContrat:openedElement.oContrat.id}}" v-slot="{navigate, href}" custom>
                         <a :href="href" @click="navigate" class="btn btn-lg btn-outline-primary mx-1 "><i class="bi bi-pencil"></i></a>
                     </router-link>
-                    <a href="/" class="btn btn-lg btn-outline-danger mx-1"><i class="bi bi-clipboard2-x"></i></a>
+                    <a href="/" class="btn btn-lg btn-outline-danger mx-1">Mettre fin au contrat</a>
+                    <!-- <i class="bi bi-clipboard2-x"></i> -->
                 </div>
             </div>
         </div>

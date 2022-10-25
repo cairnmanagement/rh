@@ -17,7 +17,6 @@
                 <span class="text-success"><span class="text-success me-2"><i class="bi bi-balloon"></i></span>Aujourd'hui c'est l'anniversaire de {{birthdayString}}</span>
             </li>
         </ul>
-        
     </div>
         
 </template>

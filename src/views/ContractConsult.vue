@@ -1,6 +1,12 @@
 <template>
-    <AppModal :title="'Contrat de travail' " size="lg" @modal-hide="routeToParent()" >
-            <contract-consultation/>
+    <AppModal 
+        :title="'Contrat de travail'" 
+        size="lg" 
+        @modal-hide="routeToParent()"
+        :deleteBtn="true"
+        
+        :cancelBtn="true">
+        <contract-consultation/>
     </AppModal>
 </template>
 <script>

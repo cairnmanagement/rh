@@ -15,7 +15,7 @@
 		<section class="text-center py-3 bg-light" v-if="openedElement.extendedData">
 			
 			<div class="row">
-				<div class="col-12 col-xl-6">
+				<div class="col-12 col-xxl-6">
 					<div class="card mb-3">
 						<div class="card-body">
 							<div class="position-relative">
@@ -113,8 +113,6 @@
 										<div>
 											<a :href="'tel'+item.numero" class="text-decoration-none me-2">{{item.numero}}</a>
 											<span v-if="item.type" class="badge bg-secondary me-2">{{item.type}}</span>
-											<span v-if="item.id">id{{item.id}}</span>
-
 										</div>
 										<div>
 											<router-link :to="{name:'ressourcePhone', params:{id:openedElement.id, idPhone:item.id}}" v-slot="{navigate,href}" custom>
@@ -133,7 +131,6 @@
 										<div>
 											<a :href="'mail'+item.adresse" class="text-decoration-none me-2">{{item.adresse}}</a>
 											<span v-if="item.type" class="badge bg-secondary me-2">{{item.type}}</span>
-											<span v-if="item.id">id{{item.id}}</span>
 										</div>
 										<div>
 											<router-link :to="{name:'ressourceMail', params:{id:openedElement.id, idMail:item.id}}" v-slot="{navigate,href}" custom>
@@ -150,7 +147,7 @@
 								<div class="d-flex flex-column flex-fill" >
 									<div class="d-flex align-items-center justify-content-between">
 										<div>
-											<span v-if="item.type" class="text-muted">{{item.type}} id: {{item.id}} </span>
+											<span v-if="item.type" class="text-muted">{{item.type}}</span>
 											<span v-else class="text-muted">Contractuelle</span>
 										</div>
 										<div>
@@ -171,65 +168,55 @@
 					</div>
 					<hr>
 				</div>
-				<div class="col-12 col-xl-6">
-				<div class="card">
-					<div class="card-body">
-						<div class="d-flex align-items-center justify-content-between">
-							<h4 class="card-title m-0">Contrats</h4>
-						</div>
-						<hr>
-						<div class="list-group-flush">
-							<router-link :to="{name:'infoContrat', params:{id:openedElement.id, idContrat:openedElement.oContrat.id}}" v-slot="{navigate,href}" custom>
-								<a :href="href" @click="navigate" class="list-group-item list-group-item-action d-flex justify-content-between mb-3">
-									<div class="d-flex flex-column align-items-start">
-										<span>{{openedElement.oFonction.nom}} </span>
-										<span class="text-muted">du {{entrydate2}} au {{exitdate2}}</span>
-										<span>Contrat à durée déterminée (3 avenants)</span> 
-									</div>
-									<div class="d-flex align-items-center">
-										<i class="bi bi-arrow-up-right"></i>
-									</div>
-								</a>
-							</router-link>
+				<div class="col-12 col-xxl-6">
+					<div class="card">
+						<div class="card-body">
+							<div class="d-flex align-items-center justify-content-between">
+								<h4 class="card-title m-0">Contrats</h4>
+							</div>
 							<hr>
-							<router-link :to="{name:'infoContrat', params:{id:openedElement.id, idContrat:openedElement.oContrat.id}}" v-slot="{navigate,href}" custom>
-								<a :href="href" @click="navigate" class="list-group-item list-group-item-action d-flex justify-content-between mb-1">
-									<div class="d-flex flex-column align-items-start">
-										<span>{{openedElement.oFonction.nom}} <span>(Cadre)</span></span>
-										<span class="text-success">depuis le {{entrydate2}}</span>
-										<span class="mb-2">Contrat à durée indéterminée (3 avenants)</span> 
-										<div class="text-success">
-											<span>. Avenant depuis le {{entrydate2}}</span>
+							<div class="list-group-flush">
+								<router-link :to="{name:'infoContrat', params:{id:openedElement.id, idContrat:openedElement.oContrat.id}}" v-slot="{navigate,href}" custom>
+									<a :href="href" @click="navigate" class="list-group-item list-group-item-action d-flex justify-content-between mb-3">
+										<div class="d-flex flex-column align-items-start">
+											<span>{{openedElement.oFonction.nom}} </span>
+											<span class="text-muted">du {{entrydate2}} au {{exitdate2}}</span>
+											<span>Contrat à durée déterminée (3 avenants)</span> 
 										</div>
-										<div class="text-muted">
-											<span>. Avenant du {{entrydate2}}</span>
+										<div class="d-flex align-items-center">
+											<i class="bi bi-arrow-up-right"></i>
 										</div>
-										<div class="text-muted">
-											<span>. Avenant du {{entrydate2}}</span>
+									</a>
+								</router-link>
+								<hr>
+								<router-link :to="{name:'infoContrat', params:{id:openedElement.id, idContrat:openedElement.oContrat.id}}" v-slot="{navigate,href}" custom>
+									<a :href="href" @click="navigate" class="list-group-item list-group-item-action d-flex justify-content-between mb-1">
+										<div class="d-flex flex-column align-items-start">
+											<span>{{openedElement.oFonction.nom}} <span>(Cadre)</span></span>
+											<span class="text-success">depuis le {{entrydate2}}</span>
+											<span class="mb-2">Contrat à durée indéterminée (3 avenants)</span> 
+											<div class="text-success">
+												<span>. Avenant depuis le {{entrydate2}}</span>
+											</div>
+											<div class="text-muted">
+												<span>. Avenant du {{entrydate2}}</span>
+											</div>
+											<div class="text-muted">
+												<span>. Avenant du {{entrydate2}}</span>
+											</div>
 										</div>
-									</div>
-									<div class="d-flex align-items-center">
-										<i class="bi bi-arrow-up-right"></i>
-									</div>
-								</a>
-							</router-link>
+										<div class="d-flex align-items-center">
+											<i class="bi bi-arrow-up-right"></i>
+										</div>
+									</a>
+								</router-link>
+							</div>
 						</div>
 					</div>
-				</div>
-				
-				
-				<div class="row">
-					<div class="col-12">
-
-						<div class="card">
-					<h5>oContrat</h5>
-					{{openedElement.oContrat}}
-				</div>
+					<div class="row">
+						<div class="col-12">
+						</div>
 					</div>
-
-				</div>
-				
-				
 				</div>
 			</div>	
 			
@@ -288,57 +275,56 @@ export default {
 
 		...mapActions(['removeRessource']),
 
-		deleteAdress(data) {
-			if (confirm('Souhaitez vous supprimer cette adresse ?')) {
+		deleteAdress(ressourceId) {
+			if (confirm('Souhaitez vous supprimer cette adresse postale?')) {
 				let idElement= this.openedElement.id;
-				let adresses = this.openedElement.oPersonne.adresses
-				console.log(idElement,data);
-				let apiUrl = 'structurePersonnel/DELETE/' +idElement+ '/adresse/' +data;
+				console.log(idElement, ressourceId);
+				let apiUrl = 'structurePersonnel/DELETE/' +idElement+ '/adresse/' +ressourceId;
 				this.$app.apiPost(apiUrl)
 
                 .then((resp) => {
-					console.log(data);
-					console.log(resp);
 
-                    if (resp) {
-                        alert('adresse supprimée');
-						console.log('1',resp);
-						console.log('2',adresses);
-						console.log('3',data);
+                    if (resp ==='OK') {
+					// supprime dans le store l'item dans le tableau des adresses, celui dont l'id == ressourceId
+
+						this.removeRessource({
+							ressource: 'adresses',
+							id: ressourceId
+						});
                     }
-					// suprimer dans le store l'item dans le tableau adresses, dont l'id == data
-                    
+                    else {
+						alert('erreurinconnue!')
+					}
                 })
-                .catch(this.catchError);
+                .catch(this.$app.catchError);
 			}
 			else {
-				alert ('Cette adresse ne sera pas supprimée');
-				console.log('Cette adresse ne sera pas supprimée');
+				alert ('Cette adresse postale ne sera pas supprimée');
+				console.log('adresse postale non supprimée');
 			}
 		},
 
-		deletePhone(data) {
+		deletePhone(ressourceId) {
 			if (confirm('Souhaitez vous supprimer ce contact téléphonique ?')) {
 				let idElement= this.openedElement.id;
-				let telephones = this.openedElement.oPersonne.telephones
-				console.log(idElement,data);
-				let apiUrl = 'structurePersonnel/DELETE/' +idElement+ '/telephone/' +data;
+				console.log(idElement,ressourceId);
+				let apiUrl = 'structurePersonnel/DELETE/' +idElement+ '/telephone/' +ressourceId;
 				this.$app.apiPost(apiUrl)
 
                 .then((resp) => {
-					console.log(data);
-					console.log(resp);
 
-                    if (resp) {
-                        alert('adresse supprimée');
-						console.log('1',resp);
-						console.log('2',telephones);
-						console.log('3',data);
+                    if (resp === 'OK') {
+					// supprime dans le store l'item dans le tableau des telephones, celui dont l'id == ressourceId
+						this.removeRessource({
+							ressource: 'telephones',
+							id: ressourceId
+						});
                     }
-					// suprimer dans le store l'item dans le tableau telephones, dont l'id == data
-
+					else {
+						alert('Erreur inconnue!')
+					}
                 })
-                .catch(this.catchError);
+                .catch(this.$app.catchError);
 			}
 			else {
 				alert ('Ce contact télphonique ne sera pas supprimé');
@@ -356,6 +342,7 @@ export default {
                 .then((resp) => {
 
 					if (resp === 'OK') {
+					// supprime dans le store l'item dans le tableau des  emails, celui dont l'id == ressourceId
 						this.removeRessource({
 							ressource: 'emails',
 							id: ressourceId
@@ -364,14 +351,12 @@ export default {
 					else {
 						alert('Erreur inconnue!');
 					}
-
-					// suprimer dans le store l'item dans le tableau emails, dont l'id == data
                 })
                 .catch(this.$app.catchError);
 			}
 			else {
 				alert ('Cette adresse mail ne sera pas supprimée');
-				console.log('téléphone non supprimée');
+				console.log('adresse mail non supprimée');
 			}
 		},
 

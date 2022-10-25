@@ -23,7 +23,9 @@
                 
                 <div class="mb-3" :class="{'text-muted':!contrat.contrat_duree_indeterminee}">
                     <div class="form-check form-switch">
-                        <label class="form-check-label" for="contratDureeIndeterminee">Contrat à durée indéterminée</label>
+                        <label v-if="contrat.contrat_duree_indeterminee" class="form-check-label" for="contratDureeIndeterminee">Contrat à durée indéterminée</label>
+                        <label v-else class="form-check-label" for="contratDureeIndeterminee">Contrat à durée déterminée</label>
+
                         <input class="form-check-input" type="checkbox" role="switch" id="contratDureeIndeterminee" name="contrat_duree_indeterminee" value="1" v-model="contrat.contrat_duree_indeterminee">
                     </div>
                 </div>
