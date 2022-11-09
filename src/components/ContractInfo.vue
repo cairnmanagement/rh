@@ -5,11 +5,11 @@
 		</div>
 		<hr>
 		<div class="list-group-flush">
-			<router-link :to="{name:'infoContrat', params:{id:openedElement.id, idContrat:openedElement.oContrat.id}}" v-slot="{navigate,href}" custom>
+			<!-- <router-link :to="{name:'infoContrat', params:{id:openedElement.id, idContrat:openedElement.oContrat.id}}" v-slot="{navigate,href}" custom>
 				<a :href="href" @click="navigate" class="list-group-item list-group-item-action d-flex justify-content-between mb-3">
 					<div class="d-flex flex-column align-items-start">
 						
-							
+					ZONE DE TEST
 						
 						
 					</div>
@@ -17,15 +17,20 @@
 						<i class="bi bi-arrow-up-right"></i>
 					</div>
 				</a>
-			</router-link>
-			<hr>
+			</router-link> -->
+			
 			<router-link :to="{name:'infoContrat', params:{id:openedElement.id, idContrat:openedElement.oContrat.id}}" v-slot="{navigate,href}" custom>
 				<a :href="href" @click="navigate" class="list-group-item list-group-item-action d-flex justify-content-between mb-1">
-					<div class="d-flex flex-column align-items-start" v-if="openedElement.oContrat.duree_indeterminee ='OUI'">
+					<div v-if="openedElement.oContrat.duree_indeterminee == 'OUI'" class="d-flex flex-column align-items-start">
 						<span v-if="openedElement.oFonction.nom">{{openedElement.oFonction.nom}}</span>
 						<span class="text-success">depuis le {{entryDateFormat2}}</span>
-						<span class="mb-2">Contrat à durée indéterminée (3 avenants)</span> 
-						
+						<span v-if="openedElement.oContrat.dsortie_reelle">{{exitDateReal}}</span>
+						<span>Contrat à durée indéterminée (X avenants)</span> 
+
+						<!-- <span class="mb-2">Contrat à durée indéterminée (? avenants)</span>  -->
+						<!-- <div class="text-success">
+							<span>. Sortie prévue le  {{exitDateFormat2}}</span>
+						</div>
 						<div class="text-success">
 							<span>. Avenant depuis le {{entryDateFormat2}}</span>
 						</div>
@@ -34,15 +39,15 @@
 						</div>
 						<div class="text-muted">
 							<span>. Avenant du {{entryDateFormat2}}</span>
-						</div>
+						</div> -->
 					</div>
-					<div class="d-flex flex-column align-items-start" v-else>
+					<div v-else-if="openedElement.oContrat.duree_indeterminee ='NON'" class="d-flex flex-column align-items-start" >
 						<span v-if="openedElement.oFonction.nom">{{openedElement.oFonction.nom}}</span>
-						<span class="text-muted">du {{entryDateFormat2}} au {{exitDateFormat2}}</span>
-						<span>Contrat à durée déterminée (3 avenants)</span> 
+						<span class="text-success">du {{entryDateFormat2}} au {{exitDateFormat2}}</span>
+						<span>Contrat à durée déterminée (X avenants)</span> 
 						
 						
-						<div class="text-success">
+						<!-- <div class="text-success">
 							<span>. Avenant depuis le {{entryDateFormat2}}</span>
 						</div>
 						<div class="text-muted">
@@ -50,15 +55,29 @@
 						</div>
 						<div class="text-muted">
 							<span>. Avenant du {{entryDateFormat2}}</span>
-						</div>
+						</div> -->
 					</div>
+					<div v-else>non déterminée</div>
+					
 					<div class="d-flex align-items-center">
 						<i class="bi bi-arrow-up-right"></i>
 					</div>
 				</a>
 				<div class="card m-6">
-
-					{{openedElement.oContrat}}
+					<div class="d-flex flex-column">
+						<div>
+							id contrat: {{openedElement.oContrat.id}}
+						</div>
+						<div>
+							duree indéterminée: {{openedElement.oContrat.duree_indeterminee}}
+						</div>
+						<div class="card-body">
+							<p>données oContrat</p>
+							{{openedElement.oContrat}}
+						</div>
+					</div>
+					<div>
+					</div>
 				</div>
 			</router-link>
 		</div>
@@ -71,6 +90,10 @@ import fr from 'date-and-time/locale/fr'
 
 
 export default{
+
+	props:{
+
+	},
 
 	computed:{
 		...mapState(["openedElement"]),
@@ -94,6 +117,10 @@ export default{
 		exitDateFormat2() {
 			date.locale(fr);
 			return date.format(new Date(this.openedElement.dsortie)  , 'DD MMM YYYY')
+		},
+		exitDateReal(){
+			date.locale(fr);
+			return date.format(new Date(this.openedElement.oContrat.dsortie_reelle) , 'DD MM YYYY')
 		}
 	},
 

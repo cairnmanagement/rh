@@ -149,10 +149,14 @@ export default {
          * @returns {Object}
          */
         getRessource(idAdress) {
-            let ressource = this.openedElement.oPersonne.adresses.find(e => e.id == idAdress);
-            this.ressource = ressource ? JSON.parse(JSON.stringify(ressource)) : this.defaultRessource;
-            console.log('getRessource', idAdress, this.ressource)
-            
+            if(!this.openedElement.oPersonne.adresses){
+                this.ressource = this.defaultRessource;
+            }
+            else {
+                let ressource = this.openedElement.oPersonne.adresses.find(e => e.id == idAdress);
+                this.ressource = ressource ? JSON.parse(JSON.stringify(ressource)) : this.defaultRessource;
+                console.log('getRessource', idAdress, this.ressource)
+            }
         },
     },
         

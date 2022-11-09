@@ -3,7 +3,7 @@
         :title="'Contrat de travail'" 
         size="lg" 
         @modal-hide="routeToParent()"
-        :deleteBtn="true"
+        
         
         :cancelBtn="true">
         <contract-consultation/>

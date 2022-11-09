@@ -20,6 +20,10 @@ export default {
         }
     },
 
+    props: {
+        tabContracts: Object
+    },
+
     methods: {
 
         // /**
@@ -51,18 +55,18 @@ export default {
         //     }
         // },
         /**
-         * Affiche un diagramme
+         * Affiche un diagramme GoogleChart PIE avec les données fournies
          */
         drawChart() {
             let div = document.getElementById('piechart');
 
             let data = [
                 ['Task', 'Type de contrat'],
-                ['CDI',     12],
-                ['CDD',      45],
-                ['Apprentissage',  2],
-                ['Professionalisation', 3],
-                ['Stage',    2]
+                ['CDI',     this.tabContracts.contrat_a_duree_indeterminee],
+                ['CDD',      this.tabContracts.contrat_a_duree_determinee],
+                ['Apprentissage',  this.tabContracts.contrat_d_apprentissage],
+                ['Professionalisation', this.tabContracts.contrat_de_professionnalisation],
+                ['Stage',    this.tabContracts.stage]
             ];
 
             let options ={

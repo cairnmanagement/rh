@@ -109,8 +109,14 @@ export default {
          * @returns {Object}
          */
         getRessource(idPhone) {
-            let ressource = this.openedElement.oPersonne.telephones.find(e => e.id == idPhone);
-            this.ressource = ressource ? JSON.parse(JSON.stringify(ressource)) : this.defaultRessource;
+            if(!this.openedElement.oPersonne.telephones){
+                this.ressource = this.defaultRessource;
+            }
+            else {
+
+                let ressource = this.openedElement.oPersonne.telephones.find(e => e.id == idPhone);
+                this.ressource = ressource ? JSON.parse(JSON.stringify(ressource)) : this.defaultRessource;
+            }
         }
     },
 

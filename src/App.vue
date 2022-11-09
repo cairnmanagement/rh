@@ -68,7 +68,6 @@
 										<div class="d-flex justify-content-between align-items-center"> {{personnel.cache_nom}}</div>
 									</div>
 								</div>
-								
 									<!--
 										Un seul bloc utile. Utiliser une méthode pour générer le libeller. La méthode reprend les 3 conditions
 										- !dentree (= "Sans contrat")
@@ -90,13 +89,16 @@
 										<div>CDD depuis le {{ formatDateFr(personnel.dentree)}}</div>
 									</div> -->
 									<!-- <span v-if="personnel.dsortie =='0000-00-00 00:00:00'">pas de date sortie</span> -->
-								<i class="rounded-circle bg-dark" style="width:8px; height:8px;"></i>
+								<i v-if="searchActifs(personnel.id) == true" class="rounded-circle bg-secondary" style="width:8px; height:8px;"></i>
+								<i v-else class="rounded-circle bg-success" style="width:8px; height:8px;"></i>
 							</div>
 						</AppMenuItem>
-					</div>
-					<div>
-						{{filterElements}}
-					</div>
+						<!-- {{filterElements}} -->
+						<!-- {{listElements}} -->
+						{{listPersonnelActifs}}
+						</div>
+					
+					
 			</AppMenu>
 			<AppMenu v-else-if="$route.path == '/personnel-actif'">
 				<div class="search-wrapper input-group sticky-top">
@@ -352,7 +354,6 @@
 				<AppMenuItem :href="'/'" icon="bi bi-file-text"><strong class="search">Modard Guillaume</strong><br><span class="text-success">Développeur et Gourou Fullstack Senior</span><br><span>CDI 13/04/2022<i class="bi bi-arrow-right m-1"></i>sans date de sortie</span><br></AppMenuItem>
 				<AppMenuItem :href="'/'" icon="bi bi-file-text"><strong class="search">Ambassade</strong><br><span class="text-success">Développeur et Gourou Fullstack Senior</span><br><span>CDI 13/04/2022<i class="bi bi-arrow-right m-1"></i>sans date de sortie</span><br></AppMenuItem>
 				<AppMenuItem :href="'/'" icon="bi bi-file-text"><strong class="text-muted">Modard Guillaume</strong><br><span class="text-muted">Créateur d'API</span><br><span class="text-muted">CDD 13/04/2020<i class="bi bi-arrow-right m-1"></i>12-04-2022</span><br></AppMenuItem>
-			
 			</AppMenu>
 			
 		</template>
@@ -397,6 +398,7 @@ export default {
 			isConnectedUser: false,
 			search: '',
 			//searchOptions: false
+			listPersonnelActifs: [],
 		}
 	},
 
@@ -425,6 +427,7 @@ export default {
 		isConnectedUser(val) {
 			if (val) {
 				this.listElements();
+				this.listPersoActifs();
 			}
 		}
 	},
@@ -471,14 +474,38 @@ export default {
 			.then((data) => {
 				this.$store.dispatch('refreshElements', {
 					action,
-					elements: data
+					elements: data,
 				});
+				console.log('listElements', data);
 			})
 			.catch(this.$app.catchError);
 		},
 
-		
-			
+		/**
+		 * Envoie une requête pour lister les personnels actifs
+		 * enregistre la liste dans listPersonnelActifs
+		 * 
+		 */
+		listPersoActifs(){
+			this.$app.apiGet('structurePersonnel/GET/list?actif=true')
+				.then((data) => {
+					console.log(data);
+
+					this.listPersonnelActifs = data;
+					console.log('listactifs', this.listPersonnelActifs);
+				})
+				.catch(this.$app.catchError);
+		},
+
+		searchActifs(id){
+			this.listPersonnelActifs.forEach(el => {
+				if(id == el.id) return true
+				else return false
+			});
+                
+		},
+
+
 
 		
 
@@ -499,12 +526,15 @@ export default {
 	
 	
 
-	mounted() {
-		if (this.isConnectedUser) {
-			this.listElements();
-			this.filterElements();
-		}
-	}
+	// mounted() {
+		
+	// 	console.log('toto');
+	// 	// this.listElements();
+	// 	// this.filterElements();
+	// 	this.listpersoActifs();
+	// 	// if (this.isConnectedUser) {
+	// 	// }
+	// }
 
 }
 </script>

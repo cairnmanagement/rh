@@ -29,6 +29,10 @@
 									<span v-if="openedElement.oContrat.duree_indeterminee == 'NON'">CDD jusqu'au {{formatDateFr(openedElement.dsortie)}}</span>
 								</div>
 							</div>
+							<div class="d-flex align-items-center justify-content-end">
+								<button @click-prevent="persoArchived(openedElement.id)" class="btn btn-sm btn-outline-danger">Archiver</button>
+							</div>
+							
 						</div>
 					</div>
 					<div class="card mb-3">
@@ -40,8 +44,11 @@
 				</div>
 				<div class="col-12 col-xxl-6">
 					<div class="card">
-						<contract-info/>
-						{{}}
+						<contract-info></contract-info>
+					</div>
+					<div class="card">
+						<p>donnée API listContrats</p>
+						{{listContrats}}
 					</div>
 				</div>
 			</div>	
@@ -67,7 +74,8 @@ export default {
         return {
             pending: {
                 extendedData: true
-            }
+            },
+			listContrats: [],
 			
         };
     },
@@ -139,8 +147,9 @@ export default {
 		loadContract(id) {
 			if (this.openedElement) {
 					this.$app.apiGet("structurePersonnel/GET/" + id +"/contrats")
-						.then(data => {
+						.then((data) => {
 						console.log('result contrat', data);
+						this.listContrats = data
 					})
 						.catch(this.$app.catchError);
 				

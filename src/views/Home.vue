@@ -10,9 +10,9 @@
 					</button>
 				</div>
 			</HeaderToolbar>
-			<div class="container">
+			<div>
 				
-				<div class="">
+				<div class="container">
 					<h1 class="my-3 ms-2">Module de gestion du personnel</h1>
 					<div class="row mb-3">
 						<StaffManagementCard :display-mode="displayMode"/>
@@ -25,7 +25,7 @@
 					<hr>
 					
 				</div> 
-				<!-- <router-view/> -->
+				<router-view/>
 			</div>	
 		</div>
 	</div>
