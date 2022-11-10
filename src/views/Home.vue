@@ -2,16 +2,18 @@
 	<div>
 		<div v-if="$store.state.login">
 			<!-- Modifier à partir d'ici -->
-			<HeaderToolbar>
-				<div class="d-flex align-items-center justify-content-end">
-					<button class="btn btn-light" @click.prevent="$emit('refresh')" title="Actualiser les données" :disabled="isPending">
-						<i class="bi bi-arrow-clockwise" v-if="!isPending"></i>
-						<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" v-else></span>
-					</button>
-				</div>
-			</HeaderToolbar>
 			<div>
-				
+				<HeaderToolbar>
+					<div class="d-flex align-items-center justify-content-end">
+						<button class="btn btn-light" @click.prevent="$emit('refresh')" title="Actualiser les données" :disabled="isPending">
+							<i class="bi bi-arrow-clockwise" v-if="!isPending"></i>
+							<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" v-else></span>
+						</button>
+					</div>
+				</HeaderToolbar>
+			</div>
+
+			<div>	
 				<div class="container">
 					<h1 class="my-3 ms-2">Module de gestion du personnel</h1>
 					<div class="row mb-3">
@@ -22,9 +24,9 @@
 							<ContractsTimeLine/>
 						</div>
 					</div>
-					<hr>
-					
+					<hr>			
 				</div> 
+				
 				<router-view/>
 			</div>	
 		</div>
