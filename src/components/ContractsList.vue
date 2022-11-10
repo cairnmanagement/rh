@@ -37,11 +37,8 @@ export default {
     props: {
         tabContracts: Object
     },
-
-
-
-
-
-    
+    mounted(){
+        console.log(this.tabContracts);    
+    }    
     }
 </script>
