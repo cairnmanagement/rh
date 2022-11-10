@@ -33,8 +33,8 @@
             .then((data) => {
                 this.tabContractsByMonth = data;
                 
-                for (let date in data){
-                    console.log('date',data[date].contrat_a_duree_determinee);
+                for (let month in data){
+                    console.log('month',data[month]);
                 }
                 console.log('contrats par mois ', this.tabContractsByMonth);
             })
