@@ -21,43 +21,22 @@
 			
 			<router-link :to="{name:'infoContrat', params:{id:openedElement.id, idContrat:openedElement.oContrat.id}}" v-slot="{navigate,href}" custom>
 				<a :href="href" @click="navigate" class="list-group-item list-group-item-action d-flex justify-content-between mb-1">
-					<div v-if="openedElement.oContrat.duree_indeterminee == 'OUI'" class="d-flex flex-column align-items-start">
+
+					<div v-if="openedElement.oContrat.dsortie_reelle">{{openedElement.oContrat.dsortie_reelle}}</div>
+
+					<div v-else-if="openedElement.oContrat.duree_indeterminee == 'OUI'" class="d-flex flex-column align-items-start">
 						<span v-if="openedElement.oFonction.nom">{{openedElement.oFonction.nom}}</span>
 						<span class="text-success">depuis le {{entryDateFormat2}}</span>
-						<span v-if="openedElement.oContrat.dsortie_reelle">{{exitDateReal}}</span>
+						<!-- <span v-if="openedElement.oContrat.dsortie_reelle">{{exitDateReal}}</span> -->
 						<span>Contrat à durée indéterminée (X avenants)</span> 
 
-						<!-- <span class="mb-2">Contrat à durée indéterminée (? avenants)</span>  -->
-						<!-- <div class="text-success">
-							<span>. Sortie prévue le  {{exitDateFormat2}}</span>
-						</div>
-						<div class="text-success">
-							<span>. Avenant depuis le {{entryDateFormat2}}</span>
-						</div>
-						<div class="text-muted">
-							<span>. Avenant du {{entryDateFormat2}}</span>
-						</div>
-						<div class="text-muted">
-							<span>. Avenant du {{entryDateFormat2}}</span>
-						</div> -->
 					</div>
 					<div v-else-if="openedElement.oContrat.duree_indeterminee ='NON'" class="d-flex flex-column align-items-start" >
 						<span v-if="openedElement.oFonction.nom">{{openedElement.oFonction.nom}}</span>
 						<span class="text-success">du {{entryDateFormat2}} au {{exitDateFormat2}}</span>
 						<span>Contrat à durée déterminée (X avenants)</span> 
-						
-						
-						<!-- <div class="text-success">
-							<span>. Avenant depuis le {{entryDateFormat2}}</span>
-						</div>
-						<div class="text-muted">
-							<span>. Avenant du {{entryDateFormat2}}</span>
-						</div>
-						<div class="text-muted">
-							<span>. Avenant du {{entryDateFormat2}}</span>
-						</div> -->
 					</div>
-					<div v-else>non déterminée</div>
+					<div v-else>?</div>
 					
 					<div class="d-flex align-items-center">
 						<i class="bi bi-arrow-up-right"></i>
@@ -118,10 +97,10 @@ export default{
 			date.locale(fr);
 			return date.format(new Date(this.openedElement.dsortie)  , 'DD MMM YYYY')
 		},
-		exitDateReal(){
-			date.locale(fr);
-			return date.format(new Date(this.openedElement.oContrat.dsortie_reelle) , 'DD MM YYYY')
-		}
+		// exitDateReal(){
+		// 	date.locale(fr);
+		// 	return date.format(new Date(this.openedElement.oContrat.dsortie_reelle) , 'DD MM YYYY')
+		// }
 	},
 
 	methods : {
