@@ -89,8 +89,8 @@
 										<div>CDD depuis le {{ formatDateFr(personnel.dentree)}}</div>
 									</div> -->
 									<!-- <span v-if="personnel.dsortie =='0000-00-00 00:00:00'">pas de date sortie</span> -->
-								<i v-if="searchActifs(personnel.id) == true" class="rounded-circle bg-secondary" style="width:8px; height:8px;"></i>
-								<i v-else class="rounded-circle bg-success" style="width:8px; height:8px;"></i>
+								<i v-if="searchActifs(personnel.id)" class="rounded-circle bg-success" style="width:10px; height:10px;"></i>
+								<i v-else class="rounded-circle bg-secondary" style="width:8px; height:8px;"></i>
 							</div>
 						</AppMenuItem>
 						<!-- {{filterElements}} -->
@@ -497,12 +497,14 @@ export default {
 				.catch(this.$app.catchError);
 		},
 
-		searchActifs(id){
-			this.listPersonnelActifs.forEach(el => {
-				if(id == el.id) return true
-				else return false
-			});
-                
+		searchActifs(idName){
+			let actif = false;
+			for (let persoActif of this.listPersonnelActifs) {
+					if (persoActif.id == idName) {
+						actif=true;
+					}
+                } 
+			return actif;   
 		},
 
 
