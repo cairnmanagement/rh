@@ -22,7 +22,12 @@
 			<router-link :to="{name:'infoContrat', params:{id:openedElement.id, idContrat:openedElement.oContrat.id}}" v-slot="{navigate,href}" custom>
 				<a :href="href" @click="navigate" class="list-group-item list-group-item-action d-flex justify-content-between mb-1">
 
-					<div v-if="openedElement.oContrat.dsortie_reelle">{{openedElement.oContrat.dsortie_reelle}}</div>
+					<div v-if="openedElement.oContrat.dsortie_reelle" class="d-flex flex-column align-items-start">
+						<span v-if="openedElement.oFonction.nom">{{openedElement.oFonction.nom}}</span>
+						<span class="text-muted">du {{entryDateFormat2}} au {{exitDateFormat2}}</span>
+						<span v-if="openedElement.oContrat.duree_indeterminee == 'OUI'">Contrat à durée indéterminée (X avenants)</span> 
+						<span v-else>Contrat à durée déterminée (X avenants)</span> 
+					</div>
 
 					<div v-else-if="openedElement.oContrat.duree_indeterminee == 'OUI'" class="d-flex flex-column align-items-start">
 						<span v-if="openedElement.oFonction.nom">{{openedElement.oFonction.nom}}</span>

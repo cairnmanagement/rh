@@ -23,9 +23,9 @@
         "list": true,
         "core": true,
         "header": true,
-        "options":{
-            "core":{
-                "className":"overflow-auto"
+        "options": {
+            "core": {
+                "className": "overflow-auto"
             }
         }
     },
