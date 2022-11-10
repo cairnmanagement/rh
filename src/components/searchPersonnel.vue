@@ -8,12 +8,12 @@
             </div>
         </form>
         <div class="d-flex flex-row justify-content-start" v-if="filterCheck">
-            <span v-if="searchOptions.actif == 1"  class=" badge bg-secondary  me-1">actifs</span>
-            <span v-if="searchOptions.actif == 0" class=" badge bg-secondary  me-1">inactifs</span>
-            <span v-if="searchOptions.matricule_status == 1" class=" badge bg-secondary  me-1">immatriculés</span>
-            <span v-if="searchOptions.matricule_status == 0" class=" badge bg-secondary  me-1">sans matricule</span>
-            <span v-if="searchOptions.archived == 1" class=" badge bg-secondary  me-1">archivés</span>
-            <span v-if="searchOptions.archived == 0" class=" badge bg-secondary  me-1">non archivés</span>
+            <span v-if="searchOptions.actif == 1"  class=" badge bg-warning  me-1">actifs</span>
+            <span v-if="searchOptions.actif == 0" class=" badge bg-warning  me-1">inactifs</span>
+            <span v-if="searchOptions.matricule_status == 1" class=" badge bg-warning  me-1">immatriculés</span>
+            <span v-if="searchOptions.matricule_status == 0" class=" badge bg-warning  me-1">sans matricule</span>
+            <span v-if="searchOptions.archived == 1" class=" badge bg-warning  me-1">archivés</span>
+            <span v-if="searchOptions.archived == 0" class=" badge bg-warning  me-1">non archivés</span>
 
         </div>
 

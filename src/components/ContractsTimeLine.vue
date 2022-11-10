@@ -32,6 +32,10 @@
             this.$app.apiGet(apiUrl)
             .then((data) => {
                 this.tabContractsByMonth = data;
+                
+                for (let date in data){
+                    console.log('date',data[date].contrat_a_duree_determinee);
+                }
                 console.log('contrats par mois ', this.tabContractsByMonth);
             })
             .catch(this.$app.catchError);
