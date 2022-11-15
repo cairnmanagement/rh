@@ -96,7 +96,9 @@
         </ul>
     </div>
 </template>
+
 <script>
+
 import { mapState, mapActions } from 'vuex';
 export default{
 
@@ -159,7 +161,7 @@ export default{
                 .catch(this.$app.catchError);
 			}
 			else {
-				alert ('Ce contact télphonique ne sera pas supprimé');
+				alert ('Ce contact téléphonique ne sera pas supprimé');
 				console.log('téléphone non supprimé');
 			}
 		},

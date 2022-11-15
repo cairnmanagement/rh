@@ -1,8 +1,20 @@
 <template>
     <div class="card">
         <div class="card-body">
+            <div class="row">
+                <div class="col-11">
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item">
+                            <div id="curve_chart" tabindex="-1" style="width: 99%;"></div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-1">
+                    
+                </div>
+            </div>
             <h3>Évolution des effectifs</h3>
-            <div id="curve_chart" style="width: 99%"></div>
 
             <div>
                 {{tabContractsByMonth}}
@@ -34,7 +46,7 @@
                 this.tabContractsByMonth = data;
                 
                 for (let month in data){
-                    console.log('month',data[month]);
+                    console.log('stats par mois', month, data[month]);
                 }
                 console.log('contrats par mois ', this.tabContractsByMonth);
             })
@@ -49,12 +61,7 @@
                 let div = document.getElementById('curve_chart');
     
                 let data = [
-                    // ['Task', 'Type de contrat'],
-                    // ['CDI',     12],
-                    // ['CDD',      45],
-                    // ['Apprentissage',  2],
-                    // ['Professionalisation', 3],
-                    // ['Stage',    2]
+                    
                     ['Month', 'CDI', 'CDD','Professionnalisation', 'Apprentissage', 'Stage','TOTAL'],
                     ['Avr 2022',  11,   2,  6,1,1, 21],
                     ['Mai 2022',  9,   2,  12,1,1, 25],
@@ -91,32 +98,23 @@
                 var chart = new GoogleCharts.api.visualization.LineChart(div);
     
                 chart.draw(visData, options);
-            },
-    
-            /**
-             * Charge un  diagramme
-             */
-            loadChart() {
-                let el = document.getElementById('curve_chart');
-                if (typeof el !== 'undefined') {
-                    GoogleCharts.load(this.drawChart);
-                }
             }
         },
 
         updated() {
-
-            this.loadChart();
+            //this.drawChart();
         },
 
+        beforeUnmount() {
+            window.removeEventListener("resize", this.drawChart);
+        },
 
-        
-    
         mounted() {
-            this.loadChart();
-            this.displayStatsContractsbyMonth();
-            window.addEventListener ("resize", this.drawChart);
             GoogleCharts.load(this.drawChart);
+            //this.displayStatsContractsbyMonth();
+            window.addEventListener("resize", this.drawChart);
+            //GoogleCharts.load(this.drawChart);
+            this.displayStatsContractsbyMonth();
         }
     }
     </script>

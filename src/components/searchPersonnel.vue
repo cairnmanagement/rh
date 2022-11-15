@@ -1,20 +1,21 @@
 <template>
     <div>
-        <form method="post" class="border-bottom d-flex" @submit.prevent="searchList()">
-            <div class="input-group mb-3">
-                <input  type="text" class="form-control" placeholder="rechercher" v-model="searchOptions.q" >
-                <button class="btn btn-outline-secondary input-group-text" type="submit"><i class="bi bi-search"></i></button>
-                <button @click.prevent="searchForm = !searchForm" type="button" :class="filterButtonClass()" class="btn  input-group-text"><i class="bi bi-filter"></i> <span v-if="filterCheck">{{filterNumber}}</span> </button>
+        <div>
+            <form method="post" class=" d-flex" @submit.prevent="searchList()">
+                <div class="input-group m-2">
+                    <input  type="text" class="form-control" placeholder="rechercher" v-model="searchOptions.q" >
+                    <button class="btn btn-outline-secondary input-group-text" type="submit"><i class="bi bi-search"></i></button>
+                    <button @click.prevent="searchForm = !searchForm" type="button" :class="filterButtonClass()" class="btn  input-group-text"><i class="bi bi-filter"></i> <span v-if="filterCheck">{{filterNumber}}</span> </button>
+                </div>
+            </form>
+            <div class="d-flex flex-row justify-content-center mB-2" v-if="filterCheck">
+                <span v-if="searchOptions.actif == 1"  class=" badge bg-warning  me-1">ACTIFS</span>
+                <span v-if="searchOptions.actif == 0" class=" badge bg-warning  me-1">INACTIFS</span>
+                <span v-if="searchOptions.matricule_status == 1" class=" badge bg-warning  me-1">IMMATRICULÉS</span>
+                <span v-if="searchOptions.matricule_status == 0" class=" badge bg-warning  me-1">SANS MATRICULE</span>
+                <span v-if="searchOptions.archived == 1" class=" badge bg-warning  me-1">ARCHIVÉS</span>
+                <span v-if="searchOptions.archived == 0" class=" badge bg-warning  me-1">NON ARCHIVÉS</span>
             </div>
-        </form>
-        <div class="d-flex flex-row justify-content-start" v-if="filterCheck">
-            <span v-if="searchOptions.actif == 1"  class=" badge bg-warning  me-1">actifs</span>
-            <span v-if="searchOptions.actif == 0" class=" badge bg-warning  me-1">inactifs</span>
-            <span v-if="searchOptions.matricule_status == 1" class=" badge bg-warning  me-1">immatriculés</span>
-            <span v-if="searchOptions.matricule_status == 0" class=" badge bg-warning  me-1">sans matricule</span>
-            <span v-if="searchOptions.archived == 1" class=" badge bg-warning  me-1">archivés</span>
-            <span v-if="searchOptions.archived == 0" class=" badge bg-warning  me-1">non archivés</span>
-
         </div>
 
         <div v-if="searchForm" id="searchOptions">

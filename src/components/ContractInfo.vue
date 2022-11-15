@@ -49,12 +49,12 @@
 				</a>
 				<div class="card m-6">
 					<div class="d-flex flex-column">
-						<div>
+						<!-- <div>
 							id contrat: {{openedElement.oContrat.id}}
 						</div>
 						<div>
 							duree indéterminée: {{openedElement.oContrat.duree_indeterminee}}
-						</div>
+						</div> -->
 						<div class="card-body">
 							<p>données oContrat</p>
 							{{openedElement.oContrat}}
