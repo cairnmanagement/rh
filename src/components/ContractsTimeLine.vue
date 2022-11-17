@@ -3,16 +3,8 @@
         <div class="card-body">
             <h3 class="card-title fs-5">Évolution des effectifs</h3>
             <div class="row">
-                <div class="col-11">
-                    <div class="list-group list-group-flush">
-                        <div class="list-group-item">
-                            <div id="curve_chart" tabindex="-1" style="width: 99%;"></div>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="col-1">
-                    
+                <div class="col-12">
+                    <div id="curve_chart"></div>
                 </div>
             </div>
         </div>

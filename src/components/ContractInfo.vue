@@ -47,22 +47,9 @@
 						<i class="bi bi-arrow-up-right"></i>
 					</div>
 				</a>
-				<div class="card m-6">
-					<div class="d-flex flex-column">
-						<!-- <div>
-							id contrat: {{openedElement.oContrat.id}}
-						</div>
-						<div>
-							duree indéterminée: {{openedElement.oContrat.duree_indeterminee}}
-						</div> -->
-						<div class="card-body">
-							<p>données oContrat</p>
-							{{openedElement.oContrat}}
-						</div>
-					</div>
-					<div>
-					</div>
-				</div>
+					
+
+					
 			</router-link>
 		</div>
 	</div>
@@ -76,7 +63,7 @@ import fr from 'date-and-time/locale/fr'
 export default{
 
 	props:{
-
+		contracts: Array
 	},
 
 	computed:{

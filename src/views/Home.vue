@@ -24,8 +24,6 @@
 	
 		<router-view/>
 	</div> 
-
-<!-- fin de modif-->
 </template>
 
 <script>
@@ -68,7 +66,6 @@ export default {
 		displayMode() {
 			return this.chartMode ? 'chart' : 'list';
 		}
-		
 	},
 
 	methods: {
@@ -117,5 +114,4 @@ export default {
 	}
 	
 }
-
 </script>
