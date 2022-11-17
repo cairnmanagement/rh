@@ -7,7 +7,7 @@
                     <select class="form-select" id="personne_civilite" name="civilite" v-model="personnel.civilite">
                         <option value="Mr">Monsieur</option>
                         <option value="Mme">Madame</option>
-                        <option value="Melle">Mademoiselle</option>
+                        <!-- <option value="Melle">Mademoiselle</option> -->
                     </select>						
                 </div>
                 <div class="col mb-3">
@@ -28,10 +28,10 @@
                     <label for="lieu_naissance" class="form-label">Ville de naissance</label>
                     <input type="text" class="form-control"  placeholder="Ville"  id="lieu_naissance" name="lieuNaissance" v-model="personnel.lieuNaissance">
                 </div>
-                <div class="col mb-3">
+                <!-- <div class="col mb-3">
                     <label for="pays_naissance" class="form-label">Pays de naissance</label>
                     <input type="text" class="form-control text-warning"  placeholder="Pays"  id="pays_naissance" name="paysNaissance" v-model="personnel.paysNaissance">
-                </div>
+                </div> -->
             </div>
             <div class="row g-2">
                 <div class="col mb-3">
@@ -55,16 +55,16 @@ import { mapState } from 'vuex';
     
         data() {
             return {
-                personnel: {
-                    civilite: null,
-                    nom: null,
-                    prenom: null,
-                    dn: null,
-                    lieuNaissance: null,
-                    nss: null,
-                    nationalite: null,
-                    PaysNaissance : null
-                },
+                // personnel: {
+                //     civilite: null,
+                //     nom: null,
+                //     prenom: null,
+                //     dn: null,
+                //     lieuNaissance: null,
+                //     nss: null,
+                //     nationalite: null,
+                //     // paysNaissance : null
+                // },
             }
         },
         computed: {
@@ -75,9 +75,7 @@ import { mapState } from 'vuex';
                 if (this.$route.params.id) {
                     return false;
                 }
-                
                 return true
-                
             }
 
         },
@@ -91,7 +89,7 @@ import { mapState } from 'vuex';
                 this.personnel.lieuNaissance = this.openedElement.oPersonne.lieuNaissance
                 this.personnel.nss = this.openedElement.nss
                 this.personnel.nationalite = this.openedElement.oPersonne.nationalite
-                this.personnel.paysNaissance = 'à prévoir API'
+                // this.personnel.paysNaissance = 'à prévoir API'
             }
         }
     }

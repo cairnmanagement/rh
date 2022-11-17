@@ -16,12 +16,12 @@
 			<h1>Module de gestion du personnel</h1>
 
 			<StaffManagementCard :display-mode="displayMode" />
+			<ContractsTimeLine/>
 
-			<div class="row">
+			<!-- <div class="row">
 				<div class="col">
-					<ContractsTimeLine/>
 				</div>
-			</div>
+			</div> -->
 			<hr>
 		</div>
 	
@@ -66,9 +66,7 @@ export default {
 		displayMode() {
 			return this.chartMode ? 'chart' : 'list';
 		}
-		
 	}
 	
 }
-
 </script>

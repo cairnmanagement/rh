@@ -63,9 +63,19 @@
 							</div>
 						</div>
 						<i  v-if="searchArchived(personnel.id) & searchActifs(personnel.id)" class="bi bi-archive-fill text-success"></i>
-						<i  v-else-if="searchArchived(personnel.id) & !searchActifs(personnel.id)" class="bi bi-archive text-secondary"></i>
-						<i  v-else-if="!searchArchived(personnel.id) & !searchActifs(personnel.id)" class="bi bi-circle text-secondary"></i>
-						<i  v-else-if="!searchArchived(personnel.id) & searchActifs(personnel.id)" class="bi bi-circle-fill text-success"></i>
+						<i  v-else-if="searchArchived(personnel.id) & !searchActifs(personnel.id)" class="bi bi-archive-fill text-secondary"></i>
+						<!-- <i  v-else-if="!searchArchived(personnel.id) & !searchActifs(personnel.id)" class="bi bi-circle text-secondary"></i> -->
+						<!-- <i  v-else-if="!searchArchived(personnel.id) & searchActifs(personnel.id)" class="bi bi-circle-fill text-success"></i> -->
+						<div v-else-if="!personnel.matricule" >
+							<i class="bi bi-circle text-secondary"></i>
+						</div>
+						<div v-else-if="!searchArchived(personnel.id) & !searchActifs(personnel.id)" class="badge bg-secondary">
+							{{personnel.matricule}}
+						</div>
+						<div v-else-if="!searchArchived(personnel.id) & searchActifs(personnel.id)" class="badge bg-success">
+							{{personnel.matricule}}
+						</div>
+						
 
 						<!-- <i v-if="searchActifs(personnel.id)" class="bi bi-circle-fill text-success" ></i> -->
 						<!-- <i v-if="!searchActifs(personnel.id)"  class="bi bi-circle text-secondary"></i> -->

@@ -1,20 +1,16 @@
 <template>
-    <div class="card">
-        <div class="card-body">
-            <div class="row">
-                <div class="col-11">
-                    <div class="list-group list-group-flush">
+    <div class="row row-cols-1 row-cols-lg-2">
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <h3>Évolution des effectifs</h3>
+                    <div id="curve_chart" tabindex="-1" style="width: 99%;"></div>
+                    <!-- <div class="list-group list-group-flush">
                         <div class="list-group-item">
-                            <div id="curve_chart" tabindex="-1" style="width: 99%;"></div>
                         </div>
-                    </div>
-
-                </div>
-                <div class="col-1">
-                    
+                    </div> -->
                 </div>
             </div>
-            <h3>Évolution des effectifs</h3>
 
             <div>
                 {{tabContractsByMonth}}

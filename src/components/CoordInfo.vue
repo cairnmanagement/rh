@@ -134,7 +134,6 @@ export default{
 			}
 			else {
 				alert ('Cette adresse postale ne sera pas supprimée');
-				console.log('adresse postale non supprimée');
 			}
 		},
 
@@ -162,7 +161,6 @@ export default{
 			}
 			else {
 				alert ('Ce contact téléphonique ne sera pas supprimé');
-				console.log('téléphone non supprimé');
 			}
 		},
 
@@ -190,7 +188,6 @@ export default{
 			}
 			else {
 				alert ('Cette adresse mail ne sera pas supprimée');
-				console.log('adresse mail non supprimée');
 			}
 		},
 

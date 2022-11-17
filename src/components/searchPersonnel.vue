@@ -130,9 +130,6 @@
                 .catch(this.$app.catchError)
 				.finally(() => this.searchForm = false);
 
-                // this.searchForm = false;
-
-
             },
 
             

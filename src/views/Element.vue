@@ -20,11 +20,12 @@
 						<div class="card-body">
 							<div class="position-relative">
 								<user-image :name="openedElement.oPersonne.nom" size="xl"></user-image>
-								<span class="badge bg-secondary position-absolute" style="top:0px;">{{openedElement.matricule}}</span>
+								<span v-if="openedElement.matricule" class="badge bg-secondary position-absolute" style="top:0px;">{{openedElement.matricule}}</span>
 							</div>
 							<h3>{{openedElement.oPersonne.prenom}} {{openedElement.oPersonne.nom}}</h3>
 							<div class="align-items-center justify-content-between" >
 								<div class="d-flex align-items-center justify-content-center">
+									<span v-if="!openedElement.oContrat.duree_indeterminee">pas de contrat</span>
 									<span v-if="openedElement.oContrat.duree_indeterminee == 'OUI'">CDI depuis le {{formatDateFr(openedElement.dentree)}}</span>
 									<span v-if="openedElement.oContrat.duree_indeterminee == 'NON'">CDD jusqu'au {{formatDateFr(openedElement.dsortie)}}</span>
 								</div>
@@ -44,10 +45,9 @@
 				</div>
 				<div class="col-12 col-xxl-6">
 					<div class="card">
-						<contract-info></contract-info>
+						<contract-info :contracts="listContrats"></contract-info>
 					</div>
 					<div class="card">
-						<p>donnée API listContrats</p>
 						{{listContrats}}
 					</div>
 				</div>
@@ -152,8 +152,6 @@ export default {
 						this.listContrats = data
 					})
 						.catch(this.$app.catchError);
-				
-				
 			}
         }
     },
@@ -165,7 +163,6 @@ export default {
         this.$store.dispatch("load", to.params.id);
         this.loadData(to.params.id);
         this.loadContract(to.params.id);
-
 
     },
     /**
