@@ -12,7 +12,10 @@ export default createStore({
 		},
 		elements: [],
 		openedElement: null,
-		tmpElement: null
+		tmpElement: null,
+		personnelStats: null,
+		contratStats: null,
+		contratCurrentStats: null
 	},
 	getters: {
 		activeStructure(state) {
@@ -177,6 +180,36 @@ export default createStore({
 			if (index !== -1) {
 				state.openedElement.oPersonne[key].splice(index, 1);
 			}
+		},
+
+		/**
+		 * Met à jour les statistiques du personnel dans le store.
+		 * 
+		 * @param {object} state State de VueX
+		 * @param {object} stats Informations à mettre à jour
+		 */
+		personnelStats(state, stats) {
+			state.personnelStats = stats;
+		},
+
+		/**
+		 * Met à jour les statistiques des contrats à date dans le store.
+		 * 
+		 * @param {object} state State de VueX
+		 * @param {object} stats Informations à mettre à jour
+		 */
+		contratCurrentStats(state, stats) {
+			state.contratCurrentStats = stats;
+		},
+
+		/**
+		 * Met à jour les statistiques des contrats sur 12 mois dans le store.
+		 * 
+		 * @param {object} state State de VueX
+		 * @param {object} stats Informations à mettre à jour
+		 */
+		contratStats(state, stats) {
+			state.contratStats = stats;
 		}
 	},
 	actions: {
@@ -281,6 +314,36 @@ export default createStore({
 		 */
 		removeRessource(context, ressourceOptions) {
 			context.commit('removePersonnelRessource', ressourceOptions);
+		},
+
+		/**
+		 * Met à jour les statistiques du personnel dans le store.
+		 * 
+		 * @param {object} context Instance VueX
+		 * @param {object} stats Données à mettre à jour
+		 */
+		updatePersonnelStats(context, stats) {
+			context.commit('personnelStats', stats);
+		},
+
+		/**
+		 * Met à jour les statistiques des contrats sur 12 mois dans le store.
+		 * 
+		 * @param {object} context Instance VueX
+		 * @param {object} stats Données à mettre à jour
+		 */
+		updateContratStats(context, stats) {
+			context.commit('contratStats', stats);
+		},
+
+		/**
+		 * Met à jour les statistiques des contrats au jour dans le store.
+		 * 
+		 * @param {object} context Instance VueX
+		 * @param {object} stats Données à mettre à jour
+		 */
+		updateContratCurrentStats(context, stats) {
+			context.commit('contratCurrentStats', stats);
 		}
 	},
 	modules: {

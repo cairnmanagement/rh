@@ -37,6 +37,10 @@
 					<a class="nav-link text-light" href="#"><i class="bi bi-arrow-clockwise"></i></a>
 
 			</div>
+			<div v-else class="d-flex align-items-center">
+				<span class="mx-2">Module de gestion du personnel</span>
+				<button class="btn btn-dark" title="Actualiser les données"><i class="bi bi-arrow-clockwise"></i></button>
+			</div>
 		</template>
 
 
@@ -77,8 +81,8 @@
 		</template>
 
 		<template v-slot:core>
-			<div class="bg-light">
-				<router-view/>
+			<div class="bg-light" v-if="isConnectedUser">
+				<router-view />
 			</div>
 		</template>
 	</AppWrapper>

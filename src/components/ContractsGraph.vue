@@ -21,7 +21,7 @@ export default {
     },
 
     props: {
-        tabContracts: Object
+        contratCurrentStats: Object
     },
 
     methods: {
@@ -61,13 +61,14 @@ export default {
             let div = document.getElementById('piechart');
 
             let data = [
-                ['Task', 'Type de contrat'],
-                ['CDI',     this.tabContracts.contrat_a_duree_indeterminee],
-                ['CDD',      this.tabContracts.contrat_a_duree_determinee],
-                ['Apprentissage',  this.tabContracts.contrat_d_apprentissage],
-                ['Professionalisation', this.tabContracts.contrat_de_professionnalisation],
-                ['Stage',    this.tabContracts.stage]
+                ['Task', 'Type de contrat']
             ];
+
+            for (const key in this.contratCurrentStats) {
+                if (key !== 'total') {
+                    data.push([key, this.contratCurrentStats[key]]);
+                }
+            }
 
             let options ={
                 //contrats en cours
