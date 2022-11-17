@@ -120,7 +120,6 @@ export default {
         getRessource(idMail) {
             if(!this.openedElement.oPersonne.emails){
                 this.ressource = this.defaultRessource;
-                alert('pas d\'emails')
             }
             else { 
                 let ressource = this.openedElement.oPersonne.emails.find(e => e.id == idMail);

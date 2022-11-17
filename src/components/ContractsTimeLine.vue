@@ -1,8 +1,24 @@
 <template>
     <div class="card">
         <div class="card-body">
+            <div class="row">
+                <div class="col-11">
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item">
+                            <div id="curve_chart" tabindex="-1" style="width: 99%;"></div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-1">
+                    
+                </div>
+            </div>
             <h3>Évolution des effectifs</h3>
-            <div id="curve_chart" style="width: 99%"></div>
+
+            <div>
+                {{tabContractsByMonth}}
+            </div>
         </div>
     </div>
 </template>
@@ -13,13 +29,29 @@
     
     export default {
         
-        // data() {
-        //     return {
-        //         displayMode: true
-        //     }
-        // },
+        
+        data() {
+		return {
+			
+            tabContractsByMonth: {},
+		}
+	},
     
         methods: {
+
+            displayStatsContractsbyMonth(){
+            let apiUrl = 'structurePersonnelContrat/GET/compteur?byMonth=true&nbMonth=8';
+            this.$app.apiGet(apiUrl)
+            .then((data) => {
+                this.tabContractsByMonth = data;
+                
+                for (let month in data){
+                    console.log('stats par mois', month, data[month]);
+                }
+                console.log('contrats par mois ', this.tabContractsByMonth);
+            })
+            .catch(this.$app.catchError);
+        },
     
             
             /**
@@ -29,17 +61,17 @@
                 let div = document.getElementById('curve_chart');
     
                 let data = [
-                    // ['Task', 'Type de contrat'],
-                    // ['CDI',     12],
-                    // ['CDD',      45],
-                    // ['Apprentissage',  2],
-                    // ['Professionalisation', 3],
-                    // ['Stage',    2]
-                    ['Month', 'CDI', 'CDD','Autres', 'TOTAL'],
-                    ['Juil 2022',  21,  6,  2,  29],
-                    ['Août 2022',  20,  6,  2,  28],
-                    ['Sept 2022',  19,  2, 5,  26],
-                    ['Oct 2022',  18,   2,  6, 27]
+                    
+                    ['Month', 'CDI', 'CDD','Professionnalisation', 'Apprentissage', 'Stage','TOTAL'],
+                    ['Avr 2022',  11,   2,  6,1,1, 21],
+                    ['Mai 2022',  9,   2,  12,1,1, 25],
+                    ['Juin 2022',  9,   2,  4,1,1, 17],
+                    ['Juil 2022',  9,  6,  0, 1,1, 17],
+                    ['Août 2022',  9,  6,  2,1,1,  19],
+                    ['Sept 2022',  9,  2, 5, 1,1, 18],
+                    ['Oct 2022',  9,   2,  6,1,0, 18],
+                    ['Nov 2022',  9,   2,  6,1,1, 19],
+
                 ];
     
                 let options ={
@@ -66,44 +98,23 @@
                 var chart = new GoogleCharts.api.visualization.LineChart(div);
     
                 chart.draw(visData, options);
-            },
-    
-            /**
-             * Charge un  diagramme
-             */
-            loadChart() {
-                let el = document.getElementById('curve_chart');
-                if (typeof el !== 'undefined') {
-                    GoogleCharts.load(this.drawChart);
-                }
             }
         },
 
         updated() {
-
-            this.loadChart();
+            //this.drawChart();
         },
-        // watch: {
 
-        //     window.addEventListener ('resize', this.drawChart)
+        beforeUnmount() {
+            window.removeEventListener("resize", this.drawChart);
+        },
 
-        // },
-
-        // beforeUnmount() {
-        //     window.removeEventListener("resize", this.drawChart);
-        // },
-    
-        // updated() {
-        //     this.drawChart();
-        // },
-
-        
-    
         mounted() {
-            this.loadChart();
-            // window.addEventListener ("resize", this.drawChart);
-            // GoogleCharts.load(this.drawChart);
-            // window.addEventListener("resize", this.drawChart);
+            GoogleCharts.load(this.drawChart);
+            //this.displayStatsContractsbyMonth();
+            window.addEventListener("resize", this.drawChart);
+            //GoogleCharts.load(this.drawChart);
+            this.displayStatsContractsbyMonth();
         }
     }
     </script>

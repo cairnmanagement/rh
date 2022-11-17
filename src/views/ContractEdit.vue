@@ -3,7 +3,9 @@
             <contract-form/>
     </AppModal>
 </template>
+
 <script>
+
 import ContractForm from '../components/ContractForm.vue';
 import AppModal from '../components/pebble-ui/AppModal.vue';
 export default {

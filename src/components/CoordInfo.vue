@@ -30,7 +30,7 @@
         </div>
         <ul class="list-group list-group-flush">
             
-            <li v-if="!openedElement.oPersonne.telephones" class="list-group-item d-flex align-items-between text-warning">Pas de numéro de téléphone enregistré</li>
+            <li v-if="!openedElement.oPersonne.telephones?.length" class="list-group-item d-flex align-items-between text-warning">Pas de numéro de téléphone enregistré</li>
             <li v-else class="list-group-item d-flex align-items-baseline">
                 <div class="me-3"><i class="bi bi-phone"></i></div>
                 <div class="d-flex flex-column flex-fill">
@@ -66,33 +66,39 @@
                     </div>
                 </div>
             </li>
-            
-            <li  v-for="item in openedElement.oPersonne.adresses" :key="item.id" class="list-group-item d-flex align-items-baseline">
-                <div class="me-3"><i class="bi bi-geo-alt"></i></div>
-                <div class="d-flex flex-column flex-fill" >
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div>
-                            <span v-if="item.type" class="text-muted">{{item.type}}</span>
-                            <span v-else class="text-muted">Contractuelle</span>
+
+            <li v-if="!openedElement.oPersonne.adresses?.length" class="list-group-item d-flex align-items-baseline text-warning"> Pas d'adresse postale enregistrée</li>
+            <li v-else class="list-group-item">
+
+                <div  v-for="item in openedElement.oPersonne.adresses" :key="item.id" class="d-flex align-items-baseline">
+                    <div class="me-3"><i class="bi bi-geo-alt"></i></div>
+                    <div class="d-flex flex-column flex-fill" >
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <span v-if="item.type" class="text-muted">{{item.type}}</span>
+                                <span v-else class="text-muted">Contractuelle</span>
+                            </div>
+                            <div>
+                                <router-link :to="{name:'ressourceAddress', params:{id:openedElement.id, idAdress:item.id}}" v-slot="{navigate,href}" custom>
+                                    <a @click="navigate" :href="href" class=" btn btn-sm btn-light rounded-pill me-2"><i class="bi bi-pencil"></i></a>
+                                </router-link>
+                                <button @click.prevent="deleteAdress(item.id)" class="btn btn-sm btn-light rounded-pill text-black-50"><i class="bi bi-trash3"></i></button>
+                            </div>
                         </div>
-                        <div>
-                            <router-link :to="{name:'ressourceAddress', params:{id:openedElement.id, idAdress:item.id}}" v-slot="{navigate,href}" custom>
-                                <a @click="navigate" :href="href" class=" btn btn-sm btn-light rounded-pill me-2"><i class="bi bi-pencil"></i></a>
-                            </router-link>
-                            <button @click.prevent="deleteAdress(item.id)" class="btn btn-sm btn-light rounded-pill text-black-50"><i class="bi bi-trash3"></i></button>
+                        <div class="d-flex flex-column align-items-start justify-content-between">
+                            <span>{{item.voie}}</span>
+                            <span> {{item.complement}} </span>
+                            <span>{{item.cp}} {{item.localite}}</span>
                         </div>
-                    </div>
-                    <div class="d-flex flex-column align-items-start justify-content-between">
-                        <span>{{item.voie}}</span>
-                        <span> {{item.complement}} </span>
-                        <span>{{item.cp}} {{item.localite}}</span>
                     </div>
                 </div>
             </li>
         </ul>
     </div>
 </template>
+
 <script>
+
 import { mapState, mapActions } from 'vuex';
 export default{
 
@@ -121,7 +127,7 @@ export default{
 						});
                     }
                     else {
-						alert('erreurinconnue!')
+						alert('Erreur inconnue!')
 					}
                 })
                 .catch(this.$app.catchError);
@@ -155,7 +161,7 @@ export default{
                 .catch(this.$app.catchError);
 			}
 			else {
-				alert ('Ce contact télphonique ne sera pas supprimé');
+				alert ('Ce contact téléphonique ne sera pas supprimé');
 				console.log('téléphone non supprimé');
 			}
 		},

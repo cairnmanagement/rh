@@ -20,7 +20,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex align-items-center justify-content-between">
-                        <h3>16! Contrats en cours</h3>
+                        <h3><span class="me-2"> {{tabContractsDay.total}} </span>  Contrats en cours</h3>
                         <div class="form-check form-switch form-check-reverse ms-2" title="Mode graphique">
                             <input class="form-check-input" type="checkbox" role="switch" id="chartModeSwitch" v-model="chartMode">
                             <label class="form-check-label" for="chartModeSwitch">
@@ -28,8 +28,8 @@
                             </label>
                         </div>
                     </div>
-                    <ContractsList v-if="displayMode == 'list'"/>
-                    <ContractsGraph v-if="displayMode =='chart'"/>
+                    <ContractsList :tabContracts="tabContractsDay" v-if="displayMode == 'list'"/>
+                    <ContractsGraph :tabContracts="tabContractsDay" v-if="displayMode =='chart'"/>
                 </div>
             </div>
         </div>
@@ -47,12 +47,13 @@ export default {
     data() {
 		return {
 			chartMode: false,
-            tabStats:{}
+            tabStats:{},
+            tabContractsDay: {},
 		}
 	},
 
     methods:{
-        DisplayStats (){
+        displayStats (){
             let apiUrl = 'structurePersonnel/GET/stats';
             this.$app.apiGet(apiUrl)
             .then((data) => {
@@ -60,7 +61,17 @@ export default {
                 console.log('staff',this.tabStats);
             })
             .catch(this.$app.catchError);
-        }
+        },
+
+        displayStatsContractsDay(){
+            let apiUrl = 'structurePersonnelContrat/GET/compteur?date';
+            this.$app.apiGet(apiUrl)
+            .then((data) => {
+                this.tabContractsDay = data;
+                console.log('contrats du jour', this.tabContractsDay);
+            })
+            .catch(this.$app.catchError);
+        },
 
     },
 
@@ -72,7 +83,8 @@ export default {
     },
 
     mounted() {
-        this.DisplayStats();
+        this.displayStats();
+        this.displayStatsContractsDay();
     },
 
 
