@@ -1,8 +1,9 @@
 <template>
-    <div class="card">
         <div class="card-body">
             <div class="d-flex align-items-center justify-content-between">
-                <h3><span class="me-2"> {{contratCurrentStats.total}} </span>  Contrats en cours</h3>
+                <h3 class="card-title fs-5 m-0">
+                    <span v-if="displayMode == 'chart'" class="text-warning"> {{contratCurrentStats.total}} </span>  
+                    <span v-else> {{contratCurrentStats.total}} </span> Contrats en cours</h3>
                 <div class="form-check form-switch form-check-reverse ms-2" title="Mode graphique">
                     <input class="form-check-input" type="checkbox" role="switch" id="chartModeSwitch" v-model="chartMode">
                     <label class="form-check-label" for="chartModeSwitch">
@@ -14,7 +15,6 @@
             <ContractsList :contratCurrentStats="contratCurrentStats" v-if="displayMode == 'list'"/>
             <ContractsGraph :contratCurrentStats="contratCurrentStats" v-if="displayMode =='chart'"/>
         </div>
-    </div>
 </template>
 
 <script>

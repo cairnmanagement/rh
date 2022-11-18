@@ -1,10 +1,6 @@
 <template>
     <div>
-        <div>
-            <div class="card-body">
-                <div id="piechart"></div>
-            </div>
-        </div>
+        <div id="piechart"></div>
     </div>
 </template>
 <script>
@@ -26,34 +22,7 @@ export default {
 
     methods: {
 
-        // /**
-        //  * affiche le google Chart avec les données fournies
-        //  */
-        // drawVisualization() {
-        //     if (this.arrayStats.length) {
-        //         let div = document.getElementById("chart-personnel-"+this.personnel.id);
-    
-        //         let dataTable = [
-        //             ["Compteur", "Pris", "Refusé"]
-        //         ];
-    
-        //         this.arrayStats.forEach(counter => {
-        //             dataTable.push([counter.label, counter.approuved, counter.refused]);
-        //         });
-    
-        //         // Some raw data (not necessarily accurate)
-        //         let data = GoogleCharts.api.visualization.arrayToDataTable(dataTable);
-        //         let options = {
-        //             seriesType: "bars",
-        //             series: {
-        //                 0: { color: "#198754", visibleInLegend: false },
-        //                 1: { color: "#adb5bd", visibleInLegend: false }
-        //             }
-        //         };
-        //         let chart = new GoogleCharts.api.visualization.ComboChart(div);
-        //         chart.draw(data, options);
-        //     }
-        // },
+        
         /**
          * Affiche un diagramme GoogleChart PIE avec les données fournies
          */
@@ -66,7 +35,9 @@ export default {
 
             for (const key in this.contratCurrentStats) {
                 if (key !== 'total') {
-                    data.push([key, this.contratCurrentStats[key]]);
+                    
+                    let typeContrat = key.split('_').join(' ');
+                    data.push([typeContrat, this.contratCurrentStats[key]]);
                 }
             }
 
@@ -77,13 +48,13 @@ export default {
                 pieSliceText:"value",
                 slices: {
 
-                    0:{color: "#0d6efd"},
-                    1:{color: "#6610f2"},
-                    2:{color: "#6f42c1"},
-                    3:{color: "#d63384"},
-                    4:{color: "#dc3545"},
-                    5:{color: "#fd7e14"},
-                    6:{color: "#ffc107"},
+                    0:{color: "#28a745"},
+                    1:{color: "#007bff"},
+                    2:{color: "#6610f2"},
+                    3:{color: "#6f42c1"},
+                    4:{color: "#fd7e14"},
+                    5:{color: "#ffc107"},
+                    6:{color: "#20c997"},
                     7:{color: "#198754"},
                     8:{color: "#20c997"},
                     9:{color: "#0dcaf0"},

@@ -31,6 +31,11 @@
 								<a class="dropdown-item" :href="href" @click="navigate">Informations</a>
 							</router-link>
 						</li>
+						<li>
+							<router-link :to="'/'" custom v-slot="{ navigate, href }">
+								<a class="dropdown-item" :href="href" @click="navigate">Archiver</a>
+							</router-link>
+						</li>
 					</ul>
 					
 				</div>

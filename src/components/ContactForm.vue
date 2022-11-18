@@ -55,16 +55,16 @@ import { mapState } from 'vuex';
     
         data() {
             return {
-                // personnel: {
-                //     civilite: null,
-                //     nom: null,
-                //     prenom: null,
-                //     dn: null,
-                //     lieuNaissance: null,
-                //     nss: null,
-                //     nationalite: null,
-                //     // paysNaissance : null
-                // },
+                personnel: {
+                    civilite: null,
+                    nom: null,
+                    prenom: null,
+                    dn: null,
+                    lieuNaissance: null,
+                    nss: null,
+                    nationalite: null,
+                    // paysNaissance : null
+                },
             }
         },
         computed: {

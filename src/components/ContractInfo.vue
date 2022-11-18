@@ -5,19 +5,6 @@
 		</div>
 		<hr>
 		<div class="list-group-flush">
-			<!-- <router-link :to="{name:'infoContrat', params:{id:openedElement.id, idContrat:openedElement.oContrat.id}}" v-slot="{navigate,href}" custom>
-				<a :href="href" @click="navigate" class="list-group-item list-group-item-action d-flex justify-content-between mb-3">
-					<div class="d-flex flex-column align-items-start">
-						
-					ZONE DE TEST
-						
-						
-					</div>
-					<div class="d-flex align-items-center">
-						<i class="bi bi-arrow-up-right"></i>
-					</div>
-				</a>
-			</router-link> -->
 			
 			<router-link :to="{name:'infoContrat', params:{id:openedElement.id, idContrat:openedElement.oContrat.id}}" v-slot="{navigate,href}" custom>
 				<a :href="href" @click="navigate" class="list-group-item list-group-item-action d-flex justify-content-between mb-1">

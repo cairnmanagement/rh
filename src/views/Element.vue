@@ -30,9 +30,7 @@
 									<span v-if="openedElement.oContrat.duree_indeterminee == 'NON'">CDD jusqu'au {{formatDateFr(openedElement.dsortie)}}</span>
 								</div>
 							</div>
-							<div class="d-flex align-items-center justify-content-end">
-								<button @click-prevent="persoArchived(openedElement.id)" class="btn btn-sm btn-outline-danger">Archiver</button>
-							</div>
+							
 							
 						</div>
 					</div>
@@ -51,7 +49,6 @@
 						<!-- {{listContrats}} -->
 
 						<ul class="list-group list-group-flush">
-
 							<li class="list-group-item" v-for="contrat in listContrats" :key="'contrat-'+contrat.id">
 								Ce contrat dispose de {{contrat.contrats.length}} avenants
 								<div v-for="avenant in contrat.contrats" :key="'avenant-'+avenant.id">
@@ -59,7 +56,6 @@
 									{{avenant}}
 								</div>
 							</li>
-
 						</ul>
 					</div>
 				</div>
@@ -81,6 +77,7 @@ import fr from 'date-and-time/locale/fr';
 import ContractInfo from '../components/ContractInfo.vue';
 import CoordInfo from '../components/CoordInfo.vue';
 import EtatCivilInfo from '../components/EtatCivilInfo.vue';
+
 export default {
     data() {
         return {

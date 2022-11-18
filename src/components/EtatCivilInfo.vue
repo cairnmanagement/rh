@@ -49,6 +49,7 @@ export default{
 
     computed: {
         ...mapState(["openedElement"]),
+        
 
         dateOfBirth() {
 			date.locale(fr);
