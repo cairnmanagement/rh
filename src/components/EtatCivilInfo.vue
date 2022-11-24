@@ -53,7 +53,7 @@ export default{
 
         dateOfBirth() {
 			date.locale(fr);
-			return date.format(new Date(this.openedElement.oPersonne.dn)  , 'DD-MM-YYYY')
+			return date.format(new Date(this.openedElement.oPersonne.dn)  , 'DD MMM YYYY')
 		},
     }
     

@@ -43,20 +43,8 @@
 				</div>
 				<div class="col-12 col-xxl-6">
 					<div class="card">
-						<contract-info :contracts="listContrats"></contract-info>
-					</div>
-					<div class="card">
-						<!-- {{listContrats}} -->
-
-						<ul class="list-group list-group-flush">
-							<li class="list-group-item" v-for="contrat in listContrats" :key="'contrat-'+contrat.id">
-								Ce contrat dispose de {{contrat.contrats.length}} avenants
-								<div v-for="avenant in contrat.contrats" :key="'avenant-'+avenant.id">
-									<strong class="d-block">{{avenant.id}}</strong>
-									{{avenant}}
-								</div>
-							</li>
-						</ul>
+						
+						<contract-info :contracts="openedContrats"></contract-info>
 					</div>
 				</div>
 			</div>	
@@ -70,7 +58,10 @@
 
 <script>
 
-import {mapState} from 'vuex'
+
+
+
+import {mapActions, mapState} from 'vuex'
 import UserImage from '../components/pebble-ui/UserImage.vue';
 import date from 'date-and-time';
 import fr from 'date-and-time/locale/fr';
@@ -82,39 +73,25 @@ export default {
     data() {
         return {
             pending: {
-                extendedData: true
-            },
-			listContrats: [],
+                extendedData: true,
+				contrats: true
+            }
 			
         };
     },
     computed: {
-        ...mapState(["openedElement"]),
+        ...mapState(["openedElement", 'openedContrats']),
 
 		birthdate() {
 			date.locale(fr);
 			return date.format(new Date(this.openedElement.oPersonne.dn)  , 'DD-MM-YYYY')
 		},
-		entrydate() {
-			date.locale(fr);
-			return date.format(new Date(this.openedElement.dentree)  , 'DD-MM-YYYY')
-		}, 
-		entrydate2() {
-			date.locale(fr);
-			return date.format(new Date(this.openedElement.dentree)  , 'DD MMM YYYY')
-		}, 
-		exitdate() {
-			date.locale(fr);
-			return date.format(new Date(this.openedElement.dsortie)  , 'DD-MM-YYYY')
-		},
-		exitdate2() {
-			date.locale(fr);
-			return date.format(new Date(this.openedElement.dsortie)  , 'DD MMM YYYY')
-		}
+		
 		
     },
     methods: {
 
+		...mapActions(['setOpenedContrats']),
 		
 
 		/**
@@ -153,15 +130,20 @@ export default {
 				}
 			}
         },
-		loadContract(id) {
-			if (this.openedElement) {
-					this.$app.apiGet("structurePersonnel/GET/" + id +"/contrats")
-						.then((data) => {
-						console.log('result contrat', data);
-						this.listContrats = data
-					})
-						.catch(this.$app.catchError);
-			}
+
+		/**
+		 * Charge l'ensemble des contrats du personnel ouvert
+		 * 
+		 * @param {number} personnelId ID du personnel pour charger les contrats. Si undefined, ID actif
+		 */
+		loadContract(personnelId) {
+			personnelId = typeof personnelId === 'undefined' ? this.openedElement.id  : personnelId;
+			this.pending.contrats = true;
+			this.$app.apiGet("structurePersonnel/GET/" + personnelId +"/contrats")
+			.then((data) => {
+				this.setOpenedContrats(data);
+			})
+			.catch(this.$app.catchError).finally(() => this.pending.contrats = false);
         }
     },
 	

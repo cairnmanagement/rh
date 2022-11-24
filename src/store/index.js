@@ -15,7 +15,8 @@ export default createStore({
 		tmpElement: null,
 		personnelStats: null,
 		contratStats: null,
-		contratCurrentStats: null
+		contratCurrentStats: null,
+		openedContrats:null
 	},
 	getters: {
 		activeStructure(state) {
@@ -210,7 +211,52 @@ export default createStore({
 		 */
 		contratStats(state, stats) {
 			state.contratStats = stats;
-		}
+		},
+
+		/**
+		 * Met à jour les données des contrats chargés
+		 * @param {Object} state Le state de l'instance vueX
+		 * @param {Object} contratsOptions Liste clé valeur des infos à mettre à jour
+		 * - mode : 'set', 'refresh', 'remove'
+		 * - contrats : collection de contrats
+		 */
+		openedContrats(state, contratsOptions) {
+			let mode = contratsOptions.mode;
+			let contrats = contratsOptions.contrats;
+
+			if (mode == 'set') {
+				state.openedContrats = contrats;
+			}
+			else if (mode == 'refresh') {
+				contrats.forEach(contrat => {
+					let contratFound = state.openedContrats.find(e => e.id == contrat.id);
+
+					if (contratFound) {
+						for (const key in contrat) {
+							contratFound[key] = contrat[key];
+						}
+					}
+					else {
+						state.openedContrats.push(contrat);
+					}
+				});
+			}
+			else if (mode == 'remove') {
+				contrats.forEach(contrat => {
+					let index = state.openedContrats.findIndex(e => e.id == contrat.id);
+
+					if (index !== -1) {
+						state.openedContrats.splice(index, 1);
+					}
+				})
+			}
+		},
+
+		// openedElementContrats (state, data){
+		// 	for (let key in data) {
+		// 		state.openedElementContrats[key] = data[key];
+		// 	}
+		// }
 	},
 	actions: {
 		/**
@@ -344,7 +390,43 @@ export default createStore({
 		 */
 		updateContratCurrentStats(context, stats) {
 			context.commit('contratCurrentStats', stats);
-		}
+		},
+
+		/**
+		 * Met à jour les contrats du personnel chargé dans le store
+		 * @param {Object} context Le l'instance vueX
+		 * @param {array} contrats Liste des contrats à mettre à jour
+		 */
+		updateOpenedContrats(context, contrats) {
+			context.commit('openedContrats', {
+				mode: 'refresh',
+				contrats
+			});
+		},
+
+		/**
+		 * Met à jour les contrats du personnel chargé dans le store
+		 * @param {Object} context Le l'instance vueX
+		 * @param {array} contrats Liste des contrats à mettre à jour
+		 */
+		setOpenedContrats(context, contrats) {
+			context.commit('openedContrats', {
+				mode: 'set',
+				contrats
+			});
+		},
+
+		/**
+		 * Retire les contrats du personnel chargé dans le store
+		 * @param {Object} context Le l'instance vueX
+		 * @param {array} contrats Liste des contrats à retire
+		 */
+		removeOpenedContrats(context, contrats) {
+			context.commit('openedContrats', {
+				mode: 'remove',
+				contrats
+			});
+		},
 	},
 	modules: {
 	}

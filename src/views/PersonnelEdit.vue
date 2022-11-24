@@ -1,7 +1,8 @@
 <template>
     <AppModal 
-    :title="this.$route.params.id ?'Modification Contact' :'Nouveau Contact'" 
+    :title="this.$route.params.id ?'Modification Contact' : 'Nouveau Contact'" 
     size="lg" 
+    @submit="record()"
     @modal-hide="routeToParent()" 
     :submitBtn="true" 
     :cancelBtn="true"
@@ -10,6 +11,8 @@
     </AppModal>
 </template>
 <script>
+import { mapState } from 'vuex';
+
 import AppModal from '../components/pebble-ui/AppModal.vue';
 import ContactForm from '../components/ContactForm.vue';
 
@@ -23,25 +26,33 @@ export default {
     //         pending: {
     //             contact : false
     //         },
-    //         // personnel: {
-    //         //         civilite: null,
-    //         //         nom: null,
-    //         //         prenom: null,
-    //         //         dn: null,
-    //         //         lieuNaissance: null,
-    //         //         nss: null,
-    //         //         nationalite: null,
-    //         //         // paysNaissance : null
-    //         // },
+    //         personnel: null,
+
     //     }
 
     // },
+    computed: {
+        ...mapState(['openedElement']),
+    },
+
     methods: {
         /**
          * retourne à la route précédente
          */
         routeToParent() {
             this.$router.go(-1);
+        },
+
+        record() {
+            //alert('vous souhaitez enregistrer ces modifications')
+            this.$app.apiPost('structurePersonnel/POST/'+this.openedElement.id+ {
+                nss : '12345',
+                nom: 'lehoux',
+            })
+            .then ((data) => {
+                console.log(data)
+            })
+            .catch(this.$app.catchError)
         }
     },
 

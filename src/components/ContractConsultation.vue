@@ -6,18 +6,18 @@
             <div class="col-3"></div>
             <div class="col-6 d-flex justify-content-between my-2">
                 <div class="d-flex flex-column align-items-start">
-                    <div>Contrat {{openedElement.oContrat.id}}</div>
+                    <div>Contrat {{contrat.id}}</div>
                     <div class="lead"><strong>{{openedElement.cache_nom}}</strong></div>
                     <span>Contrat à durée indéterminée</span>
                 </div>
                 <div>
-                    <router-link :to="{name:'EditContrat', params:{id:openedElement.id, idContrat:openedElement.oContrat.id}}" v-slot="{navigate, href}" custom>
+                    <router-link :to="{name:'EditContrat', params:{id:openedElement.id, idContrat:contrat.id}}" v-slot="{navigate, href}" custom>
                         <a :href="href" @click="navigate" class="btn btn-sm btn-outline-primary mx-1 "><i class="bi bi-pencil"></i></a>
                     </router-link>
                 </div>
             </div>
             <div class="col-3 mt-2">
-                <router-link :to="{name:'EditContrat', params:{id:openedElement.id, idContrat:openedElement.oContrat.id}}" v-slot="{navigate, href}" custom>
+                <router-link :to="{name:'EditContrat', params:{id:openedElement.id, idContrat:contrat.id}}" v-slot="{navigate, href}" custom>
                         <a :href="href" @click="navigate" class="btn btn-sm btn-outline-danger mx-1 ">Mettre fin au contrat</a>
                     </router-link>
             </div>
@@ -65,7 +65,9 @@
                     <div class="mb-2">Reste 12 jours de période d'essai</div>
                     <div class="d-flex flex-column align-items-start mb-2">
                         <span>Salaire horaire:</span>
-                        <span><strong>15,00€ </strong></span>
+                        <span v-if="contrat.salaire_horaire == 'null' || contrat.salaire_horaire == 0">Pas d'infos sur le salaire horaire</span>
+                        <span v-else-if="contrat.salaire_horaire"><strong>{{contrat.salaire_horaire}}€ </strong></span>
+                        <span v-else>Pas d'infos enregistrées</span>
                     </div>
                     <div class="d-flex flex-column align-items-start mb-2">
                         <span>Temps de travail:</span>
@@ -83,11 +85,14 @@
         <div class="row">
             <div class="col-3"></div>
             <div class="col-9">
-                <span>Contrat au forfait jour:</span>
-                <div class="row fw-bold mb-2">
-                    <div class="col">3 unités/semaine</div>
-                    <div class="col">13 unités/mois</div>
-                    <div class="col">156 unités/an</div>
+                <div v-if="contrat.forfait_jour =='OUI'">
+                    <span>Contrat au forfait jour:</span>
+                    <div class="row fw-bold mb-2">
+                        <div class="col">{{contrat.nb_par_semaine}} unités/semaine</div>
+                        <div class="col">{{contrat.nb_par_mois}} unités/mois</div>
+                        <div class="col">{{contrat.nb_par_an}} unités/an</div>
+                    </div>
+                
                 </div>
                 <div class="d-flex flex-row justify-content-between mb-2">
                     <div class="d-flex flex-column">
@@ -103,15 +108,25 @@
             </div>
         </div>
     </div>
+    <div class="card">
+        {{contrat}}
+    </div>
 </template>
 
 <script>
 
+
+
     import { mapState } from 'vuex';
     export default {
+
+        props: {
+            contrat: Object
+        },
         
         computed: {
             ...mapState(['openedElement']),
+
         },
         mounted(){
         }
