@@ -51,14 +51,19 @@
 import { mapState } from 'vuex';
 
     export default {
+
+        props:{
+            contact: Object
+        },
         
     
         data() {
             return {
                 personnel: {
-                    civilite: null,
                     nom: null,
                     prenom: null,
+                    //nomNaissance: null,
+                    civilite: null,
                     dn: null,
                     lieuNaissance: null,
                     nss: null,
@@ -71,26 +76,90 @@ import { mapState } from 'vuex';
 
             ...mapState(["openedElement"]),
 
-            newContact(){
-                if (this.$route.params.id) {
-                    return false;
-                }
-                return true
-            }
+            // newContact(){
+            //     if (this.$route.params.id) {
+            //         return false;
+            //     }
+            //     return true
+            // }
 
+        },
+
+        emits:['edit-nom', 'edit-prenom','edit-civilite','edit-dn','edit-lieuNaissance','edit-nationalite', 'edit-nss'],
+
+        watch: {
+            /**
+             * Envoie un événement à l'élément parent lorsque le nom est modifié.
+             * 
+             * @param {String} newVal Nouveau nom
+             */
+            nom(newVal) {
+                this.$emit('edit-nom', newVal);
+            },
+
+            /**
+             * Envoie un événement à l'élément parent lorsque le prénom est  modifiée.
+             * 
+             * @param {String} newVal Nouveau prénom
+             */
+            prenom(newVal) {
+                this.$emit('edit-prenom', newVal);
+            },
+            /**
+             * Envoie un événement à l'élément parent lorsque la civilité est modifiée.
+             * 
+             * @param {String} newVal Nouvelle civilité
+             */
+            civilite(newVal) {
+                this.$emit('edit-civilite', newVal);
+            },
+            /**
+             * Envoie un événement à l'élément parent lorsque la date de naissance est  modifiée.
+             * 
+             * @param {String} newVal date de naissance
+             */
+            dn(newVal) {
+                this.$emit('edit-dn', newVal);
+            },
+            /**
+             * Envoie un événement à l'élément parent lorsque le lieu de naissance est  modifié.
+             * 
+             * @param {String} newVal Nouveau lieu de naissance
+             */
+            lieuNaissance(newVal) {
+                this.$emit('edit-lieuNaissance', newVal);
+            },
+            /**
+            * Envoie un événement à l'élément parent lorsque la nationalité est  modifiée.
+            * 
+            * @param {String} newVal Nouvelle nationalité
+            */
+            nationalite(newVal) {
+                this.$emit('edit-nationalite', newVal);
+            },
+            /**
+             * Envoie un événement à l'élément parent lorsque le numéro de sécurité sociale est modifié.
+             * 
+             * @param {String} newVal Nouveau numéro de sécurité sociale
+             */
+            nss(newVal) {
+                this.$emit('edit-nss', newVal);
+            }
         },
     
         mounted(){
-            if (!this.newContact) {
-                this.personnel.civilite = this.openedElement.oPersonne.civilite
-                this.personnel.nom = this.openedElement.oPersonne.nom
-                this.personnel.prenom = this.openedElement.oPersonne.prenom
-                this.personnel.dn = this.openedElement.oPersonne.dn
-                this.personnel.lieuNaissance = this.openedElement.oPersonne.lieuNaissance
-                this.personnel.nss = this.openedElement.nss
-                this.personnel.nationalite = this.openedElement.oPersonne.nationalite
-                // this.personnel.paysNaissance = 'à prévoir API'
-            }
+            // if (!this.newContact) {
+            //     this.personnel.nom = this.openedElement.oPersonne.nom
+            //     this.personnel.prenom = this.openedElement.oPersonne.prenom
+            //     // this.personnel.paysNaissance = 'à prévoir API'
+            // }
+            this.personnel.nom = this.contact.nom
+            this.personnel.prenom = this.contact.prenom
+            this.personnel.civilite = this.contact.civilite
+            this.personnel.dn = this.contact.dn
+            this.personnel.lieuNaissance = this.contact.lieuNaissance
+            this.personnel.nationalite = this.contact.nationalite
+            this.personnel.nss = this.contact.nss      
         }
     }
     </script>

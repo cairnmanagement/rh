@@ -4,6 +4,7 @@
             <div class="d-flex align-items-center justify-content-between">
                 <h4 class="card-title m-0">Etat-civil</h4>
                 <router-link :to="{name:'ModificationEtatCivil', params:{id:openedElement.id}}" v-slot="{navigate,href}" custom>
+                    <!-- personelEdit -->
                     <a :href="href" @click="navigate" class="btn btn-light"><i class="bi bi-pencil"></i></a>
                 </router-link>
             </div>

@@ -20,6 +20,8 @@
 </template>
 
 <script>
+
+
     
     export default {
     
@@ -56,7 +58,7 @@
         adresse(newVal) {
             this.$emit('edit-adresse', newVal);
         }
-    },
+        },
     
         mounted() {
             this.type = this.mail.type;

@@ -28,7 +28,6 @@
 
 <script>
 
-
 import { mapState } from 'vuex';
 import ContractsTimeLine from '../components/ContractsTimeLine.vue';
 import ContractCurrentStats from '../components/ContractCurrentStats.vue';
@@ -114,4 +113,5 @@ export default {
 	}
 	
 }
+
 </script>
