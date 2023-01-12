@@ -179,8 +179,16 @@ export default {
 		},
 
 		showFilter() {
+			console.log('Element', this.elements);
+			console.log('personnel fil', this.personnelListFilter);
+
 			if (!this.showFilter) {
 				let newPersonnelFiltre = [];
+
+
+				// if ('' == this.searchValue) { 
+
+				// }
 
 				this.personnelListFilter.forEach((personnel) => {
 					let find = this.elements.find((e) => e.id == personnel.id);
@@ -203,7 +211,10 @@ export default {
 		/**
 		 * Modifie le format de la date entrée en paramètre et la retourne 
 		 * sous le format dd/mm:yyyy
+		 * 
 		 * @param {string} date 
+		 * 
+		 * @return {date}
 		 */
 		formatDateFr(date) {
 			let newDate = new Date(date);
@@ -240,7 +251,7 @@ export default {
 					action,
 					elements: data,
 				});
-				console.log('listElements', data);
+				//console.log('listElements', data);
 			})
 			.catch(this.$app.catchError);
 		},
@@ -252,13 +263,10 @@ export default {
 		 */
 		listPersoActifs(){
 			this.$app.apiGet('structurePersonnel/GET/list?actif=true')
-				.then((data) => {
-					console.log('actifs', data);
-
-					this.listPersonnelActifs = data;
-					console.log('listactifs', this.listPersonnelActifs);
-				})
-				.catch(this.$app.catchError);
+			.then((data) => {
+				this.listPersonnelActifs = data;
+			})
+			.catch(this.$app.catchError);
 		},
 
 		searchActifs(idName){
@@ -274,9 +282,7 @@ export default {
 		listPersoArchived(){
 			this.$app.apiGet('structurePersonnel/GET/list?archived=true')
 			.then((data) => {
-				console.log('archivés',data);
 				this.listPersonnelArchived = data;
-				console.log ('listArchived', this.listPersonnelArchived);
 			})
 			.catch(this.$app.catchError);
 		},
