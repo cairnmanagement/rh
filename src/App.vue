@@ -178,6 +178,9 @@ export default {
 			this.personnelListFilter = newPersonnelList;
 		},
 
+		/**
+		 * Filtre le personnel en function des filtres séléctionné
+		 */
 		showFilter() {
 			console.log('Element', this.elements);
 			console.log('personnel fil', this.personnelListFilter);
@@ -186,21 +189,22 @@ export default {
 				let newPersonnelFiltre = [];
 
 
-				// if ('' == this.searchValue) { 
+				if ('' == this.searchValue) { 
+					newPersonnelFiltre = this.elements;
+				} else {
+					this.personnelListFilter.forEach((personnel) => {
+						let find = this.elements.find((e) => e.id == personnel.id);
+	
+						if (find) {
+							newPersonnelFiltre.push(find);
+						}
+					});
+				}
 
-				// }
-
-				this.personnelListFilter.forEach((personnel) => {
-					let find = this.elements.find((e) => e.id == personnel.id);
-
-					if (find) {
-						newPersonnelFiltre.push(find);
-					}
-				});
 
 				this.personnelListFilter = newPersonnelFiltre;
 			}
-		}
+		},
 	},
 
 	components: {AppWrapper, AppMenu, AppMenuItem, searchPersonnel, PersonnelItem, AppSearchBar},

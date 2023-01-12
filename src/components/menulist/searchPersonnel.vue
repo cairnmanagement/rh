@@ -1,34 +1,24 @@
 <template>
     <div class="container">
-        <div class="my-2">
-            <h2 class="fs-5">Contrat:</h2>
+        <template v-for="(filterSection, index) in aFilterSection" :key="'filtreSection-'+index" >
+            <div class="my-2">
+                <h2 class="fs-5">{{filterSection.label}}</h2>
 
-            <div class="btn-group w-100" role="group" aria-label="filtre des contrat">
-                <button type="button" class="btn btn-outline-secondary" :class="{'active': searchActif == '1'}" @click="updateSearch(['Actif', 1, '1'])">Actif</button>
-                <button type="button" class="btn btn-outline-secondary" :class="{'active': searchActif == '0'}" @click="updateSearch(['Actif', 1, '0'])">Inactif</button>
-                <button type="button" class="btn btn-outline-secondary" :class="{'active': searchActif == 'null'}" @click="updateSearch(['Actif', 0, 'null'])">Tous</button>
+                <div class="btn-group w-100" role="group" aria-label="filtre des contrat">
+                    <button v-for="(oButton, i) in filterSection.button" :key="'filtreSection-'+index+'-button-'+i"
+                            class="btn btn-outline-secondary" :class="buttonDisplay(oButton.value, filterSection)"
+                            type="button"
+                            @click="updateSearchOptions(filterSection, oButton)">
+                        {{ oButton.label }}
+                    </button>
+                    <button class="btn btn-outline-secondary" :class="buttonDisplay('null', filterSection)" 
+                            type="button" 
+                            @click="updateSearchOptions(filterSection, 'Tous')">
+                        Tous
+                    </button>
+                </div>
             </div>
-        </div>
-
-        <div class="my-2">
-            <h2 class="fs-5">Matricule:</h2>
-
-            <div class="btn-group w-100" role="group" aria-label="filtre des contrat">
-                <button type="button" class="btn btn-outline-secondary" :class="{'active': searchMatriculeStatus == '1'}" @click="updateSearch(['MatriculeStatus', 1, '1'])">Actif</button>
-                <button type="button" class="btn btn-outline-secondary" :class="{'active': searchMatriculeStatus == '0'}" @click="updateSearch(['MatriculeStatus', 1, '0'])">Inactif</button>
-                <button type="button" class="btn btn-outline-secondary" :class="{'active': searchMatriculeStatus == 'null'}" @click="updateSearch(['MatriculeStatus', 0, 'null'])">Tous</button>
-            </div>
-        </div>
-
-        <div class="my-2">
-            <h2 class="fs-5">Archivé:</h2>
-
-            <div class="btn-group w-100" role="group" aria-label="filtre des contrat">
-                <button type="button" class="btn btn-outline-secondary" :class="{'active': searchArchived == '1'}" @click="updateSearch(['Archived', 1, '1'])">Actif</button>
-                <button type="button" class="btn btn-outline-secondary" :class="{'active': searchArchived == '0'}" @click="updateSearch(['Archived', 1, '0'])">Inactif</button>
-                <button type="button" class="btn btn-outline-secondary" :class="{'active': searchArchived == 'null'}" @click="updateSearch(['Archived', 1, 'null'])">Tous</button>
-            </div>
-        </div>
+        </template>
 
         <div class="text-center my-4">
             <button  type="button" class="btn btn-primary col-8" @click.prevent="searchList()">
@@ -60,7 +50,33 @@
                     Actif: 0,
                     MatriculeStatus: 0,
                     Archived: 0,
-                }
+                },
+                aFilterSection: [
+                    {
+                        'label':'Contrat', 
+                        'mapSearch':'Actif', 
+                        'button':  [
+                            {'label': 'Actif', 'value': '1'},
+                            {'label': 'Inactif', 'value': '0'}
+                        ]
+                    },
+                    {
+                        'label':'Matricule', 
+                        'mapSearch':'MatriculeStatus',
+                        'button': [
+                            {'label': 'Actif', 'value': '1'},
+                            {'label': 'Inactif', 'value': '0'}
+                        ]
+                    },
+                    {
+                        'label':'Archived', 
+                        'mapSearch':'Archived',
+                        'button': [
+                            {'label': 'Oui', 'value': '1'},
+                            {'label': 'Non', 'value': '0'}
+                        ]
+                    }
+                ],
             }
         },
 
@@ -69,6 +85,8 @@
         methods: {
             /**
              * Récupère la liste fitrer avec les parametres choisies
+             * 
+             * @event   update:showFilter
              */
             searchList() {
                 this.pending.filter = true;
@@ -94,25 +112,53 @@
                 });
             },
             
+
             /**
              * Met à jour les informations du searchOptions de l'element parents
              * Ainsi que le nombre de filtre activé
              * 
-             * @param {Array} options 
-             *                  - filtre        Filtre qui est concerné par le changement
-             *                  - CountValue    La valeur a effectuer a l'element count concerné
-             *                  - FiltreValue   La valeur a effectuer au filtre pour la requete a la base de données
-             *                                  actif = '1', incatif = '0', tous = 'null'
+             * @param {Object}      filterSection       Represente la section du filtre
+             * @param {Object|string}      oButton              Object du button clicker
+             * 
+             * @event   update:nbFilterActive
+             * @event   update:searchActif
+             * @event   update:searchMatriculeStatus
+             * @event   update:searchArchived
              */
-            updateSearch(options) {
-                if (0 === options[1]) {
-                    this.count[options[0]] = 0;
+            updateSearchOptions(filterSection, oButton) {
+                let button = {
+                    'label' : null,
+                    'value' : null
+                };
+
+                if (typeof oButton == 'string') {
+                    button = {
+                        'label': oButton,
+                        'value': 'null'
+                    }
                 } else {
-                    this.count[options[0]] = 1;
+                    button = oButton;
                 }
+
+                button.label != 'Tous' ? this.count[filterSection.mapSearch] = 1 : this.count[filterSection.mapSearch] = 0;
                 
                 this.$emit('update:nbFilterActive', (this.count.Actif + this.count.MatriculeStatus + this.count.Archived));
-                this.$emit('update:search'+options[0], options[2] );
+                this.$emit('update:search'+ filterSection.mapSearch, button.value );
+            },
+
+            /**
+             * Retourne la classe CSS à donner au boutton de filtre si on le selectionne
+             * 
+             * @returns {String}
+             */
+            buttonDisplay(buttonValue, filterSection) {
+                if (
+                    this.searchActif === buttonValue && 'Actif' == filterSection.mapSearch
+                    || this.searchMatriculeStatus === buttonValue && 'MatriculeStatus' == filterSection.mapSearch
+                    || this.searchArchived === buttonValue && 'Archived' == filterSection.mapSearch
+                    ) {
+                    return "active";
+                }
             }
 
         },
