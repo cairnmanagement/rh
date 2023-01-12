@@ -14,6 +14,7 @@
 						<i class="bi bi-arrow-left"></i>
 					</a>
 				</router-link>
+
 				<router-link :to="'/personnel/'+openedElement.id+'/properties'" custom v-slot="{ navigate, href }">
 					<a class="btn btn-dark me-2" :href="href" @click="navigate">
 						<i class="bi bi-file-earmark me-1"></i>
@@ -25,26 +26,23 @@
 					<button class="btn btn-dark dropdown-toggle" type="button" id="fileDdMenu" data-bs-toggle="dropdown" aria-expanded="false">
 						Fichier
 					</button>
+
 					<ul class="dropdown-menu" aria-labelledby="fileDdMenu">
 						<li>
 							<router-link :to="'/personnel/'+openedElement.id+'/informations'" custom v-slot="{ navigate, href }">
 								<a class="dropdown-item" :href="href" @click="navigate">Informations</a>
 							</router-link>
 						</li>
+
 						<li>
 							<router-link :to="'/'" custom v-slot="{ navigate, href }">
 								<a class="dropdown-item" :href="href" @click="navigate">Archiver</a>
 							</router-link>
 						</li>
 					</ul>
-					
 				</div>
-					<a class="nav-link text-light" href="#"><i class="bi bi-arrow-clockwise"></i></a>
 
-			</div>
-			<div v-else class="d-flex align-items-center">
-				<span class="mx-2">Module de gestion du personnel</span>
-				<button class="btn btn-dark" title="Actualiser les données"><i class="bi bi-arrow-clockwise"></i></button>
+				<a class="nav-link text-light" href="#"><i class="bi bi-arrow-clockwise"></i></a>
 			</div>
 		</template>
 
@@ -58,40 +56,30 @@
 
 		<template v-slot:list>
 			<AppMenu>
-				<div>
-					<search-personnel></search-personnel>
-				</div>
-				<AppMenuItem :href="'/personnel/'+personnel.id" v-for="personnel in filterElements" :key="personnel.id">
-					<div class="d-flex align-items-center justify-content-between">
-						<div class="d-flex align-items-center">
-							<div class="me-2">
-								<UserImage :name="personnel.cache_nom" />
-							</div>
-							<div class="align-items-center justify-content-between">
-								<div class="d-flex justify-content-between align-items-center"> {{personnel.cache_nom}}</div>
-							</div>
-						</div>
-						<i  v-if="searchArchived(personnel.id) & searchActifs(personnel.id)" class="bi bi-archive-fill text-success"></i>
-						<i  v-else-if="searchArchived(personnel.id) & !searchActifs(personnel.id)" class="bi bi-archive-fill text-secondary"></i>
-						<!-- <i  v-else-if="!searchArchived(personnel.id) & !searchActifs(personnel.id)" class="bi bi-circle text-secondary"></i> -->
-						<!-- <i  v-else-if="!searchArchived(personnel.id) & searchActifs(personnel.id)" class="bi bi-circle-fill text-success"></i> -->
-						<div v-else-if="!personnel.matricule" >
-							<i class="bi bi-circle text-secondary"></i>
-						</div>
-						<div v-else-if="!searchArchived(personnel.id) & !searchActifs(personnel.id)" class="badge bg-secondary">
-							{{personnel.matricule}}
-						</div>
-						<div v-else-if="!searchArchived(personnel.id) & searchActifs(personnel.id)" class="badge bg-success">
-							{{personnel.matricule}}
-						</div>
-						
+				<app-search-bar 
+					v-model:showFilter="showFilter"
+					v-model:searchValue="searchValue"
 
-						<!-- <i v-if="searchActifs(personnel.id)" class="bi bi-circle-fill text-success" ></i> -->
-						<!-- <i v-if="!searchActifs(personnel.id)"  class="bi bi-circle text-secondary"></i> -->
-						<!-- <i v-else  class="bi bi-circle text-secondary"></i> -->
+					:nbFilterActive="nbFilterActive"
+				/>
 
-					</div>
-				</AppMenuItem>
+				<template v-if="showFilter">
+					<search-personnel 
+						v-model:nbFilterActive="nbFilterActive"
+						v-model:searchActif="searchOptions.actif"
+						v-model:searchMatriculeStatus="searchOptions.matriculeStatus"
+						v-model:searchArchived="searchOptions.archived"
+						v-model:showFilter="showFilter"
+					/>
+				</template>
+
+				<template v-else >
+					<AppMenuItem :href="'/personnel/'+personnel.id" v-for="personnel in personnelListFilter" :key="personnel.id">
+						<personnel-item :personnel="personnel"></personnel-item>
+					</AppMenuItem>	
+				</template>
+
+				
 			</AppMenu>
 		</template>
 
@@ -103,11 +91,7 @@
 	</AppWrapper>
 	
 </template>
-<style lang="scss">
-h3 {
-	font-weight: normal!important;
-}
-</style>
+
 <script>
 
 import AppWrapper from '@/components/pebble-ui/AppWrapper.vue'
@@ -115,9 +99,10 @@ import AppMenu from '@/components/pebble-ui/AppMenu.vue'
 import AppMenuItem from '@/components/pebble-ui/AppMenuItem.vue'
 import { mapActions, mapState } from 'vuex'
 import CONFIG from "@/config.json"
-import UserImage from './components/pebble-ui/UserImage.vue'
-import searchPersonnel from './components/searchPersonnel.vue'
 
+import searchPersonnel from './components/menulist/searchPersonnel.vue'
+import PersonnelItem from './components/menulist/personnelItem.vue'
+import AppSearchBar from './components/pebble-ui/AppSearchBar.vue'
 
 export default {
 
@@ -133,14 +118,25 @@ export default {
 			isConnectedUser: false,
 			search: '',
 			listPersonnelActifs: [],
-			listPersonnelArchived: []
+			listPersonnelArchived: [], 
+
+			showFilter: false,
+			nbFilterActive: 0,
+			personnelListFilter: [],
+			searchValue: '',
+			searchOptions: {
+				actif: "null",
+				matriculeStatus: "null",
+				archived: "null"
+			},
+
 		}
 	},
 
 	computed: {
 		...mapState(['elements', 'openedElement']),
 
-		filterElements() {
+		personnelFilted() {
 			if(!this.search) return this.elements;
 			
 			else 
@@ -165,24 +161,56 @@ export default {
 				this.listPersoActifs();
 				this.listPersoArchived();
 			}
+		},
+
+		/**
+		 * Filtre le personnel en fonction de la recherche effectuée
+		 */
+		searchValue() {
+			let newPersonnelList;
+
+			if ('' == this.searchValue && !this.nbFilterActive) {
+				newPersonnelList = this.elements;
+			} else {
+				newPersonnelList = this.personnelListFilter.filter((personnel) => personnel.cache_nom.toLowerCase().includes(this.searchValue.toLowerCase()));
+			}
+
+			this.personnelListFilter = newPersonnelList;
+		},
+
+		showFilter() {
+			if (!this.showFilter) {
+				let newPersonnelFiltre = [];
+
+				this.personnelListFilter.forEach((personnel) => {
+					let find = this.elements.find((e) => e.id == personnel.id);
+
+					if (find) {
+						newPersonnelFiltre.push(find);
+					}
+				});
+
+				this.personnelListFilter = newPersonnelFiltre;
+			}
 		}
 	},
 
-	methods: {
+	components: {AppWrapper, AppMenu, AppMenuItem, searchPersonnel, PersonnelItem, AppSearchBar},
 
-		
+	methods: {
+		...mapActions(['closeElement']),
+
 		/**
 		 * Modifie le format de la date entrée en paramètre et la retourne 
 		 * sous le format dd/mm:yyyy
 		 * @param {string} date 
 		 */
-
-
 		formatDateFr(date) {
 			let newDate = new Date(date);
 			let format = newDate.toLocaleDateString('fr-FR');
 			return format;
 		},
+
 		/**
 		 * Met à jour les informations de l'utilisateur connecté
 		 * @param {Object} user Un objet LocalUser
@@ -252,42 +280,12 @@ export default {
 			})
 			.catch(this.$app.catchError);
 		},
-		searchArchived(idName){
-			let archived = false;
-			for (let persoArchived of this.listPersonnelArchived) {
-					if (persoArchived.id == idName) {
-						archived=true;
-					}
-                } 
-			return archived;   
-		},
-	
-		...mapActions(['closeElement']) 
 	},
 
-	
+	mounted() {
+		this.personnelListFilter = this.elements;
+	}
 
-	components: {
-    AppWrapper,
-    AppMenu,
-    AppMenuItem,
-    UserImage,
-	searchPersonnel
-
-},
-
-	
-	
-
-	// mounted() {
-		
-	// 	console.log('toto');
-	// 	// this.listElements();
-	// 	// this.filterElements();
-	// 	this.listpersoActifs();
-	// 	// if (this.isConnectedUser) {
-	// 	// }
-	// }
 
 }
 </script>
