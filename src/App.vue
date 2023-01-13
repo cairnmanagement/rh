@@ -60,22 +60,26 @@
 					v-model:showFilter="showFilter"
 					v-model:searchValue="searchValue"
 
-					:nbFilterActive="nbFilterActive"
+					:nbFilterActive="countNbFilterActive"
 				/>
 
 				<template v-if="showFilter">
 					<search-personnel 
-						v-model:nbFilterActive="nbFilterActive"
 						v-model:searchActif="searchOptions.actif"
 						v-model:searchMatriculeStatus="searchOptions.matriculeStatus"
 						v-model:searchArchived="searchOptions.archived"
 						v-model:showFilter="showFilter"
+
+						v-model:nbFilterActif="nbFilterActive.Actif"
+						v-model:nbFilterMatricule="nbFilterActive.MatriculeStatus"
+						v-model:nbFilterArchived="nbFilterActive.Archived"
 					/>
 				</template>
 
 				<template v-else >
-					<AppMenuItem :href="'/personnel/'+personnel.id" v-for="personnel in personnelListFilter" :key="personnel.id">
-						<personnel-item :personnel="personnel"></personnel-item>
+					<AppMenuItem :href="'/personnel/'+personnel.id" v-for="personnel in elements" :key="personnel.id">
+						<spinner v-if="this.pending.element"></spinner>
+						<personnel-item v-else :personnel="personnel"></personnel-item>
 					</AppMenuItem>	
 				</template>
 
@@ -103,6 +107,7 @@ import CONFIG from "@/config.json"
 import searchPersonnel from './components/menulist/searchPersonnel.vue'
 import PersonnelItem from './components/menulist/personnelItem.vue'
 import AppSearchBar from './components/pebble-ui/AppSearchBar.vue'
+import Spinner from './components/pebble-ui/Spinner.vue'
 
 export default {
 
@@ -116,12 +121,13 @@ export default {
 				elements: true
 			},
 			isConnectedUser: false,
-			search: '',
-			listPersonnelActifs: [],
-			listPersonnelArchived: [], 
 
 			showFilter: false,
-			nbFilterActive: 0,
+			nbFilterActive: {
+				Actif: 0,
+				MatriculeStatus: 0,
+				Archived: 0,
+			},
 			personnelListFilter: [],
 			searchValue: '',
 			searchOptions: {
@@ -136,13 +142,8 @@ export default {
 	computed: {
 		...mapState(['elements', 'openedElement']),
 
-		personnelFilted() {
-			if(!this.search) return this.elements;
-			
-			else 
-			return this.elements.filter(el => {
-				return el.cache_nom.toLowerCase().includes(this.search.toLowerCase())
-			})
+		countNbFilterActive() {
+			return this.nbFilterActive.Actif + this.nbFilterActive.MatriculeStatus + this.nbFilterActive.Archived;
 		}
 	},
 
@@ -158,8 +159,6 @@ export default {
 		isConnectedUser(val) {
 			if (val) {
 				this.listElements();
-				this.listPersoActifs();
-				this.listPersoArchived();
 			}
 		},
 
@@ -167,47 +166,19 @@ export default {
 		 * Filtre le personnel en fonction de la recherche effectuée
 		 */
 		searchValue() {
-			let newPersonnelList;
-
-			if ('' == this.searchValue && !this.nbFilterActive) {
-				newPersonnelList = this.elements;
-			} else {
-				newPersonnelList = this.personnelListFilter.filter((personnel) => personnel.cache_nom.toLowerCase().includes(this.searchValue.toLowerCase()));
-			}
-
-			this.personnelListFilter = newPersonnelList;
+			this.personnelFilted();
 		},
 
 		/**
 		 * Filtre le personnel en function des filtres séléctionné
 		 */
 		showFilter() {
-			console.log('Element', this.elements);
-			console.log('personnel fil', this.personnelListFilter);
-
-			if (!this.showFilter) {
-				let newPersonnelFiltre = [];
-
-
-				if ('' == this.searchValue) { 
-					newPersonnelFiltre = this.elements;
-				} else {
-					this.personnelListFilter.forEach((personnel) => {
-						let find = this.elements.find((e) => e.id == personnel.id);
-	
-						if (find) {
-							newPersonnelFiltre.push(find);
-						}
-					});
-				}
-
-
-				this.personnelListFilter = newPersonnelFiltre;
-			}
+			if (!this.showFilter)
+				this.personnelFilted();
 		},
 	},
 
-	components: {AppWrapper, AppMenu, AppMenuItem, searchPersonnel, PersonnelItem, AppSearchBar},
+	components: {AppWrapper, AppMenu, AppMenuItem, searchPersonnel, PersonnelItem, AppSearchBar, Spinner},
 
 	methods: {
 		...mapActions(['closeElement']),
@@ -261,35 +232,31 @@ export default {
 		},
 
 		/**
-		 * Envoie une requête pour lister les personnels actifs
-		 * enregistre la liste dans listPersonnelActifs
-		 * 
+		 * Filtre la liste du personnel avec les options de filtre défini.
 		 */
-		listPersoActifs(){
-			this.$app.apiGet('structurePersonnel/GET/list?actif=true')
-			.then((data) => {
-				this.listPersonnelActifs = data;
-			})
-			.catch(this.$app.catchError);
-		},
+		personnelFilted() {
+			this.pending.elements = true;
 
-		searchActifs(idName){
-			let actif = false;
-			for (let persoActif of this.listPersonnelActifs) {
-					if (persoActif.id == idName) {
-						actif=true;
-					}
-                } 
-			return actif;   
-		},
+			let apiUrl = 'structurePersonnel/GET/list';
+			let search = {
+				'contrat': this.searchOptions.actif,
+				'matricule_status': this.searchOptions.matriculeStatus,
+				'archived': this.searchOptions.archived,
+				'q': this.searchValue
+			};
 
-		listPersoArchived(){
-			this.$app.apiGet('structurePersonnel/GET/list?archived=true')
+			this.$app.apiGet(apiUrl, search)
 			.then((data) => {
-				this.listPersonnelArchived = data;
+				console.log('data filter', data);
+				this.$store.dispatch('refreshElements', {
+					action: 'replace',
+					elements: data,
+				});
 			})
-			.catch(this.$app.catchError);
+			.catch(this.$app.catchError)
+			.finally(() => {this.pending.elements = false});
 		},
+		
 	},
 
 	mounted() {

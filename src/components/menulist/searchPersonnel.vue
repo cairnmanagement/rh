@@ -21,7 +21,7 @@
         </template>
 
         <div class="text-center my-4">
-            <button  type="button" class="btn btn-primary col-8" @click.prevent="searchList()">
+            <button  type="button" class="btn btn-primary col-8" @click.prevent="hideFilterForm()">
                 <span v-if="pending.filter" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                 <i v-else class="bi bi-check-lg me-1"></i>
                 Appliquer
@@ -34,11 +34,14 @@
     
     export default {
         props: {
-            nbFilterActive: Number,
             searchActif: String,
             searchMatriculeStatus: String,
             searchArchived: String,
             showFilter: Boolean,
+
+            nbFilterActif: Number,
+            nbFilterMatricule: Number,
+            nbFilterArchived: Number,
         },
     
         data() {
@@ -69,7 +72,7 @@
                         ]
                     },
                     {
-                        'label':'Archived', 
+                        'label':'Archivé', 
                         'mapSearch':'Archived',
                         'button': [
                             {'label': 'Oui', 'value': '1'},
@@ -80,36 +83,25 @@
             }
         },
 
-        emits: ['update:nbFilterActive', 'update:searchActif', 'update:searchMatriculeStatus', 'update:searchArchived', 'update:showFilter'],
+        emits: [
+            'update:searchActif', 
+            'update:searchMatriculeStatus', 
+            'update:searchArchived', 
+            'update:showFilter',
+
+            'update:nbFilterActif',
+            'update:nbFilterMatricule',
+            'update:nbFilterArchived',
+        ],
 
         methods: {
             /**
-             * Récupère la liste fitrer avec les parametres choisies
+             * Cache le formulaire de filtre
              * 
              * @event   update:showFilter
              */
-            searchList() {
-                this.pending.filter = true;
-
-                let apiUrl = 'structurePersonnel/GET/list';
-                let search = {
-                    'contrat': this.searchActif,
-                    'matricule_status': this.searchMatriculeStatus,
-                    'archived': this.searchArchived
-                };
-
-                this.$app.apiGet(apiUrl, search)
-                .then((data) => {
-                    this.$store.dispatch('refreshElements', {
-                        action: 'replace',
-                        elements: data,
-                    });
-                })
-                .catch(this.$app.catchError)
-				.finally(() => {
-                    this.pending.filter = false; 
-                    this.$emit('update:showFilter', false)
-                });
+             hideFilterForm() {
+                this.$emit('update:showFilter', false);
             },
             
 
@@ -120,7 +112,9 @@
              * @param {Object}      filterSection       Represente la section du filtre
              * @param {Object|string}      oButton              Object du button clicker
              * 
-             * @event   update:nbFilterActive
+             * @event   update:nbFilterActif
+             * @event   update:nbFilterMatricule
+             * @event   update:nbFilterArchived
              * @event   update:searchActif
              * @event   update:searchMatriculeStatus
              * @event   update:searchArchived
@@ -142,7 +136,10 @@
 
                 button.label != 'Tous' ? this.count[filterSection.mapSearch] = 1 : this.count[filterSection.mapSearch] = 0;
                 
-                this.$emit('update:nbFilterActive', (this.count.Actif + this.count.MatriculeStatus + this.count.Archived));
+                this.$emit('update:nbFilterActif', this.count.Actif);
+                this.$emit('update:nbFilterMatricule', this.count.MatriculeStatus);
+                this.$emit('update:nbFilterArchived', this.count.Archived);
+
                 this.$emit('update:search'+ filterSection.mapSearch, button.value );
             },
 
@@ -156,11 +153,20 @@
                     this.searchActif === buttonValue && 'Actif' == filterSection.mapSearch
                     || this.searchMatriculeStatus === buttonValue && 'MatriculeStatus' == filterSection.mapSearch
                     || this.searchArchived === buttonValue && 'Archived' == filterSection.mapSearch
-                    ) {
+                    ) 
+                {
                     return "active";
                 }
             }
 
         },
+
+        mounted() {
+            this.count = {
+                Actif: this.nbFilterActif,
+                MatriculeStatus: this.nbFilterMatricule,
+                Archived: this.nbFilterArchived,
+            }
+        }
     }
     </script>
