@@ -3,6 +3,7 @@
         :title="'Contrat de travail'" 
         size="lg" 
         @modal-hide="routeToParent()"
+        :className="'modal-dialog-scrollable'"
         :cancelBtn="true">
         <contract-consultation :contrat="contrat" />
         

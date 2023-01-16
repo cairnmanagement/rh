@@ -1,5 +1,6 @@
 <template>
-<div class="container" v-if="openedElement">
+
+	<div class="container" v-if="openedElement">
 
 		<div>
 			<nav id="enteteDossier" class=" card-header navbar navbar-light bg-light px-3 justify-content-end">
@@ -11,7 +12,7 @@
 			</nav>
 		</div>
 
-	<!--en-tête fiche personnel-->
+		<!--en-tête fiche personnel-->
 		<section class="text-center py-3 bg-light" v-if="openedElement.extendedData">
 			
 			<div class="row">
@@ -37,9 +38,15 @@
 							
 						</div>
 					</div>
+
+					<div class="card mb-3">
+						<!-- <PersonnelHeaderCard></PersonnelHeaderCard> -->
+					</div>
+
 					<div class="card mb-3">
 						<etat-civil-info/>
 					</div>
+
 					<div class="card mb-3">
 						<coord-info/>
 					</div>
@@ -53,9 +60,11 @@
 			</div>	
 		</section>
 
-	<!-- Ne pas toucher -->
+		<!-- Ne pas toucher -->
         <router-view></router-view>
-</div>
+	</div>
+
+	<spinner v-else></spinner>
 
 </template>
 
@@ -71,6 +80,8 @@ import fr from 'date-and-time/locale/fr';
 import ContractInfo from '../components/ContractInfo.vue';
 import CoordInfo from '../components/CoordInfo.vue';
 import EtatCivilInfo from '../components/EtatCivilInfo.vue';
+import Spinner from '../components/pebble-ui/Spinner.vue';
+// import PersonnelHeaderCard from '@/components/PersonnelHeaderCard.vue';
 
 export default {
     data() {
@@ -177,7 +188,7 @@ export default {
         this.loadData(this.$route.params.id);
 		this.loadContract(this.$route.params.id);
     },
-    components: { UserImage, ContractInfo, CoordInfo, EtatCivilInfo}
+    components: { UserImage, ContractInfo, CoordInfo, EtatCivilInfo, Spinner, }
 }
 
 </script>

@@ -96,6 +96,14 @@
 	
 </template>
 
+<style lang="scss">
+
+.fs-7 {
+	font-size: 0.80rem !important;
+}
+
+</style>
+
 <script>
 
 import AppWrapper from '@/components/pebble-ui/AppWrapper.vue'
@@ -128,7 +136,6 @@ export default {
 				MatriculeStatus: 0,
 				Archived: 0,
 			},
-			personnelListFilter: [],
 			searchValue: '',
 			searchOptions: {
 				actif: "null",
@@ -226,7 +233,6 @@ export default {
 					action,
 					elements: data,
 				});
-				//console.log('listElements', data);
 			})
 			.catch(this.$app.catchError);
 		},
@@ -247,7 +253,6 @@ export default {
 
 			this.$app.apiGet(apiUrl, search)
 			.then((data) => {
-				console.log('data filter', data);
 				this.$store.dispatch('refreshElements', {
 					action: 'replace',
 					elements: data,
@@ -258,11 +263,5 @@ export default {
 		},
 		
 	},
-
-	mounted() {
-		this.personnelListFilter = this.elements;
-	}
-
-
 }
 </script>

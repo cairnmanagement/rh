@@ -1,7 +1,11 @@
 <template>
     <div class="card-body">
-		<div class="d-flex align-items-center justify-content-between">
+		<div class="d-flex align-items-center justify-content-between mb-2">
 			<h4 class="card-title m-0">Contrats</h4>
+
+			<button type="button" class="btn btn-primary">
+				Nouveau contrat
+			</button>
 		</div>
 		<div >
 			<div class=" list-group list-group-flush" >
@@ -10,7 +14,6 @@
 						<a :href="href" @click="navigate"  class="list-group-item list-group-item-action d-flex justify-content-between mb-1 text-decoration-none">
 							<div v-if="contrat.dsortie_reelle" class="d-flex flex-column align-items-start">
 								<div>Contrat {{contrat.id}}</div>
-								<div>Qualification: {{contrat.mls__qualification}}</div>
 								<div class="text-muted">du {{changeFormatDateLit(contrat.dentree)}} au {{changeFormatDateLit(contrat.dsortie_reelle)}}</div>
 								<div>contrat à durée indéterminée: {{contrat.duree_indeterminee}}</div>
 	

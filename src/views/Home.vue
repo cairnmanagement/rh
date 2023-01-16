@@ -1,27 +1,28 @@
 <template>
 	<div v-if="$store.state.login">
 
-	<div class="container my-2">
-		<div class="row row-cols-1 row-cols-xl-2">
-			<div class="col">
-				<div class="card mb-2">
-					<PersonalStats :personnel-stats="personnelStats" v-if="!pending.updatePersonnelStats"></PersonalStats>
+		<div class="container my-2">
+			<div class="row row-cols-1 row-cols-xl-2">
+				<div class="col">
+					<div class="card mb-2">
+						<PersonalStats :personnel-stats="personnelStats" v-if="!pending.updatePersonnelStats"></PersonalStats>
+					</div>
+				</div>
+				<div class="col">
+					<div class="card mb-2">
+						<ContractCurrentStats :contrat-current-stats="contratCurrentStats" v-if="!pending.updateContratCurrentStats"></ContractCurrentStats>
+					</div>
 				</div>
 			</div>
-			<div class="col">
-				<div class="card mb-2">
-					<ContractCurrentStats :contrat-current-stats="contratCurrentStats" v-if="!pending.updateContratCurrentStats"></ContractCurrentStats>
+			<div class="row">
+				<div class="col-12">
+					<div class="card mb-2">
+						<ContractsTimeLine :contrat-stats="contratStats" v-if="!pending.updateContratStats" />
+					</div>
 				</div>
 			</div>
 		</div>
-		<div class="row">
-			<div class="col-12">
-				<div class="card mb-2">
-					<ContractsTimeLine :contrat-stats="contratStats" v-if="!pending.updateContratStats" />
-				</div>
-			</div>
-		</div>
-	</div>
+		
 		<router-view/>
 	</div> 
 </template>
