@@ -1,89 +1,84 @@
 <template>
-    <div v-if="openedElement">
-        <!-- <div v-for="contratItem in contrat.contrats" :key="'contratItem-'+contratItem.id">
-            <router-link :to="{name:'infoContrat', params:{id:openedElement.id, idContrat:openedElement.oContrat.id}}" v-slot="{navigate,href}" custom>
-                <a :href="href" @click="navigate" class="list-group-item list-group-item-action d-flex justify-content-between mb-1">
-
-                    <div v-if="contratItem.dsortie_reelle" class="d-flex flex-column align-items-start">
-                        <div v-if="contratItem.id">{{contratItem.id}}</div>
-                        <div class="text-muted">du {{entryDateFormat2}} au {{exitDateFormat2}}</div>
-                        <div v-if="contratItem.oContrat.duree_indeterminee == 'OUI'">Contrat à durée indéterminée (X avenants)</div> 
-                        <div v-else>Contrat à durée déterminée  avenants</div> 
+    <div @click="showContract()" class="list-group-item list-group-item-action mb-1 border rounded-1 contrat-item" type="button">
+        <div class="d-flex align-items-center justify-content-between">
+            <div>
+                <div class="d-flex align-items-center">
+                    Contrat n°{{ contrat.id }}
+            
+                    <div class="badge bg-secondary ms-2">
+                        <span v-if="contrat.duree_indeterminee === 'OUI'">CDI</span>
+                        <span v-else>CDD</span>
                     </div>
+                </div>
 
-                    <div v-else-if="contratItem.duree_indeterminee == 'OUI'" class="d-flex flex-column align-items-start">
-                        <div v-if="contratItem.id">{{contratItem.id}}</div>
-                        <div class="text-success">depuis le {{entryDateFormat2}}</div>
-                        <div>Contrat à durée indéterminée  (X avenants)</div> 
+                <div class="fw-lighter">
+                    <div v-if="contrat.duree_indeterminee === 'OUI'">
+                        Depuis le {{ changeFormatDateLit(contrat.dentree) }}
+                    </div>
+    
+                    <div v-else>
+                        Du {{ changeFormatDateLit(contrat.dentree) }} au {{ changeFormatDateLit(sortieContrat) }}
+                    </div>
+                </div>
+            </div>
 
-                    </div>
-                    <div v-else-if="contratItem.duree_indeterminee ='NON'" class="d-flex flex-column align-items-start" >
-                        <div v-if="contratItem.id">{{contratItem.id}}</div>
-                        <div class="text-success">du {{entryDateFormat2}} au {{exitDateFormat2}}</div>
-                        <div>Contrat à durée déterminée (X avenants)</div> 
-                    </div>
-                    <div v-else>?</div>
-                    
-                    <div class="d-flex align-items-center">
-                        <i class="bi bi-arrow-up-right"></i>
-                    </div> -->
-                    <!-- contractItem 
-                                fonction du personnel ... a remplacer par qualification de contrat-->
-                                <strong class="d-block">{{contratItem.id}}</strong>
-                <!-- </a>
-            </router-link> -->
-        <!-- </div> -->
+            <div class="icon-display">
+                <i class="bi bi-eye"></i>
+            </div>
+        </div>
     </div>
 </template>
+
+<style lang="scss" scoped>
+    .icon-display {
+        display: none;
+    }
+    .contrat-item:hover .icon-display {
+        display: block;
+    }
+</style>
+
 <script>
-import {mapState,} from 'vuex';
 import date from 'date-and-time';
 import fr from 'date-and-time/locale/fr';
+import { mapState } from 'vuex';
 
 export default{
-
     props: {
-        contrats: Array
-    }, 
+        contrat: Object
+    },
 
-    computed:{
-        ...mapState(["openedElement"]),
+    computed: {
+        ...mapState(['openedElement']),
+        
 
-        entrydate() {
-			date.locale(fr);
-			return date.format(new Date(this.openedElement.dentree)  , 'DD-MM-YYYY')
-		},
         /**
-		 * modifie le format de la date reçue de l'API au format 10 janv. 2022
-		 * @params	
-		 */
-		entryDateFormat2() {
-			date.locale(fr);
-			return date.format(new Date(this.openedElement.dentree)  , 'DD MMM YYYY')
-		}, 
-		exitdate() {
-			date.locale(fr);
-			return date.format(new Date(this.openedElement.dsortie)  , 'DD-MM-YYYY')
-		},
-		exitDateFormat2() {
-			date.locale(fr);
-			return date.format(new Date(this.openedElement.dsortie)  , 'DD MMM YYYY')
-		},
-		// exitDateReal(){
-		// 	date.locale(fr);
-		// 	return date.format(new Date(this.contracts.dsortie_reelle) , 'DD MM YYYY')
-		// }
+         * Retourne la date de sortie exacte du contrat
+         */
+        sortieContrat() {
+            if(this.contrat.dsortie_reelle) {
+                return this.contrat.dsortie_reelle;
+            }
+                        
+            return this.contrat.dsortie;
+        }
+    },
 
-		/**
-		 * dateFormat
-		 * modifie le format de la date reçue en paramètre et la retourne 
-		 * sous la forme 10 janv. 2022
-		 * @param	{String}	date
+    methods: {
+        /**
+		 * Modifie le format de la date entrée en paramètre et la retourne 
+		 * sous le format 01 févr. 2021
+		 * @param {string} date 
 		 */
-		dateformatLit(day) {
+
+		changeFormatDateLit(el) {
 			date.locale(fr);
-			return date.format(new Date(day) , 'DD MMM YYYY')
-		}
+			return date.format(new Date(el), 'DD MMM YYYY')
+		},
+
+        showContract() {
+            this.$router.push({ name:'infoContrat', params:{id: this.openedElement.id, idContrat: this.contrat.id}})
+        }
     }
 }
 </script>

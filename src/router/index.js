@@ -70,11 +70,7 @@ const routes = [
       {
         path: '/personnel/:id/contrat/:idContrat',
         name: 'infoContrat',
-        //Affichage des informations d’un contrat dans une boite modale au-dessus de la fiche personnel.
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
-        component: () => import(/* webpackChunkName: "about" */ '../views/ContractConsult.vue')
+        component: () => import('../views/ContractConsult.vue')
         
       },
       {

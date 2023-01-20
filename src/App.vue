@@ -50,7 +50,6 @@
 		<template v-slot:menu>
 			<AppMenu>
 				<AppMenuItem href="/" look="dark" icon="bi bi-house">Mon personnel</AppMenuItem>
-				<AppMenuItem href="/a-propos" look="dark" icon="bi bi-app">À propos</AppMenuItem>
 			</AppMenu>
 		</template>
 

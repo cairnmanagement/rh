@@ -1,46 +1,11 @@
 <template>
 
 	<div class="container" v-if="openedElement">
-
-		<div>
-			<nav id="enteteDossier" class=" card-header navbar navbar-light bg-light px-3 justify-content-end">
-				<ul class="nav nav-pills">
-					<li class="nav-item">
-						<a class="nav-link" href="#"><i class="bi bi-arrow-clockwise"></i></a>
-					</li>
-				</ul>
-			</nav>
-		</div>
-
-		<!--en-tête fiche personnel-->
 		<section class="text-center py-3 bg-light" v-if="openedElement.extendedData">
-			
 			<div class="row">
 				<div class="col-12 col-xxl-6">
 					<div class="card mb-3">
-						<div class="card-body">
-							<div class="position-relative">
-								<user-image :name="openedElement.oPersonne.nom" size="xl"></user-image>
-								<span v-if="openedElement.matricule" class="badge bg-secondary position-absolute" style="top:0px;">{{openedElement.matricule}}</span>
-							</div>
-							<h3>{{openedElement.oPersonne.prenom}} {{openedElement.oPersonne.nom}}</h3>
-							<div v-if="openedElement.oContrat" class="align-items-center justify-content-between" >
-								<div class="d-flex align-items-center justify-content-center">
-									<span v-if="!openedElement.oContrat.duree_indeterminee">pas de contrat</span>
-									<span v-if="openedElement.oContrat.duree_indeterminee == 'OUI'">CDI depuis le {{formatDateFr(openedElement.dentree)}}</span>
-									<span v-if="openedElement.oContrat.duree_indeterminee == 'NON'">CDD jusqu'au {{formatDateFr(openedElement.dsortie)}}</span>
-								</div>
-							</div>
-							<div v-else>
-								Cette personne n'a jamais fait partie des effectifs de la société
-							</div>
-							
-							
-						</div>
-					</div>
-
-					<div class="card mb-3">
-						<!-- <PersonnelHeaderCard></PersonnelHeaderCard> -->
+						<personnel-header-card></personnel-header-card>
 					</div>
 
 					<div class="card mb-3">
@@ -51,16 +16,15 @@
 						<coord-info/>
 					</div>
 				</div>
+
 				<div class="col-12 col-xxl-6">
 					<div class="card">
-						
 						<contract-info :contracts="openedContrats"></contract-info>
 					</div>
 				</div>
 			</div>	
 		</section>
 
-		<!-- Ne pas toucher -->
         <router-view></router-view>
 	</div>
 
@@ -70,18 +34,13 @@
 
 <script>
 
-
-
-
 import {mapActions, mapState} from 'vuex'
-import UserImage from '../components/pebble-ui/UserImage.vue';
-import date from 'date-and-time';
-import fr from 'date-and-time/locale/fr';
+
 import ContractInfo from '../components/ContractInfo.vue';
 import CoordInfo from '../components/CoordInfo.vue';
 import EtatCivilInfo from '../components/EtatCivilInfo.vue';
 import Spinner from '../components/pebble-ui/Spinner.vue';
-// import PersonnelHeaderCard from '@/components/PersonnelHeaderCard.vue';
+import PersonnelHeaderCard from '@/components/PersonnelHeaderCard.vue';
 
 export default {
     data() {
@@ -90,45 +49,28 @@ export default {
                 extendedData: true,
 				contrats: true
             }
-			
         };
     },
+
     computed: {
-        ...mapState(["openedElement", 'openedContrats']),
-
-		birthdate() {
-			date.locale(fr);
-			return date.format(new Date(this.openedElement.oPersonne.dn)  , 'DD-MM-YYYY')
-		},
-		
-		
+        ...mapState(["openedElement", 'openedContrats']),		
     },
+
+	components: { ContractInfo, CoordInfo, EtatCivilInfo, Spinner, PersonnelHeaderCard },
+
     methods: {
-
 		...mapActions(['setOpenedContrats']),
-		
-
-		/**
-		 * Modifie le format de la date entrée en paramètre et la retourne 
-		 * sous le format dd/mm:yyyy
-		 * @param {string} date 
-		 */
-
-
-		formatDateFr(date) {
-			let newDate = new Date(date);
-			let format = newDate.toLocaleDateString('fr-FR');
-			return format;
-		},
 		
         /**
          * Charger les données complémentaires du personnel
+		 * 
+		 * @param {number}	personnelId		l'id d'un personnel
          */
-        loadData(id) {
+        loadData(personnelId) {
 			if (this.openedElement) {
 				if (!this.openedElement.extendedData) {
 					this.pending.extendedData = true;
-					this.$app.apiGet("structurePersonnel/GET/" + id, {
+					this.$app.apiGet("structurePersonnel/GET/" + personnelId, {
 						api_hierarchy: true
 					})
 						.then(personnelData => {
@@ -170,6 +112,7 @@ export default {
         this.loadContract(to.params.id);
 
     },
+
     /**
      * Lorsqu'on quite la route active, l'élément ouvert est vidé.
      */
@@ -177,6 +120,7 @@ export default {
         this.$store.dispatch("unload");
         next();
     },
+
     /**
      * Lorsque l'élément est monté, on va lire l'élément à charger passé en paramètre.
      */
@@ -188,7 +132,6 @@ export default {
         this.loadData(this.$route.params.id);
 		this.loadContract(this.$route.params.id);
     },
-    components: { UserImage, ContractInfo, CoordInfo, EtatCivilInfo, Spinner, }
 }
 
 </script>

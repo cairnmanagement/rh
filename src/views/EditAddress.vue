@@ -20,8 +20,8 @@
         <div v-else class="alert alert-warning" >Aucun élément trouvé </div>
     </AppModal>
 </template>
-<script>
 
+<script>
 import AppModal from '../components/pebble-ui/AppModal.vue';
 import FormPostalAddress from '../components/FormPostalAddress.vue';
 import { mapActions, mapState } from 'vuex';

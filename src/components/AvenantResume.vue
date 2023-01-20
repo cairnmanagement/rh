@@ -3,13 +3,13 @@
         <div>
             <div class="text-success d-flex justify-content-between aligne">
                 <div>
-                    Avenant du {{ changeFormatDateLit(avSelected.dentree_relative) }}
+                    Avenant du {{ changeFormatDateLit(startContrat) }}
                 </div>
 
                 <div class="text-secondary">
                     <i class="bi bi-chevron-right"></i>
-                    <span v-if="avSelected.dsortie">Fini le {{ changeFormatDateLit(avSelected.dsortie) }}</span>
-                    <span v-else> Sans date de sortie</span>
+                    <span v-if="checkCDI"> Sans date de sortie</span>
+                    <span v-else>Fini le {{ changeFormatDateLit(endContrat) }}</span>
                 </div>
             </div>
 
@@ -87,13 +87,57 @@
 
 <script>
 import date from 'date-and-time';
-import fr from 'date-and-time/locale/fr';
 
 export default {
     name: 'avenantResume',
 
     props: {
         avSelected: Object
+    },
+
+    computed: {
+        /**
+         * Retourne la date d'entrée exacte du contrat
+         * 
+         * @return {DateTime}
+         */
+        startContrat() {
+            if (this.avSelected.dentree_relative && this.avSelected.dentree_relative != "0000-00-00 00:00:00") {
+                return this.avSelected.dentree_relative;
+            }
+
+            return this.avSelected.dentree;
+        },
+
+        /**
+         * Retourne la date de sortie exacte du contrat
+         * 
+         * @return {DateTime}
+         */
+        endContrat() {
+            if(this.avSelected.dsortie_reelle && this.avSelected.dsortie_reelle != "0000-00-00 00:00:00") {
+                return this.avSelected.dsortie_reelle;
+            }
+                        
+            return this.avSelected.dsortie;
+        },
+
+        /**
+         * Check si c un CDI
+         * 
+         * @return {boolean}
+         */
+         checkCDI() {
+            let dsortie_reelle = this.avSelected.dsortie_reelle;
+            let dsortie = this.avSelected.dsortie;
+
+            if (dsortie_reelle && dsortie_reelle != "0000-00-00 00:00:00" || dsortie && dsortie != "0000-00-00 00:00:00") {
+                return false;
+            }
+
+            return true;
+        }
+
     },
 
     methods: {
@@ -103,9 +147,10 @@ export default {
          * @param {string} date 
          */
         changeFormatDateLit(el) {
-            date.locale(fr);
             return date.format(new Date(el), 'DD MMM YYYY')
         },
+
+
     }
 }
 </script>

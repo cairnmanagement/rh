@@ -1,106 +1,89 @@
 <template>
+
     <div>
         <div class="card-body">
             <div class="d-flex align-items-center justify-content-between">
-                <h4 class="card-title m-0">Coordonnées</h4>
-                <!-- <a href="/" class="btn btn-light"><i class="bi bi-plus-lg"></i></a> -->
-                <div class="dropdown">
-                    <button class="btn btn-light dropdown-toggle" type="button" id="addRessource" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="bi bi-plus-lg"></i>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="addRessource">
-                        <li>
-                            <router-link :to="{name:'ressourcePhone', params:{id:openedElement.id, idPhone: 0}}" v-slot="{navigate,href}" custom>
-                                <a class="dropdown-item" :href="href" @click="navigate">Téléphone</a>
-                            </router-link>
-                        </li>
-                        <li>
-                            <router-link :to="{name:'ressourceMail', params:{id:openedElement.id, idMail: 0}}" v-slot="{navigate,href}" custom>
-                                <a class="dropdown-item" :href="href" @click="navigate">Mail</a>
-                            </router-link>
-                        </li>
-                        <li>
-                            <router-link :to="{name:'ressourceAddress', params:{id:openedElement.id, idAdress: 0}}" v-slot="{navigate,href}" custom>
-                                <a class="dropdown-item" :href="href" @click="navigate">Adresse</a>
-                            </router-link>
-                        </li>
-                    </ul>
+                <h3 class="card-title m-0">Coordonnées</h3>
+
+                <div>
+                    <router-link v-for="(contact, key) in contacts" :key="'button'+key" :to="routeLink(key, contact)" v-slot="{navigate, href}" custom>
+                        <a :href="href" class="btn rounded-pill button-contact mx-1" @click="navigate" :title="contact.title">
+                            <i class="bi" :class="contact.classIcon"></i>
+                        </a>
+                    </router-link>
                 </div>
             </div>
         </div>
+
         <ul class="list-group list-group-flush">
-            
-            <li v-if="!openedElement.oPersonne.telephones?.length" class="list-group-item d-flex align-items-between text-warning">Pas de numéro de téléphone enregistré</li>
-            <li v-else class="list-group-item d-flex align-items-baseline">
-                <div class="me-3"><i class="bi bi-phone"></i></div>
-                <div class="d-flex flex-column flex-fill">
-                    <div v-for="item in openedElement.oPersonne.telephones" :key="item.id" class="d-flex flex-row align-items-center justify-content-between">
-                        <div>
-                            <a :href="'tel'+item.numero" class="text-decoration-none me-2">{{item.numero}}</a>
-                            <span v-if="item.type" class="badge bg-secondary me-2">{{item.type}}</span>
-                        </div>
-                        <div>
-                            <router-link :to="{name:'ressourcePhone', params:{id:openedElement.id, idPhone:item.id}}" v-slot="{navigate,href}" custom>
-                                <a @click="navigate" :href="href" class=" btn btn-sm btn-light rounded-pill me-2"><i class="bi bi-pencil"></i></a>
-                            </router-link>
-                                <button @click.prevent="deletePhone(item.id)"   class="btn btn-sm btn-light rounded-pill text-black-50"><i class="bi bi-trash3"></i></button>
-                        </div>
-                    </div>
-                </div>
-            </li>
-            <li v-if="!openedElement.oPersonne.emails?.length" class="list-group-item d-flex align-items-between text-warning">Pas d'adresse email enregistrée</li>
-            <li v-else class="list-group-item d-flex align-items-baseline">
-                <div class="me-3"><i class="bi bi-envelope"></i></div>
-                <div class="d-flex flex-column flex-fill">
-                    <div v-for="item in openedElement.oPersonne.emails" :key="item.id" class="d-flex flex-row align-items-center justify-content-between">
-                        <div>
-                            <a :href="'mail'+item.adresse" class="text-decoration-none me-2">{{item.adresse}}</a>
-                            <span v-if="item.type" class="badge bg-secondary me-2">{{item.type}}</span>
-                        </div>
-                        <div>
-                            <router-link :to="{name:'ressourceMail', params:{id:openedElement.id, idMail:item.id}}" v-slot="{navigate,href}" custom>
-                                <a @click="navigate" :href="href" class=" btn btn-sm btn-light rounded-pill me-2"><i class="bi bi-pencil"></i></a>
-                            </router-link>
-                            <button @click.prevent="deleteMail(item.id)"  class="btn btn-sm btn-light rounded-pill text-black-50"><i class="bi bi-trash3"></i></button>
-                        </div>
-                    </div>
-                </div>
-            </li>
-
-            <li v-if="!openedElement.oPersonne.adresses?.length" class="list-group-item d-flex align-items-baseline text-warning"> Pas d'adresse postale enregistrée</li>
-            <li v-else class="list-group-item">
-
-                <div  v-for="item in openedElement.oPersonne.adresses" :key="item.id" class="d-flex align-items-baseline">
-                    <div class="me-3"><i class="bi bi-geo-alt"></i></div>
-                    <div class="d-flex flex-column flex-fill" >
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div>
-                                <span v-if="item.type" class="text-muted">{{item.type}}</span>
-                                <span v-else class="text-muted">Contractuelle</span>
-                            </div>
-                            <div>
-                                <router-link :to="{name:'ressourceAddress', params:{id:openedElement.id, idAdress:item.id}}" v-slot="{navigate,href}" custom>
-                                    <a @click="navigate" :href="href" class=" btn btn-sm btn-light rounded-pill me-2"><i class="bi bi-pencil"></i></a>
-                                </router-link>
-                                <button @click.prevent="deleteAdress(item.id)" class="btn btn-sm btn-light rounded-pill text-black-50"><i class="bi bi-trash3"></i></button>
-                            </div>
-                        </div>
-                        <div class="d-flex flex-column align-items-start justify-content-between">
-                            <span>{{item.voie}}</span>
-                            <span> {{item.complement}} </span>
-                            <span>{{item.cp}} {{item.localite}}</span>
-                        </div>
-                    </div>
-                </div>
-            </li>
+            <contact-ressource-group v-for="(contact, key) in contacts" :key="'list'+key" :ressources="ressourceToSend(key)" :type="key"/>
         </ul>
     </div>
+
 </template>
+
+<style lang="scss" scoped>
+
+@import 'bootstrap';
+
+.button-contact {
+    @extend .btn-light;
+
+    .icon-phone::before {
+        content: "\f4e7";
+    }
+
+    .icon-mail::before { 
+        content: "\f32f";
+    }
+
+    .icon-address::before { 
+        content: "\f3e8";
+    }
+
+
+    &:hover {
+        @extend .btn-primary;
+
+        .icon-phone::before,
+        .icon-mail::before,
+        .icon-address::before {
+            content: "\f64d";
+        }
+    }
+}
+
+</style>
 
 <script>
 
 import { mapState, mapActions } from 'vuex';
+import ContactRessourceGroup from './ContactRessourceGroup.vue';
+
 export default{
+  components: { ContactRessourceGroup },
+
+    data() {
+        return {
+            contacts : {
+                'telephone': {
+                    'route': 'ressourcePhone',
+                    'classIcon': 'icon-phone',
+                    'title': "Ajouter un téléphone"
+                },
+                'mail': {
+                    'route': 'ressourceMail',
+                    'classIcon': 'icon-mail',
+                    'title': "Ajouter un email"
+                },
+                'address': {
+                    'route': 'ressourceAddress',
+                    'classIcon': 'icon-address',
+                    'title': "Ajouter une adresse"
+                },
+            }
+        }
+    },
 
     computed: {
         ...mapState(["openedElement"]),
@@ -108,6 +91,39 @@ export default{
 
     methods: {
 		...mapActions(['removeRessource']),
+
+        /**
+         * Retourne la route du button
+         * 
+         * @param {string} key          index de l'object
+         * @param {Object} contact      Object de contact telephone ou mail ou adresse
+         * 
+         * @return {object}
+         */
+        routeLink(key, contact) {
+            let route = {name:contact.route, params:{id: this.openedElement.id}};
+
+            if (key === 'telephone') route.params.idPhone = 0;
+            if (key === 'mail') route.params.idMail = 0;
+            if (key === 'address') route.params.idAdress = 0;
+
+            return route;
+        },
+
+        /**
+         * Retourne la ressource en fonction du contact label renseigné
+         * 
+         * @param {String} contactLabel 
+         * 
+         * @return {object}
+         */
+        ressourceToSend(contactLabel) {
+            if (contactLabel === "telephone") return this.openedElement.oPersonne.telephones;
+            if (contactLabel === "mail") return this.openedElement.oPersonne.emails;
+            if (contactLabel === "address") return this.openedElement.oPersonne.adresses;
+        },
+
+
 
 		deleteAdress(ressourceId) {
 			if (confirm('Souhaitez vous supprimer cette adresse postale?')) {

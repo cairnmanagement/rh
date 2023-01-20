@@ -1,33 +1,33 @@
 <template>
 
     <div class="card-body">
-
-        <section class="row mb-3">
-            <div class="col-3">
-                <div class="position-relative">
-                    <user-image :name="openedElement.oPersonne.nom" size="xl"></user-image>
-                    <span v-if="openedElement.matricule" class="badge bg-secondary position-absolute" style="top:0px; right:30px">{{openedElement.matricule}}</span>
-                </div>
+        <section class="mb-3">
+            <div class="position-relative">
+                <user-image :name="openedElement.oPersonne.nom" size="xl"></user-image>
+                <span v-if="openedElement.matricule" class="badge bg-secondary position-absolute" style="top:0px; left:50%">{{openedElement.matricule}}</span>
             </div>
 
-            <div class="col-6 d-flex justify-content-between my-2">
-                <div class="d-flex flex-column align-items-start">
-                    <div class="badge bg-secondary">Contrat {{contrat.id}}</div>
-                    <div class="lead"><strong>{{openedElement.cache_nom}}</strong></div>
-                </div>
-            </div>
 
-            <div class="col-3 mt-2">
-                <router-link :to="{name:'EditContrat', params:{id:openedElement.id, idContrat:contrat.id}}" v-slot="{navigate, href}" custom>
-                    <a :href="href" @click="navigate" class="btn btn-sm btn-outline-primary mx-1 ">
-                        Modifier
+            <div class="d-flex flex-column align-items-center my-2">
+                <div class="mb-2 text-center">
+                    <h2>{{openedElement.cache_nom}}</h2>
+                </div>
+
+                <div class="d-flex">
+                    <router-link :to="{name:'EditContrat', params:{id:openedElement.id, idContrat:contrat.id}}" v-slot="{navigate, href}" custom>
+                    <a :href="href" @click="navigate" class="btn btn-sm btn-success mx-1 ">
                         <i class="bi bi-pencil"></i>
-                    </a>
-                </router-link>
-
-                <router-link :to="{name:'EditContrat', params:{id:openedElement.id, idContrat:contrat.id}}" v-slot="{navigate, href}" custom>
-                    <a :href="href" @click="navigate" class="btn btn-sm btn-outline-danger mx-1 ">Mettre fin au contrat</a>
-                </router-link>
+                        Modifier le contrat
+                        </a>
+                    </router-link>
+    
+                    <router-link :to="{name:'EditContrat', params:{id:openedElement.id, idContrat:contrat.id}}" v-slot="{navigate, href}" custom>
+                        <a :href="href" @click="navigate" class="btn btn-sm btn-danger mx-1 ">
+                            <i class="bi bi-file-earmark-x"></i>
+                            Mettre fin au contrat
+                        </a>
+                    </router-link>
+                </div>
             </div>
         </section>
         

@@ -8,12 +8,14 @@
 						<PersonalStats :personnel-stats="personnelStats" v-if="!pending.updatePersonnelStats"></PersonalStats>
 					</div>
 				</div>
+
 				<div class="col">
 					<div class="card mb-2">
 						<ContractCurrentStats :contrat-current-stats="contratCurrentStats" v-if="!pending.updateContratCurrentStats"></ContractCurrentStats>
 					</div>
 				</div>
 			</div>
+			
 			<div class="row">
 				<div class="col-12">
 					<div class="card mb-2">
