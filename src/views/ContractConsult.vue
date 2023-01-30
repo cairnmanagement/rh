@@ -1,30 +1,25 @@
 <template>
     
     <AppModal 
-        :title="titleModal" 
+        :title="`Contrat de travail n°${this.$route.params.idContrat}`" 
         size="lg" 
-        @submit="record()"
         @modal-hide="routeToParent()"
         :className="'modal-dialog-scrollable'"
-        :cancelBtn="true"
-        :submitBtn="submit">
+        :cancelBtn="true">
         
-        <contract-consultation v-if="contratExist" :contrat="contrat" />
-        <contract-form-2 v-else />
-        
+        <contract-consultation :contrat="contrat" />
     </AppModal>
-    
+
 </template>
 
 <script>
 import {mapState} from 'vuex';
 import ContractConsultation from '../components/ContractConsultation.vue';
-import ContractForm2 from '../components/ContractForm2.vue';
 import AppModal from '../components/pebble-ui/AppModal.vue';
 
 
 export default {
-    components: { AppModal, ContractConsultation, ContractForm2},
+    components: { AppModal, ContractConsultation},
 
     computed: {
         ...mapState(['openedContrats']),
@@ -36,44 +31,10 @@ export default {
          */
         contrat() {
             let contrat = this.openedContrats.find(e => e.id == this.$route.params.idContrat);
+
             return contrat;
         },
 
-        /**
-         * Rtourne le titre de la modal en fonction si un contrat est fourni ou pas
-         * 
-         * @return {string}
-         */
-        titleModal() {
-            if (this.contratExist) {
-                return `Contrat de travail n°${this.$route.params.idContrat}`;
-            }
-
-            return 'Nouveau contrat de travail';
-        },  
-
-        /**
-         * Check si un id de contrat a été fourni dans l'url
-         * 
-         * @return {boolean}
-         */
-        contratExist() {
-            if (this.$route.params.idContrat == '0') {
-                return false;
-            }
-
-            return true;
-        },
-
-        /**
-         * Permet l'affichage du button submit de la modal si aucun contrat
-         * ou un contrat en mode édition
-         * 
-         * @return {boolean}
-         */
-        submit() {
-            return this.contratExist ? false : true;
-        }
     },
 
 
@@ -84,8 +45,6 @@ export default {
         routeToParent() {
             this.$router.go(-1);
         },
-
-
     }
 }
 </script>

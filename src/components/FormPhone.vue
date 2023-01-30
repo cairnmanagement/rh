@@ -1,39 +1,41 @@
 <template>
-    <div v-if="telephone">
-        
+
+    <div>
         <div class="row g-2">
             <div class="col mb-3">
                 <label for="type" class="form-label">Type:</label>
-                <select class="form-select" v-model="type">
+                <select class="form-select" v-model="typeValue">
                     <option selected></option>
                     <option value="Personnel">Personnel</option>
                     <option value="Professionnel">Professionnel</option>
                 </select>
             </div>
         </div>
+
         <div class="row g-2">
             <div class="col mb-3">
                 <label for="tel" class="form-label">Numéro</label>
-                <input type="tel" class="form-control" id="tel" name="tel" v-model="numero">
+                <input type="tel" class="form-control" id="tel" name="tel" v-model="numeroValue">
             </div>
         </div>
     </div>
+
 </template>
 
 <script>
     
 export default {
-
     props: {
-        telephone: Object
+        type: String,
+        numero: String
     },
 
-    emits: ['edit-type', 'edit-numero'],
+    emits: ['update:type', 'update:numero'],
 
     data() {
         return {
-            type: null,
-            numero: null
+            typeValue: null,
+            numeroValue: null
         }
     },
 
@@ -43,8 +45,8 @@ export default {
          * 
          * @param {String} newVal Nouveau type
          */
-        type(newVal) {
-            this.$emit('edit-type', newVal);
+         typeValue(newVal) {
+            this.$emit('update:type', newVal);
         },
 
         /**
@@ -52,14 +54,14 @@ export default {
          * 
          * @param {String} newVal Nouveau numéro de téléphone
          */
-        numero(newVal) {
-            this.$emit('edit-numero', newVal);
+         numeroValue(newVal) {
+            this.$emit('update:numero', newVal);
         }
     },
 
     mounted() {
-        this.type = this.telephone.type;
-        this.numero = this.telephone.numero;
+        this.typeValue = this.type;
+        this.numeroValue = this.numero;
     }
 }
 

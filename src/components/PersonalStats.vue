@@ -10,15 +10,15 @@
         <ul class="list-group list-group-flush">
             <li class="list-group-item d-flex justify-content-between align-items-center">
                 <span>Tous les contacts (actifs et inactifs)</span>
-                <span class="badge bg-secondary">{{personnelStats.contacts}} </span>
+                <span class="badge text-bg-secondary">{{personnelStats.contacts}} </span>
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-center" v-if="numIn">
                 <span><i class="bi bi-person-plus-fill me-2"></i>Arrivées dans les {{personnelStats.turnoverdays}} jours</span>
-                <span class="badge bg-secondary">{{numIn}}</span>
+                <span class="badge text-bg-secondary">{{numIn}}</span>
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-center" v-if="numOut">
                 <span><i class="bi bi-person-dash-fill me-2"></i>Départs dans les {{personnelStats.turnoverdays}} jours</span>
-                <span class="badge bg-secondary">{{numOut}}</span>
+                <span class="badge text-bg-secondary">{{numOut}}</span>
             </li>
             <li class="list-group-item list d-flex justify-content-between align-items-center" v-if="birthdayString">
                 <span class="text-success"><span class="text-success me-2"><i class="bi bi-balloon"></i></span>Aujourd'hui c'est l'anniversaire de {{birthdayString}}</span>

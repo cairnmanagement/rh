@@ -128,6 +128,9 @@ export default {
             console.log('editnss', this.personnel.nss);
         },
 
+        /**
+         * Enregistre les informations d'un personnel
+         */
         record() {
             //verrouille le statu de chargement
             this.pending.contact = true;
@@ -147,7 +150,6 @@ export default {
             })
             .catch(this.$app.catchError)
             .finally(() => {
-                //dévérouille le statut de chargement
                 this.pending.contact = false;
             })
         },

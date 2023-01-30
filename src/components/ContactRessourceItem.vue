@@ -3,7 +3,7 @@
         <div v-if="type != 'address'">
             <a :href="href" class="text-decoration-none me-2" v-if="href">{{label}}</a>
             <span v-else>{{ label }}</span>
-            <span v-if="typeLabel" class="badge bg-secondary me-2"> {{typeLabel}}</span>
+            <span v-if="typeLabel" class="badge text-bg-secondary me-2"> {{typeLabel}}</span>
         </div>
 
         <div v-else>
@@ -19,13 +19,13 @@
         </div>
 
         <div>
-            <router-link :to="routeEditOptions" v-slot="{navigate,href}" custom>
+            <router-link :to="routeRessourceEdit" v-slot="{navigate,href}" custom>
                 <a @click="navigate" :href="href" class="btn btn-sm button-contact-edit rounded-pill me-2" title="Modifier">
                     <i class="bi bi-pencil"></i>
                 </a>
             </router-link>
 
-            <button @click.prevent="deleteRessource(ressource.id)" class="btn btn-sm button-contact-delete rounded-pill text-black-50" title="supprimer">
+            <button @click.prevent="deleteRessource( ressource.id)" class="btn btn-sm button-contact-delete rounded-pill text-black-50" title="supprimer">
                 <i class="bi bi-trash3"></i>
             </button>
         </div>
@@ -54,13 +54,23 @@
 </style>
 
 <script>
-import { mapState } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 
 
 export default {
     props: {
         ressource: Object,
         type: String
+    },
+
+    data() {
+        return {
+            pending : {
+                'telephone': false,
+                'mail': false,
+                'address': false,
+            }
+        }
     },
 
     computed: {
@@ -88,7 +98,6 @@ export default {
          * Retourne un label de la ressource
          */
         label() {
-            console.log(this.ressource);
             switch (this.type) {
                 case 'telephone':
                     return this.ressource.numero;
@@ -101,7 +110,10 @@ export default {
             }
         },
 
-        routeEditOptions() {
+        /**
+         * returne la route pour éditer un ressource
+         */
+        routeRessourceEdit() {
             let route = {};
 
             switch (this.type) {
@@ -117,19 +129,62 @@ export default {
                 default:
                     route = {};
             }
-            console.log('route',route);
+            
             return route;
         },
 
+        /**
+         * Retourne le label de la ressource
+         */
         typeLabel() {
             return this.ressource.type;
         },
     },
 
     methods: {
-        deleteRessource(ressourceId) {
+        ...mapActions(['removeRessource']),
+
+        /**
+         * Supprime la ressource selectionnée
+         * 
+         * @param {string} ressource            la ressource a supprimer (telephone, mail, address)
+         * @param {number} ressourceId          id de la ressource
+         */
+         deleteRessource(ressourceId) {
             console.log(ressourceId);
-        }
+            let alertMessage = "Souhaitez vous supprimer";
+
+            switch (this.type) {
+                case 'telephone':
+                    alertMessage += " ce contact téléphonique?";
+                    break;
+                case'mail':
+                    alertMessage += " cette adresse mail?";
+                    break;
+                case 'address':
+                    alertMessage += " cette adresse postale?";
+                    break;
+
+                default:
+                    alertMessage += " cette ressource ? ";
+                    break;
+            }
+
+            if (confirm(alertMessage)) {
+                let apiUrl = `structurePersonnel/DELETE/${this.openedElement.id}/${this.type}/${ressourceId}`
+
+                this.$app.apiPost(apiUrl).then((resp) => {
+                    if (resp === "OK") {
+                        this.removeRessource({
+                            ressource: this.type, 
+                            id:ressourceId
+                        });
+                    } else {
+                        alert("Erreur lors de la suppression sur le serveur");
+                    }
+                }).catch(this.$app.catchError)
+            }
+        },
     },
 }
 

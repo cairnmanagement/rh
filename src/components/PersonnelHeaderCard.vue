@@ -3,7 +3,7 @@
     <div class="card-body">
         <div class="position-relative">
             <user-image :name="openedElement.oPersonne.nom" size="xl"></user-image>
-            <span v-if="openedElement.matricule" class="badge bg-secondary position-absolute" style="top:0px;">{{openedElement.matricule}}</span>
+            <span v-if="openedElement.matricule" class="badge text-bg-secondary position-absolute" style="top:0px;">{{openedElement.matricule}}</span>
         </div>
 
         <h2>{{openedElement.cache_nom}}</h2>

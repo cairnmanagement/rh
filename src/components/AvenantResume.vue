@@ -13,7 +13,7 @@
                 </div>
             </div>
 
-            <div class="badge bg-secondary">
+            <div class="badge text-bg-secondary">
                 Contrat initial au {{ changeFormatDateLit(avSelected.dentree) }}
             </div>
 

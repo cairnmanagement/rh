@@ -7,46 +7,42 @@
         :submitBtn="true" 
         :cancelBtn="true" 
         :pending="pending.telephone">
-            <FormPhone
-                :telephone="ressource"
-                @edit-type="editType"
-                @edit-numero="editNumero"
-                v-if="ressource">
-            </FormPhone>
-            <div class="alert alert-warning" v-else>Aucun élément trouvé</div>
+            <form-phone
+                v-if="checkPhoneToEdit"
+                v-model:type = ressourceTelephone.type
+                v-model:numero = ressourceTelephone.numero>
+            </form-phone>
+
+            <alert-message v-else variant="warning">Aucun élément trouvé</alert-message>
     </AppModal>
 </template>
 <script>
 import { mapActions, mapState } from 'vuex';
 import AppModal from '../components/pebble-ui/AppModal.vue';
 import FormPhone from '../components/FormPhone';
+import AlertMessage from '../components/pebble-ui/AlertMessage.vue';
 
 export default {
-    components: { AppModal, FormPhone },
+    components: { AppModal, FormPhone, AlertMessage },
 
     data() {
         return {
             pending: {
                 telephone: false
             },
-            ressource: null,
-
-            defaultRessource: {
-
-                type : '',
-                numero: '',
-            }
+            ressourceTelephone: {
+                type: '',
+                numero: ''
+            },
+            checkPhoneToEdit: false
         }
     },
 
     computed: {
-
         ...mapState(['openedElement']),
-
     },
 
     methods: {
-
         ...mapActions(['updateRessource']),
 
         /**
@@ -57,24 +53,6 @@ export default {
         },
 
         /**
-         * Affecte la valeur du type à la ressource stockée dans data
-         * 
-         * @param {String} val Nouveau type
-         */
-        editType(val) {
-            this.ressource.type = val;
-        },
-
-        /**
-         * Affecte la valeur du numéro de téléphone à la ressource stockée dans data
-         * 
-         * @param {String} val Nouveau numéro de téléphone
-         */
-        editNumero(val) {
-            this.ressource.numero = val;
-        },
-
-        /**
          * Enregistre les informations soumises sur la base de données
          */
         record() {
@@ -82,9 +60,9 @@ export default {
             this.pending.telephone = true;
 
             // Enregistre les informations
-            this.$app.apiPost('structurePersonnel/POST/'+this.openedElement.id+'/telephone/'+this.ressource.id, {
-                numero: this.ressource.numero,
-                type: this.ressource.type
+            this.$app.apiPost('structurePersonnel/POST/'+this.openedElement.id+'/telephone/'+this.$route.params.idPhone, {
+                numero: this.ressourceTelephone.numero,
+                type: this.ressourceTelephone.type
             })
             .then((data) => {
                 // Met à jour le store avec les nouvelles informations
@@ -105,18 +83,25 @@ export default {
 
         /**
          * Récupère les informations de la ressource au niveau du store depuis l'idPhone passé dans l'URL.
+         * Si l'object telephone exite ou que le idPhone == 0, on passe la variable checkPhoneToEdit a true
+         * 
+         * @param {number} idPhone          id de la ressource telephone
          * 
          * @returns {Object}
          */
         getRessource(idPhone) {
-            if(!this.openedElement.oPersonne.telephones){
-                this.ressource = this.defaultRessource;
-            }
-            else {
+                let oTelephone = this.openedElement.oPersonne.telephones.find(e => e.id == idPhone);
 
-                let ressource = this.openedElement.oPersonne.telephones.find(e => e.id == idPhone);
-                this.ressource = ressource ? JSON.parse(JSON.stringify(ressource)) : this.defaultRessource;
-            }
+                if (oTelephone) {
+                    this.checkPhoneToEdit = true;
+
+                    this.ressourceTelephone.type = oTelephone.type;
+                    this.ressourceTelephone.numero = oTelephone.numero
+                }
+
+                if (this.checkPhoneToEdit == false && this.$route.params.idPhone == 0) {
+                    this.checkPhoneToEdit = true
+                }
         }
     },
 

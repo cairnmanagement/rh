@@ -4,7 +4,7 @@
 			<h4 class="card-title m-0">Contrats</h4>
 
 
-			<router-link :to="{name: 'infoContrat', params:{id:openedElement.id, idContrat: 0}}" v-slot="{navigation, href}" custom>
+			<router-link :to="{name: 'EditContrat', params:{id:openedElement.id, idContrat: 0}}" v-slot="{navigation, href}" custom>
 				<a :href="href" class="btn btn-primary" @click="navigation">
 					<i class="bi bi-plus-lg"></i>
 					Nouveau contrat

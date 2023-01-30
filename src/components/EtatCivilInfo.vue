@@ -6,7 +6,7 @@
                 <h3 class="card-title m-0">Etat-civil</h3>
 
                 <router-link :to="{name:'ModificationEtatCivil', params:{id:openedElement.id}}" v-slot="{navigate,href}" custom>
-                    <a :href="href" @click="navigate" class="btn btn-light">
+                    <a :href="href" @click="navigate" class="btn button-etat-civil">
                         <i class="bi bi-pencil"></i>
                     </a>
                 </router-link>
@@ -16,32 +16,44 @@
         <ul class="list-group list-group-flush">
             <li class="list-group-item d-flex align-items-center justify-content-between">
                 <span>Nom complet:</span>
-                <span>{{openedElement.oPersonne.civilite}} {{openedElement.cache_nom}}</span>
+                <span>{{ openedElement.oPersonne.civilite }} {{ openedElement.cache_nom }}</span>
             </li>
 
             <li class="list-group-item d-flex align-items-center justify-content-between">
                 <span>né(e) le:</span>
-                <span>{{dateOfBirth}}</span> 
+                <span>{{ dateOfBirth }}</span> 
             </li>
 
             <li class="list-group-item d-flex align-items-center justify-content-between">
                 <span>Lieu de naissance:</span>
-                <span>{{openedElement.oPersonne.lieuNaissance}}</span> 
+                <span>{{ openedElement.oPersonne.lieuNaissance }}</span> 
             </li>
             
             <li class="list-group-item d-flex align-items-center justify-content-between">
                 <span>Nationalité:</span>
-                <span>{{openedElement.oPersonne.nationalite}}</span> 
+                <span>{{ openedElement.oPersonne.nationalite }}</span> 
             </li>
 
             <li class="list-group-item d-flex align-items-center justify-content-between">
                 <span>N° de sécurité sociale:</span>
-                <span>{{openedElement.nss}}</span> 
+                <span>{{ openedElement.nss }}</span> 
             </li>
         </ul>
     </div>
 
 </template>
+
+<style lang="scss" scoped>
+@import 'bootstrap';
+
+.button-etat-civil{
+    @extend .btn-light;
+
+    &:hover {
+        @extend .btn-success;
+    }
+}
+</style>
 
 <script>
 

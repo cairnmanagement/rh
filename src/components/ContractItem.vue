@@ -5,14 +5,14 @@
                 <div class="d-flex align-items-center">
                     Contrat n°{{ contrat.id }}
             
-                    <div class="badge bg-secondary ms-2">
+                    <div class="badge text-bg-secondary ms-2">
                         <span v-if="contrat.duree_indeterminee === 'OUI'">CDI</span>
                         <span v-else>CDD</span>
                     </div>
                 </div>
 
                 <div class="fw-lighter">
-                    <div v-if="contrat.duree_indeterminee === 'OUI'">
+                    <div v-if="CDIActif">
                         Depuis le {{ changeFormatDateLit(contrat.dentree) }}
                     </div>
     
@@ -40,8 +40,8 @@
 
 <script>
 import date from 'date-and-time';
-import fr from 'date-and-time/locale/fr';
 import { mapState } from 'vuex';
+import fr from 'date-and-time/locale/fr';
 
 export default{
     props: {
@@ -61,6 +61,14 @@ export default{
             }
                         
             return this.contrat.dsortie;
+        },
+
+        CDIActif() {
+            if(this.contrat.duree_indeterminee === 'OUI' && !this.sortieContrat || this.contrat.duree_indeterminee === 'OUI' && this.sortieContrat == "0000-00-00 00:00:00") {
+                return true;
+            }
+
+            return false;
         }
     },
 
@@ -72,13 +80,17 @@ export default{
 		 */
 
 		changeFormatDateLit(el) {
-			date.locale(fr);
+            date.locale(fr);
 			return date.format(new Date(el), 'DD MMM YYYY')
 		},
 
+        /**
+         * Show the contrat selected
+         */
         showContract() {
             this.$router.push({ name:'infoContrat', params:{id: this.openedElement.id, idContrat: this.contrat.id}})
         }
+
     }
 }
 </script>

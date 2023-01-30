@@ -81,7 +81,7 @@ export default{
                     'classIcon': 'icon-address',
                     'title': "Ajouter une adresse"
                 },
-            }
+            },
         }
     },
 
@@ -123,89 +123,131 @@ export default{
             if (contactLabel === "address") return this.openedElement.oPersonne.adresses;
         },
 
+        // /**
+        //  * Supprime la ressource selectionnée
+        //  * 
+        //  * @param {string} ressource            la ressource a supprimer (telephone, mail, address)
+        //  * @param {string} ressource
+        //  */
+        // deleteRessource(ressource, ressourceId) {
+        //     console.log(typeof ressourceId);
+        //     let alertMessage = "Souhaitez vous supprimer";
+
+        //     switch (ressource) {
+        //         case 'telephone':
+        //             alertMessage += " ce contact téléphonique?";
+        //             break;
+        //         case'mail':
+        //             alertMessage += " cette adresse mail?";
+        //             break;
+        //         case 'address':
+        //             alertMessage += " cette adresse postale?";
+        //             break;
+
+        //         default:
+        //             alertMessage += " cette ressource ? ";
+        //             break;
+        //     }
+
+        //     if (confirm(alertMessage)) {
+        //         let apiUrl = `structurePersonnel/DELETE/${this.openedElement.id}/${ressource}/${ressourceId}`
+
+        //         this.$app.apiPost(apiUrl).then((resp) => {
+        //             if (resp === "OK") {
+        //                 this.removeRessource({
+        //                     ressource: ressource, 
+        //                     id:ressourceId
+        //                 });
+        //             } else {
+        //                 alert("Erreur lors de la suppression sur le serveur");
+        //             }
+        //         }).catch(this.$app.catchError)
+        //     }
+        // },
 
 
-		deleteAdress(ressourceId) {
-			if (confirm('Souhaitez vous supprimer cette adresse postale?')) {
-				let idElement= this.openedElement.id;
-				console.log(idElement, ressourceId);
-				let apiUrl = 'structurePersonnel/DELETE/' +idElement+ '/adresse/' +ressourceId;
-				this.$app.apiPost(apiUrl)
 
-                .then((resp) => {
+		// deleteAdress(ressourceId) {
+		// 	if (confirm('Souhaitez vous supprimer cette adresse postale?')) {
+		// 		let idElement= this.openedElement.id;
 
-                    if (resp ==='OK') {
-					// supprime dans le store l'item dans le tableau des adresses, celui dont l'id == ressourceId
+		// 		let apiUrl = 'structurePersonnel/DELETE/' +idElement+ '/adresse/' +ressourceId;
+		// 		this.$app.apiPost(apiUrl)
 
-						this.removeRessource({
-							ressource: 'adresses',
-							id: ressourceId
-						});
-                    }
-                    else {
-						alert('Erreur inconnue!')
-					}
-                })
-                .catch(this.$app.catchError);
-			}
-			else {
-				alert ('Cette adresse postale ne sera pas supprimée');
-			}
-		},
+        //         .then((resp) => {
 
-		deletePhone(ressourceId) {
-			if (confirm('Souhaitez vous supprimer ce contact téléphonique ?')) {
-				let idElement= this.openedElement.id;
-				console.log(idElement,ressourceId);
-				let apiUrl = 'structurePersonnel/DELETE/' +idElement+ '/telephone/' +ressourceId;
-				this.$app.apiPost(apiUrl)
+        //             if (resp ==='OK') {
+		// 			// supprime dans le store l'item dans le tableau des adresses, celui dont l'id == ressourceId
 
-                .then((resp) => {
+		// 				this.removeRessource({
+		// 					ressource: 'adresses',
+		// 					id: ressourceId
+		// 				});
+        //             }
+        //             else {
+		// 				alert('Erreur inconnue!')
+		// 			}
+        //         })
+        //         .catch(this.$app.catchError);
+		// 	}
+		// 	else {
+		// 		alert ('Cette adresse postale ne sera pas supprimée');
+		// 	}
+		// },
 
-                    if (resp === 'OK') {
-					// supprime dans le store l'item dans le tableau des telephones, celui dont l'id == ressourceId
-						this.removeRessource({
-							ressource: 'telephones',
-							id: ressourceId
-						});
-                    }
-					else {
-						alert('Erreur inconnue!')
-					}
-                })
-                .catch(this.$app.catchError);
-			}
-			else {
-				alert ('Ce contact téléphonique ne sera pas supprimé');
-			}
-		},
+		// deletePhone(ressourceId) {
+		// 	if (confirm('Souhaitez vous supprimer ce contact téléphonique ?')) {
+		// 		let idElement= this.openedElement.id;
+		// 		console.log(idElement,ressourceId);
+		// 		let apiUrl = 'structurePersonnel/DELETE/' +idElement+ '/telephone/' +ressourceId;
+		// 		this.$app.apiPost(apiUrl)
 
-		deleteMail(ressourceId) {
-			if (confirm('Souhaitez vous supprimer cette adresse mail ?')) {
-				let idElement= this.openedElement.id;
-				console.log(idElement,ressourceId);
-				let apiUrl = 'structurePersonnel/DELETE/' +idElement+ '/email/' +ressourceId;
-				this.$app.apiPost(apiUrl)
+        //         .then((resp) => {
 
-                .then((resp) => {
+        //             if (resp === 'OK') {
+		// 			// supprime dans le store l'item dans le tableau des telephones, celui dont l'id == ressourceId
+		// 				this.removeRessource({
+		// 					ressource: 'telephones',
+		// 					id: ressourceId
+		// 				});
+        //             }
+		// 			else {
+		// 				alert('Erreur inconnue!')
+		// 			}
+        //         })
+        //         .catch(this.$app.catchError);
+		// 	}
+		// 	else {
+		// 		alert ('Ce contact téléphonique ne sera pas supprimé');
+		// 	}
+		// },
 
-					if (resp === 'OK') {
-					// supprime dans le store l'item dans le tableau des  emails, celui dont l'id == ressourceId
-						this.removeRessource({
-							ressource: 'emails',
-							id: ressourceId
-						});
-					}
-					else {
-						alert('Erreur inconnue!');
-					}
-                })
-                .catch(this.$app.catchError);
-			}
-			else {
-				alert ('Cette adresse mail ne sera pas supprimée');
-			}
-		},
+		// deleteMail(ressourceId) {
+		// 	if (confirm('Souhaitez vous supprimer cette adresse mail ?')) {
+		// 		let idElement= this.openedElement.id;
+		// 		console.log(idElement,ressourceId);
+		// 		let apiUrl = 'structurePersonnel/DELETE/' +idElement+ '/email/' +ressourceId;
+		// 		this.$app.apiPost(apiUrl)
+
+        //         .then((resp) => {
+
+		// 			if (resp === 'OK') {
+		// 			// supprime dans le store l'item dans le tableau des  emails, celui dont l'id == ressourceId
+		// 				this.removeRessource({
+		// 					ressource: 'emails',
+		// 					id: ressourceId
+		// 				});
+		// 			}
+		// 			else {
+		// 				alert('Erreur inconnue!');
+		// 			}
+        //         })
+        //         .catch(this.$app.catchError);
+		// 	}
+		// 	else {
+		// 		alert ('Cette adresse mail ne sera pas supprimée');
+		// 	}
+		// },
 
 
 	}

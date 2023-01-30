@@ -10,7 +10,7 @@
             </div>
         </div>
 
-        <div class="badge bg-secondary">
+        <div class="badge text-bg-secondary">
             {{personnel.matricule}}
         </div>
         

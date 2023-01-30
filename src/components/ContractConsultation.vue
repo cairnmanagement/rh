@@ -4,7 +4,7 @@
         <section class="mb-3">
             <div class="position-relative">
                 <user-image :name="openedElement.oPersonne.nom" size="xl"></user-image>
-                <span v-if="openedElement.matricule" class="badge bg-secondary position-absolute" style="top:0px; left:50%">{{openedElement.matricule}}</span>
+                <span v-if="openedElement.matricule" class="badge text-bg-secondary position-absolute" style="top:0px; left:50%">{{openedElement.matricule}}</span>
             </div>
 
 
