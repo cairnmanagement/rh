@@ -8,7 +8,7 @@
         :cancelBtn="true" 
         :pending="pending.telephone">
             <form-phone
-                v-if="checkPhoneToEdit"
+                v-if="checkPhoneEdit"
                 v-model:type = ressourceTelephone.type
                 v-model:numero = ressourceTelephone.numero>
             </form-phone>
@@ -34,7 +34,7 @@ export default {
                 type: '',
                 numero: ''
             },
-            checkPhoneToEdit: false
+            checkPhoneEdit: false
         }
     },
 
@@ -53,24 +53,27 @@ export default {
         },
 
         /**
-         * Enregistre les informations soumises sur la base de données
+         * Enregistre les informations soumises sur la base de données 
+         * Et met a jour le store
          */
         record() {
             // Verrouille le status de chargement
             this.pending.telephone = true;
 
+            let apiUrl = `structurePersonnel/POST/${this.openedElement.id}/telephone/${this.$route.params.idPhone}`
+
+            let query = {
+                type: this.ressourceTelephone.type,
+                numero: this.ressourceTelephone.numero
+            }
+
             // Enregistre les informations
-            this.$app.apiPost('structurePersonnel/POST/'+this.openedElement.id+'/telephone/'+this.$route.params.idPhone, {
-                numero: this.ressourceTelephone.numero,
-                type: this.ressourceTelephone.type
-            })
-            .then((data) => {
+            this.$app.apiPost(apiUrl, query).then((data) => {
                 // Met à jour le store avec les nouvelles informations
                 this.updateRessource({
                     ressource: 'telephones',
                     data
                 });
-                console.log(data)
                 this.routeToParent();
             })
             .catch(this.$app.catchError)
@@ -83,7 +86,7 @@ export default {
 
         /**
          * Récupère les informations de la ressource au niveau du store depuis l'idPhone passé dans l'URL.
-         * Si l'object telephone exite ou que le idPhone == 0, on passe la variable checkPhoneToEdit a true
+         * Si l'object telephone exite ou que le idPhone == 0, on passe la variable checkPhoneEdit a true
          * 
          * @param {number} idPhone          id de la ressource telephone
          * 
@@ -93,14 +96,10 @@ export default {
                 let oTelephone = this.openedElement.oPersonne.telephones.find(e => e.id == idPhone);
 
                 if (oTelephone) {
-                    this.checkPhoneToEdit = true;
+                    this.checkPhoneEdit = true;
 
                     this.ressourceTelephone.type = oTelephone.type;
                     this.ressourceTelephone.numero = oTelephone.numero
-                }
-
-                if (this.checkPhoneToEdit == false && this.$route.params.idPhone == 0) {
-                    this.checkPhoneToEdit = true
                 }
         }
     },
@@ -110,7 +109,13 @@ export default {
     },
 
     mounted() {
-        this.getRessource(this.$route.params.idPhone);
+        if (this.$route.params.idPhone == 0) {
+            this.checkPhoneEdit = true;
+        }
+
+        if (this.openedElement.oPersonne.telephones) {
+            this.getRessource(this.$route.params.idPhone);
+        }
     }
 }
 </script>

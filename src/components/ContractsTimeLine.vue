@@ -50,7 +50,7 @@ export default {
                 // Créer une date et la rendrer "lisible" 2022-09-30 > Sept. 2022
                 
                 let monthString = month; // Changer month en une valeur transformée.
-                console.log(month,'month')
+
                 let row = [monthString];
                 
 

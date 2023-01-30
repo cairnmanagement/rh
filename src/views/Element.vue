@@ -70,16 +70,16 @@ export default {
 			if (this.openedElement) {
 				if (!this.openedElement.extendedData) {
 					this.pending.extendedData = true;
+
 					this.$app.apiGet("structurePersonnel/GET/" + personnelId, {
 						api_hierarchy: true
 					})
-						.then(personnelData => {
+					.then(personnelData => {
 						personnelData.extendedData = true;
 						this.$store.dispatch("refreshOpened", personnelData);
-						this.pending.extendedData = false;
-						console.log('result api', personnelData)
 					})
-						.catch(this.$app.catchError);
+					.catch(this.$app.catchError)
+					.finally(() => this.pending.extendedData = false);
 				}
 				else {
 					this.pending.extendedData = false;

@@ -101,7 +101,6 @@ export default {
 				this.$app.apiGet(options.route, options.query)
 				.then(data => {
 					this.$store.dispatch(action, data);
-					console.log(action, data);
 				})
 				.catch(this.$app.catchError)
 				.finally(() => {

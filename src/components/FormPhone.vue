@@ -44,6 +44,8 @@ export default {
          * Envoie un événement à l'élément parent lorsque le type est modifié.
          * 
          * @param {String} newVal Nouveau type
+         * 
+         * @event update:type
          */
          typeValue(newVal) {
             this.$emit('update:type', newVal);
@@ -53,6 +55,8 @@ export default {
          * Envoie un événement à l'élément parent lorsque le numéro de téléphone est modifié.
          * 
          * @param {String} newVal Nouveau numéro de téléphone
+         * 
+         * @event update:numero
          */
          numeroValue(newVal) {
             this.$emit('update:numero', newVal);
