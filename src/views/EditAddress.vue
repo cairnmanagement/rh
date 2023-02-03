@@ -1,23 +1,22 @@
 <template>
     <AppModal
-        :title="this.$route.params.idAdress == 0 ?'Nouvelle adresse postale' :'Modification adresse postale'"
+        :title="this.$route.params.idAdress == 0 ?'Nouvelle adresse postale' :'Modification de l\'adresse postale'"
         size="md"
         @submit="record()"
         @modal-hide="routeToParent()"
         :submitBtn="true"
         :cancelBtn="true"
-        :pending="pending.adresse">
+        :pending="pending.adress">
             <FormPostalAddress 
-                :adresse="ressource"
-                @edit-voie="editVoie"
-                @edit-complement="editComplement"
-                @edit-cp="editCP"
-                @edit-localite="editLocalite"
-                @edit-type="editType"
-                v-if="ressource"
-                >
+                v-if="checkAdressEdit"
+                v-model:type = ressourceAdress.type
+                v-model:voie = ressourceAdress.voie
+                v-model:complement = ressourceAdress.complement
+                v-model:cp = ressourceAdress.cp
+                v-model:localite = ressourceAdress.localite>
             </FormPostalAddress>
-        <div v-else class="alert alert-warning" >Aucun élément trouvé </div>
+
+            <alert-message v-else variant="warning">Aucune adresse postale trouvée</alert-message>
     </AppModal>
 </template>
 
@@ -25,39 +24,33 @@
 import AppModal from '../components/pebble-ui/AppModal.vue';
 import FormPostalAddress from '../components/FormPostalAddress.vue';
 import { mapActions, mapState } from 'vuex';
+import AlertMessage from '../components/pebble-ui/AlertMessage.vue';
 
 export default {
-    components: { AppModal, FormPostalAddress },
+    components: { AppModal, FormPostalAddress, AlertMessage },
 
     data() {
         return {
             pending: {
-                adresse : false
+                adress : false
             },
-            ressource: null,
-
-            defaultRessource: {
-
+            ressourceAdress: {
                 type: '',
                 voie: '',
                 complement: '',
                 cp: '',
                 localite: '',
-            }
+            },
+            checkAdressEdit: false
+
         }
     },
 
     computed: {
-
         ...mapState(['openedElement']),
-
-        // ressource() {
-        //     let ressource = this.openedElement.oPersonne.adresses.find(e => e.id == this.$route.params.idAdress);
-        //     return ressource;
-        // }
     },
-    methods: {
 
+    methods: {
         ...mapActions(['updateRessource']),
 
         /**
@@ -66,79 +59,39 @@ export default {
         routeToParent() {
             this.$router.go(-1);
         },
-
-        /**
-         * Affecte la valeur du type à la ressource stockée dans data
-         * 
-         * @param {String} val Nouveau type
-         */
-        editType(val) {
-            this.ressource.type = val;
-            console.log('edittype', this.ressource.type);
-        },
-
-        /**
-         * Affecte la valeur de la voie à la ressource stockée dans data
-         * 
-         * @param {String} val Nouvelle voie
-         */
-        editVoie(val) {
-            this.ressource.voie = val;
-        },
-
-        /**
-         * Affecte la valeur du complément d'adresse à la ressource stockée dans data
-         * 
-         * @param {String} val Nouveau complement
-         */
-        editComplement(val) {
-            this.ressource.complement = val;
-        },
-
-        /**
-         * Affecte la valeur du code postal à la ressource stockée dans data
-         * 
-         * @param {String} val Nouveau code postal
-         */
-        editCP(val) {
-            this.ressource.cp= val;
-        },
-
-        /**
-         * Affecte la valeur de la localité à la ressource stockée dans data
-         * 
-         * @param {String} val Nouvelle localite
-         */
-        editLocalite(val) {
-            this.ressource.localite= val;
-        },
-
         
+        /**
+         * Enregistre les informations soumises dans la base de données 
+         * Et met a jour le store
+         */
         record() {
             // Verrouille le status de chargement
-            this.pending.adresse = true;
+            this.pending.adress = true;
+
+            let apiUrl = `structurePersonnel/POST/${this.openedElement.id}/adresse/${this.$route.params.idAdress}`
+
+            let query = {
+                type: this.ressourceAdress.type,
+                voie: this.ressourceAdress.voie,
+                complement: this.ressourceAdress.complement,
+                cp: this.ressourceAdress.cp,
+                localite: this.ressourceAdress.localite,
+            }
 
             // Enregistre les informations
-            this.$app.apiPost('structurePersonnel/POST/'+this.openedElement.id+'/adresse/'+this.ressource.id, {
-                type: this.ressource.type,
-                voie: this.ressource.voie,
-                complement: this.ressource.complement,
-                cp: this.ressource.cp,
-                localite: this.ressource.localite,
-            })
-            .then((data) => {
+            this.$app.apiPost(apiUrl, query).then((data) => {
                 // Met à jour le store avec les nouvelles informations
                 this.updateRessource({
                     ressource: 'adresses',
                     data
                 });
-                console.log('adresse',data)
+                
                 this.routeToParent();
             })
             .catch(this.$app.catchError)
             .finally(() => {
                 // Déverouille le status de chargement
-                this.pending.adresse = false;
+                this.pending.adress = false;
             });
 
         },
@@ -146,31 +99,35 @@ export default {
         /**
          * Récupère les informations de la ressource au niveau du store depuis l'idAdress passé dans l'URL.
          * 
-         * @returns {Object}
+         * @param {number} idAdress         l'id de l'entité adresse postal
          */
         getRessource(idAdress) {
-            if(!this.openedElement.oPersonne.adresses){
-                this.ressource = this.defaultRessource;
-            }
-            else {
-                let ressource = this.openedElement.oPersonne.adresses.find(e => e.id == idAdress);
-                this.ressource = ressource ? JSON.parse(JSON.stringify(ressource)) : this.defaultRessource;
-                console.log('getRessource', idAdress, this.ressource)
+            let oAdress = this.openedElement.oPersonne.adresses.find(e => e.id == idAdress);
+
+            if (oAdress) {
+                this.checkAdressEdit = true;
+
+                this.ressourceAdress.type = oAdress.type;
+                this.ressourceAdress.voie = oAdress.voie;
+                this.ressourceAdress.complement = oAdress.complement;
+                this.ressourceAdress.cp = oAdress.cp;
+                this.ressourceAdress.localite = oAdress.localite;
             }
         },
     },
         
     beforeRouteUpdate(to) {
         this.getRessource(to.params.idAdress);
-        console.log('idAdress', this.idAdress)
     },
 
-
-
     mounted() {
+        if (0 == this.$route.params.idAdress) {
+            this.checkAdressEdit = true;
+        }
 
-        this.getRessource(this.$route.params.idAdress);
-        console.log('mounted', this.ressource)
+        if (this.openedElement.oPersonne.adresses) {
+            this.getRessource(this.$route.params.idAdress);
+        }
     }
 
         

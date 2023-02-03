@@ -53,7 +53,8 @@ export default {
         },
 
         /**
-         *  Enregistre les informations soumises sur la base de données
+         * Enregistre les informations soumises dans la base de données 
+         * Et met a jour le store
          */
         record() {
             // Verrouille le status de chargement
@@ -86,9 +87,7 @@ export default {
         /**
          * Récupère l'email au niveau du store en fonction de idMail.
          * 
-         * @param {number} idMail           l'id de l'object email
-         * 
-         * @returns {Object}
+         * @param {number} idMail           l'id de l'entité email
          */
         getRessource(idMail) {
             let oMail = this.openedElement.oPersonne.emails.find(e => e.id == idMail);
@@ -107,7 +106,7 @@ export default {
     },
 
     mounted() {
-        if (this.$route.params.idMail == 0) {
+        if (0 == this.$route.params.idMail) {
             this.checkEmailEdit = true;
         }
 

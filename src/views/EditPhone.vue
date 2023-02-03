@@ -54,7 +54,7 @@ export default {
         },
 
         /**
-         * Enregistre les informations soumises sur la base de données 
+         * Enregistre les informations soumises dans la base de données 
          * Et met a jour le store
          */
         record() {
@@ -89,9 +89,7 @@ export default {
          * Récupère les informations de la ressource au niveau du store depuis l'idPhone passé dans l'URL.
          * Si l'object telephone exite ou que le idPhone == 0, on passe la variable checkPhoneEdit a true
          * 
-         * @param {number} idPhone          id de la ressource telephone
-         * 
-         * @returns {Object}
+         * @param {number} idPhone          id de l'entité telephone
          */
         getRessource(idPhone) {
                 let oTelephone = this.openedElement.oPersonne.telephones.find(e => e.id == idPhone);
@@ -110,7 +108,7 @@ export default {
     },
 
     mounted() {
-        if (this.$route.params.idPhone == 0) {
+        if (0 == this.$route.params.idPhone) {
             this.checkPhoneEdit = true;
         }
 
