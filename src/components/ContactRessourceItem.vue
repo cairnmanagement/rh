@@ -25,7 +25,7 @@
                 </a>
             </router-link>
 
-            <button @click.prevent="deleteRessource( ressource.id)" class="btn btn-sm button-contact-delete rounded-pill text-black-50" title="supprimer">
+            <button @click.prevent="deleteRessource( ressource.id)" class="btn btn-sm button-contact-delete rounded-pill" title="supprimer">
                 <i class="bi bi-trash3"></i>
             </button>
         </div>
@@ -147,21 +147,22 @@ export default {
         /**
          * Supprime la ressource selectionnée
          * 
-         * @param {string} ressource            la ressource a supprimer (telephone, mail, address)
          * @param {number} ressourceId          id de la ressource
          */
          deleteRessource(ressourceId) {
-            console.log(ressourceId);
             let alertMessage = "Souhaitez vous supprimer";
+            let type = this.type;
 
             switch (this.type) {
                 case 'telephone':
-                    alertMessage += " ce contact téléphonique?";
+                    alertMessage += " ce numero de téléphone?";
                     break;
                 case'mail':
+                    type = 'email';                
                     alertMessage += " cette adresse mail?";
                     break;
                 case 'address':
+                    type = 'adresse'
                     alertMessage += " cette adresse postale?";
                     break;
 
@@ -171,16 +172,16 @@ export default {
             }
 
             if (confirm(alertMessage)) {
-                let apiUrl = `structurePersonnel/DELETE/${this.openedElement.id}/${this.type}/${ressourceId}`
+                let apiUrl = `structurePersonnel/DELETE/${this.openedElement.id}/${type}/${ressourceId}`
 
                 this.$app.apiPost(apiUrl).then((resp) => {
                     if (resp === "OK") {
                         this.removeRessource({
-                            ressource: this.type, 
+                            ressource: type + 's', 
                             id:ressourceId
                         });
                     } else {
-                        alert("Erreur lors de la suppression sur le serveur");
+                        alert("Erreur lors de la suppression");
                     }
                 }).catch(this.$app.catchError)
             }
