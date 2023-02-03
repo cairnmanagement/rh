@@ -13,9 +13,10 @@
                 v-model:numero = ressourceTelephone.numero>
             </form-phone>
 
-            <alert-message v-else variant="warning">Aucun élément trouvé</alert-message>
+            <alert-message v-else variant="warning">Aucun téléphone trouvé</alert-message>
     </AppModal>
 </template>
+
 <script>
 import { mapActions, mapState } from 'vuex';
 import AppModal from '../components/pebble-ui/AppModal.vue';

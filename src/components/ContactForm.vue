@@ -5,26 +5,26 @@
             <div class="col-md-auto mb-3">
                 <label for="personne_civilite" class="form-label">Civilité</label>
                 <select class="form-select" id="personne_civilite" name="civilite" v-model="civiliteValue">
-                    <option value="Mr">Monsieur</option>
+                    <option value="M">Monsieur</option>
                     <option value="Mme">Madame</option>
                 </select>						
             </div>
 
             <div class="col-md mb-3">
-                <label for="personne_nom" class="form-label">Nom</label>
-                <input type="text" class="form-control" id="personne_nom" name="nom" placeholder="" v-model="nomValue">
+                <label for="personne_nom" class="form-label">Nom*</label>
+                <input type="text" class="form-control" id="personne_nom" name="nom" v-model="nomValue" required>
             </div>
 
             <div class="col-md mb-3">
-                <label for="personne_prenom" class="form-label">Prénom</label>
-                <input type="text" class="form-control" id="personne_prenom" name="prenom" v-model="prenomValue">
+                <label for="personne_prenom" class="form-label">Prénom*</label>
+                <input type="text" class="form-control" id="personne_prenom" name="prenom" v-model="prenomValue" required>
             </div>
         </div>
 
         <div class="row g-2">
             <div class="col-auto mb-3">
-                <label for="date_naissance" class="form-label">Né(e) le</label>
-                <input type="date" class="form-control" id="date_naissance" name="dn" v-model="dnValue">
+                <label for="date_naissance" class="form-label">Né(e) le*</label>
+                <input type="date" class="form-control" id="date_naissance" name="dn" v-model="dnValue" required>
             </div>
 
             <div class="col mb-3">
@@ -44,6 +44,10 @@
                 <input type="text" class="form-control"  placeholder="Nationalité"  id="nationalite" name="Nationalite" v-model="nationaliteValue">
             </div>
         </div>
+
+        <div class="fw-lighter mt-4 fs-7">
+            * Champs obligatoire
+        </div>
     </form>
 
 </template>
@@ -58,7 +62,7 @@ export default {
         civilite: String,
         dn: String,
         lieuNaissance: String,
-        nss: Number,
+        nss: String,
         nationalite: String
     },
 

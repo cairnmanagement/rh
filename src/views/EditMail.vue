@@ -1,57 +1,49 @@
 <template>
     <AppModal 
-        :title="this.$route.params.idMail == 0 ?'Nouvelle adresse mail' :' Modification adresse mail'" 
+        :title="this.$route.params.idMail == 0 ?'Nouveau email' :' Modification de l\'email'" 
         size="md"
         @submit="record()" 
         @modal-hide="routeToParent()" 
         :submitBtn="true" 
-        :cancelBtn="true">
+        :cancelBtn="true"
+        :pending="pending.email">
             <FormMailAddress 
-                :mail="ressource" 
-                @edit-type="editType" 
-                @edit-adresse="editAdresse" 
-                v-if="ressource">
+                v-if="checkEmailEdit"
+                v-model:type = ressourceEmail.type
+                v-model:adresse = ressourceEmail.adresse>
             </FormMailAddress>
             
-            <div class="alert alert-warning" v-else>Aucun élement trouvé</div>
+            <alert-message v-else variant="warning">Aucun email trouvé</alert-message>
     </AppModal>
 </template>
 <script>
 import { mapActions, mapState } from 'vuex';
 import AppModal from '../components/pebble-ui/AppModal.vue';
 import FormMailAddress from '../components/FormMailAddress.vue';
+import AlertMessage from '../components/pebble-ui/AlertMessage.vue';
 
 export default {
-
-    components: { AppModal, FormMailAddress },
+    components: { AppModal, FormMailAddress, AlertMessage },
 
     data() {
         return {
             pending: {
-                mail: false
+                email: false
             },
-            ressource: null,
-
-            defaultRessource: {
+            ressourceEmail: {
                 type: '',
                 adresse: ''
-            }
+            },
+            checkEmailEdit: false
         }
     },
 
     computed: {
         ...mapState(['openedElement']),
-
-        // ressource() {
-        //     let ressource = this.openedElement.oPersonne.emails.find(e => e.id == this.$route.params.idMail);
-        //     return ressource;
-        // }
     },
 
     methods: {
-
         ...mapActions(['updateRessource']),
-
 
         /**
          * retourne à la route précédente
@@ -61,70 +53,51 @@ export default {
         },
 
         /**
-         * Affecte la valeur du type à la ressource stockée dans data
-         * 
-         * @param {String} val Nouveau type
-         */
-        editType(val) {
-            this.ressource.type = val;
-        },
-
-        /**
-         * Affecte la valeur de l'adresse mail  à la ressource stockée dans data
-         * 
-         * @param {String} val Nouvelle adresse mail
-         */
-        editAdresse(val) {
-            this.ressource.adresse = val;
-        },
-
-
-        /**
          *  Enregistre les informations soumises sur la base de données
          */
         record() {
             // Verrouille le status de chargement
-            this.pending.mail = true;
+            this.pending.email = true;
 
+            let apiUrl = `structurePersonnel/POST/${this.openedElement.id}/email/${this.$route.params.idMail}`;
+
+            let query = {
+                type: this.ressourceEmail.type,
+                adresse: this.ressourceEmail.adresse
+            };
+            
             // Enregistre les informations
-            this.$app.apiPost('structurePersonnel/POST/'+this.openedElement.id+'/email/'+this.ressource.id, {
-                adresse: this.ressource.adresse,
-                type: this.ressource.type,
-            })
-            .then((data) => {
+            this.$app.apiPost(apiUrl, query).then((data) => {
                 // Met à jour le store avec les nouvelles informations
-                console.log('avantupdateRessource', this.ressource, this.ressource.id)
                 this.updateRessource({
                     ressource: 'emails',
                     data
                 });
-                console.log('aprèsUpdateDataetressource',data,this.ressource, data.id);
                 
                 this.routeToParent();
             })
-            
             .catch(this.$app.catchError)
             .finally(() => {
                 // Déverouille le status de chargement
-                this.pending.mail = false;
+                this.pending.email = false;
             });
-            console.log('ressources finally update',this.ressource, this.ressource.id)
-
         },
 
         /**
-         * Récupère les informations de la ressource au niveau du store depuis l'idMail passé dans l'URL.
+         * Récupère l'email au niveau du store en fonction de idMail.
+         * 
+         * @param {number} idMail           l'id de l'object email
          * 
          * @returns {Object}
          */
         getRessource(idMail) {
-            if(!this.openedElement.oPersonne.emails){
-                this.ressource = this.defaultRessource;
-            }
-            else { 
-                let ressource = this.openedElement.oPersonne.emails.find(e => e.id == idMail);
-                this.ressource = ressource ? JSON.parse(JSON.stringify(ressource)) : this.defaultRessource;
-                console.log('getRessource', idMail, this.ressource)
+            let oMail = this.openedElement.oPersonne.emails.find(e => e.id == idMail);
+
+            if (oMail) {
+                this.checkEmailEdit = true;
+
+                this.ressourceEmail.type = oMail.type;
+                this.ressourceEmail.adresse = oMail.adresse;
             }
         }
     },
@@ -134,7 +107,13 @@ export default {
     },
 
     mounted() {
-        this.getRessource(this.$route.params.idMail);
+        if (this.$route.params.idMail == 0) {
+            this.checkEmailEdit = true;
+        }
+
+        if (this.openedElement.oPersonne.emails) {
+            this.getRessource(this.$route.params.idMail);
+        }
     }
 }
 </script>

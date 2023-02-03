@@ -23,7 +23,7 @@
     </AppModal>
 </template>
 <script>
-import { mapState } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 
 import AppModal from '../components/pebble-ui/AppModal.vue';
 import ContactForm from '../components/ContactForm.vue';
@@ -56,6 +56,8 @@ export default {
     },
 
     methods: {
+        ...mapActions(['refreshOpened']),
+
         /**
          * retourne à la route précédente
          */
@@ -68,10 +70,10 @@ export default {
          */
         record() {
             //verrouille le statu de chargement
-            this.pending.contact = true;
+            this.pending.personnel = true;
             
             if (confirm('vous souhaitez enregistrer ces modifications')) {
-                let apiUrl = `structurePersonnel/POST/${this.openedElement.id}`;
+                let apiUrl = `structurePersonnel/POST/${this.openedElement.id}?api_hierarchy=1`;
 
                 let query = {
                     nom: this.ressourcePersonnel.nom,
@@ -83,15 +85,18 @@ export default {
                     nss: this.ressourcePersonnel.nss,
                 }
 
-                this.$app.apiPost(apiUrl, query).then ((data) => {
+                this.$app.apiPost(apiUrl, query).then((data) => {
                     console.log(data);
+                    this.refreshOpened(data);
 
                     this.routeToParent();
                 })
                 .catch(this.$app.catchError)
                 .finally(() => {
-                    this.pending.contact = false;
+                    this.pending.personnel = false;
                 })
+            } else {
+                this.pending.personnel = false;
             }
 
         },
