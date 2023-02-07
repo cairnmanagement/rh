@@ -13,20 +13,19 @@
                     <h2>{{openedElement.cache_nom}}</h2>
                 </div>
 
-                <div class="d-flex">
-                    <router-link :to="{name:'EditContrat', params:{id:openedElement.id, idContrat:contrat.id}}" v-slot="{navigate, href}" custom>
-                    <a :href="href" @click="navigate" class="btn btn-sm btn-success mx-1 ">
-                        <i class="bi bi-pencil"></i>
-                        Modifier le contrat
-                        </a>
-                    </router-link>
-    
-                    <router-link :to="{name:'EditContrat', params:{id:openedElement.id, idContrat:contrat.id}}" v-slot="{navigate, href}" custom>
-                        <a :href="href" @click="navigate" class="btn btn-sm btn-danger mx-1 ">
-                            <i class="bi bi-file-earmark-x"></i>
-                            Mettre fin au contrat
-                        </a>
-                    </router-link>
+                <div class="row g-2">
+                    <template v-for="(button, index) in buttonsContratOptions" :key="index">
+                        <div class="col-12 col-md">
+                            <template v-if="button.condition">
+                                <router-link :to="button.route" v-slot="{navigate, href}" custom>
+                                    <a :href="href" @click="navigate" class="btn btn-sm w-100" :class="'btn-'+button.color">
+                                        <i class="bi" :class="button.icon"></i>
+                                        {{button.label}}
+                                    </a>
+                                </router-link>
+                            </template>
+                        </div>
+                    </template>
                 </div>
             </div>
         </section>
@@ -64,11 +63,74 @@ export default {
         data() {
             return {
                 avSelected: {},
+                buttonsContratOptions: [
+                    {
+                        condition: "checkEditContrat",
+                        label: "Modifier le contrat",
+                        color: "success",
+                        icon: "bi-pencil",
+                        route: {
+                            name: "EditContrat",
+                            params: this.routeParam
+                        }
+                    },
+                    {
+                        condition: "checkAvenant",
+                        label: "Faire une avenant",
+                        color: "primary",
+                        icon: "bi-file-earmark-plus",
+                        route: {
+                            name: "DeleteContrat",
+                            params: this.routeParam
+                        }
+                    },
+                    {
+                        condition: "checkDeleteContrat",
+                        label: "Mettre fin au contrat",
+                        color: "danger",
+                        icon: "bi-clipboard2-x",
+                        route: {
+                            name: "DeleteContrat",
+                            params: this.routeParam
+                        }
+                    },
+                ]
             }
         },
         
         computed: {
             ...mapState(['openedElement']),
+
+            /**
+             * Verifie si le contrat peu etre modifié
+             */
+            checkEditContrat() {
+                return true;
+            },
+
+            /**
+             * Verifie si le contrat peu etre supprimé
+             */
+            checkDeleteContrat() {
+                return true;
+            },
+
+            /**
+             * Verifie si on peux faire un avenant
+             */
+            checkAvenant() {
+                return true;
+            },
+
+            /**
+             * Retourne l'id du personnel et l'id du contrat pour les param du roouter link des buttons
+             */
+            routeParam() {
+                return {
+                    id: this.contrat.id,
+                    idContrat: this.contrat.id
+                }
+            }
         },
 
         components: {LineLifeAvenant,  UserImage, AvenantResume, Spinner},
