@@ -57,7 +57,6 @@ export default {
             this.$app.apiGet(apiUrl)
             .then((data) => {
                 this.tabStats = data;
-                console.log('staff',this.tabStats);
             })
             .catch(this.$app.catchError);
         },
@@ -67,7 +66,6 @@ export default {
             this.$app.apiGet(apiUrl)
             .then((data) => {
                 this.tabContractsDay = data;
-                console.log('contrats du jour', this.tabContractsDay);
             })
             .catch(this.$app.catchError);
         },

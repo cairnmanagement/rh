@@ -15,18 +15,20 @@
 
                 <div class="row g-2">
                     <template v-for="(button, index) in buttonsContratOptions" :key="index">
-                        <div class="col-12 col-md">
-                            <template v-if="button.condition">
-                                <router-link :to="button.route" v-slot="{navigate, href}" custom>
-                                    <a :href="href" @click="navigate" class="btn btn-sm w-100" :class="'btn-'+button.color">
+                        <template v-if="getCondition(button.mode)">
+                            <div class="col-12 col-md">
+                                <router-link :to="getRoute(button.routeName)" v-slot="{navigate, href}" custom>
+                                    <a :href="href" @click="navigate" class="btn btn-sm w-100" :class="classBtn(button)">
                                         <i class="bi" :class="button.icon"></i>
                                         {{button.label}}
                                     </a>
                                 </router-link>
-                            </template>
-                        </div>
+                            </div>
+                        </template>
                     </template>
                 </div>
+
+                <div v-if="checkLastContrat"></div>
             </div>
         </section>
         
@@ -56,6 +58,8 @@ import AvenantResume from './AvenantResume.vue';
 import Spinner from './pebble-ui/Spinner.vue';
 
 export default {
+        components: {LineLifeAvenant,  UserImage, AvenantResume, Spinner},
+
         props: {
             contrat: Object
         },
@@ -65,34 +69,25 @@ export default {
                 avSelected: {},
                 buttonsContratOptions: [
                     {
-                        condition: "checkEditContrat",
+                        mode: 'edit',
                         label: "Modifier le contrat",
                         color: "success",
                         icon: "bi-pencil",
-                        route: {
-                            name: "EditContrat",
-                            params: this.routeParam
-                        }
+                        routeName: "EditContrat"
                     },
                     {
-                        condition: "checkAvenant",
+                        mode: 'avenant',
                         label: "Faire une avenant",
                         color: "primary",
                         icon: "bi-file-earmark-plus",
-                        route: {
-                            name: "DeleteContrat",
-                            params: this.routeParam
-                        }
+                        routeName: "DeleteContrat"
                     },
                     {
-                        condition: "checkDeleteContrat",
+                        mode: 'delete',
                         label: "Mettre fin au contrat",
                         color: "danger",
                         icon: "bi-clipboard2-x",
-                        route: {
-                            name: "DeleteContrat",
-                            params: this.routeParam
-                        }
+                        routeName: "DeleteContrat"
                     },
                 ]
             }
@@ -103,39 +98,96 @@ export default {
 
             /**
              * Verifie si le contrat peu etre modifié
+             * 
+             * @return {boolean}
              */
             checkEditContrat() {
+                if ('OUI' === this.contrat.verrou) {
+                    return false;
+                }
+
                 return true;
             },
 
             /**
              * Verifie si le contrat peu etre supprimé
+             * 
+             * @return {boolean}
              */
             checkDeleteContrat() {
+                if (this.contrat.dsortie_reelle && '0000-00-00 00:00:00' !== this.contrat.dsortie_reelle) {
+                    return false;
+                }
+
                 return true;
             },
 
             /**
              * Verifie si on peux faire un avenant
+             * 
+             * @return {boolean}
              */
             checkAvenant() {
+                if (this.contrat.avenant__structure__personnel_contrat_id) {
+                    return false;
+                }
+
                 return true;
             },
 
             /**
-             * Retourne l'id du personnel et l'id du contrat pour les param du roouter link des buttons
+             * Verifie si on selectionné le dernier contrat
+             * 
+             * @return {boolean}
              */
-            routeParam() {
-                return {
-                    id: this.contrat.id,
-                    idContrat: this.contrat.id
+            checkLastContrat() {
+                if (this.contrat.contrats[0].id === this.avSelected.id ) {
+                    return true;
                 }
-            }
+
+                return false;
+            }, 
+
+            
         },
 
-        components: {LineLifeAvenant,  UserImage, AvenantResume, Spinner},
+
 
         methods: {
+            /**
+             * Retourne true ou false en function du mode du button
+             * 
+             * @param {String} mode l'avtion que va effectuer le button
+             * 
+             * @return {Boolean}  
+             */
+            getCondition(mode) {
+                if (mode === 'edit') {
+                    return this.checkEditContrat;
+                }
+
+                if (mode === 'delete') {
+                    return this.checkDeleteContrat;
+                }
+
+                if (mode === 'avenant') {
+                    return this.checkAvenant;
+                }
+
+                return false;
+            },
+
+            /**
+             * retourne l'object route pour le :to du router-link
+             * 
+             * @param {string} routeName le nom de la route
+             * 
+             * @return {Object} 
+             */
+            getRoute(routeName) {
+                return {name: routeName, params: {id: this.contrat.structure__personnel_id, idContrat: this.contrat.id}};
+            },
+
             /**
              * Load le premier avenant
              */
@@ -157,10 +209,26 @@ export default {
                 let format = newDate.toLocaleDateString('fr-FR');
                 return format;
             },
+
+
+            /**
+             * Retoure la classe du buttons
+             */
+            classBtn(button) {
+                let className = '';
+
+                className += ' btn-' + button.color;
+
+                if (!this.checkLastContrat) {
+                    className += ' disabled';
+                }
+
+                return className;
+            }
         },
 
         mounted(){
-            this.loadFirstAvenant()
+            this.loadFirstAvenant();
         }
 
     }

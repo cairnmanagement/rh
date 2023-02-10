@@ -76,8 +76,8 @@ export default {
 
             let apiUrl = `structurePersonnel/POST/${this.$route.params.id}/contrat/${this.$route.params.idContrat}/stop`;
 
-            this.$app.apiPost(apiUrl, this.endContratItem).then(resp => {
-                console.log('resp', resp);
+            this.$app.apiPost(apiUrl, this.endContratItem).then(() => {
+                this.$router.push({name:'Personnel', params: {id: this.$route.params.id}});
             })
             .catch(this.$app.catchError)
             .finally(() => this.pending.endContrat = false);

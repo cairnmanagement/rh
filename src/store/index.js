@@ -112,6 +112,15 @@ export default createStore({
 		},
 
 		/**
+		 * Ajoute un personnel a opened element
+		 * @param {Object} state le state de l'instance vueX
+		 * @param {object} data données du nouveau personnel
+		 */
+		newOpened(state, data) {
+			state.openedElement = data;
+		},
+
+		/**
 		 * Enregistre le login dans le store
 		 * @param {Object} state Le state de l'instance vueX
 		 * @param {Object} login L'objet Login
@@ -317,6 +326,15 @@ export default createStore({
 		 */
 		refreshOpened(context, data) {
 			context.commit('updateOpened', data);
+		},
+
+		/**
+		 * ajout un nouveau personnel a l'élément ouvert avec des données
+		 * @param {Object} context L'instance vueX
+		 * @param {Object} data un personnel
+		 */
+		newOpened(context, data) {
+			context.commit('newOpened', data);
 		},
 
 		/**

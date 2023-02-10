@@ -1,7 +1,7 @@
 <template>
     <div class="ms-4 col-8">
         <div>
-            <div class="text-success d-flex justify-content-between aligne">
+            <div class="d-flex justify-content-between aligne" :class="classNumContrat">
                 <div>
                     Avenant du {{ changeFormatDateLit(startContrat) }}
                 </div>
@@ -9,18 +9,19 @@
                 <div class="text-secondary">
                     <i class="bi bi-chevron-right"></i>
                     <span v-if="checkCDI"> Sans date de sortie</span>
-                    <span v-else>Fini le {{ changeFormatDateLit(endContrat) }}</span>
+                    <span v-else>Fini le {{ changeFormatDateLit(sortieContrat) }}</span>
                 </div>
             </div>
-
+            
             <div class="badge text-bg-secondary">
-                Contrat initial au {{ changeFormatDateLit(avSelected.dentree) }}
-            </div>
-
-            <div class="mt-4">
                 <span v-if="avSelected.duree_determinee === 'OUI'">Contrat a durée indeterminé</span>
                 <span v-else>Contrat a durée déterminé</span>
             </div>
+
+            <div class="mt-4">
+                Contrat initial au {{ changeFormatDateLit(avSelected.dentree) }}
+            </div>
+
             
             <div class="fw-lighter">
                 <div v-if="avSelected.periode_essai">
@@ -114,7 +115,7 @@ export default {
          * 
          * @return {DateTime}
          */
-        endContrat() {
+        sortieContrat() {
             if(this.avSelected.dsortie_reelle && this.avSelected.dsortie_reelle != "0000-00-00 00:00:00") {
                 return this.avSelected.dsortie_reelle;
             }
@@ -136,11 +137,56 @@ export default {
             }
 
             return true;
-        }
+        },
+
+                /**
+         * retourne la nom de la classe a appliqué si contrat actif
+         * 
+         * @return {string}
+         */
+         classNumContrat() {
+            if (this.contratActif) {
+                return 'text-success';
+            }
+
+            return '';
+        },
+
+        /**
+         * Check su le CDI est actif ou non
+         * 
+         * @return {boolean}
+         */
+         CDIActif() {
+            if(this.avSelected.duree_indeterminee === 'OUI' && !this.sortieContrat || this.avSelected.duree_indeterminee === 'OUI' && this.sortieContrat == "0000-00-00 00:00:00") {
+                return true;
+            }
+
+            return false;
+        },
+
+        /**
+         * check si le contrat est actif ou non
+         * 
+         * @return {Boolean}
+         */
+         contratActif() {
+            let today = new Date().getTime();
+            let start = new Date(this.startContrat).getTime();
+            let end = new Date(this.sortieContrat).getTime();
+
+            if(this.CDIActif && today > start || today < end && today > start) {
+                return true;
+            }
+
+            return false;
+        },
 
     },
 
     methods: {
+
+
         /**
          * Modifie le format de la date entrée en paramètre et la retourne 
          * sous le format 01 févr. 2021

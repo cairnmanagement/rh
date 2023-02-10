@@ -39,8 +39,8 @@ export default {
 
     data() {
         return {
-            motifValue: this.motif,
-            dsortie_reelleValue: this.dsortie_reelle,
+            motifValue: null,
+            dsortie_reelleValue: null,
         }
     },
 
@@ -53,6 +53,11 @@ export default {
         motifValue(newValue) {
             this.$emit('update:motif', newValue);
         }
-    }
+    },
+
+    mounted() {
+        this.motifValue = this.motif;
+        this.dsortie_reelleValue = this.dsortie_reelle;
+    },
 }
 </script>

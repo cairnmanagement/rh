@@ -15,7 +15,14 @@
 					</a>
 				</router-link>
 
-				<router-link :to="'/personnel/'+openedElement.id+'/properties'" custom v-slot="{ navigate, href }">
+				<router-link :to="{name:'PersonnelNew'}" custom v-slot="{ navigate, href }">
+					<a class="btn btn-primary btn-sm me-2" :href="href" @click="navigate">
+						<i class="bi bi-plus-lg ms-1"></i>
+						Nouveau personnel
+					</a>
+				</router-link>
+
+				<!-- <router-link :to="'/personnel/'+openedElement.id+'/properties'" custom v-slot="{ navigate, href }">
 					<a class="btn btn-dark me-2" :href="href" @click="navigate">
 						<i class="bi bi-file-earmark me-1"></i>
 						{{openedElement.cache_nom}}
@@ -42,7 +49,7 @@
 					</ul>
 				</div>
 
-				<a class="nav-link text-light" href="#"><i class="bi bi-arrow-clockwise"></i></a>
+				<a class="nav-link text-light" href="#"><i class="bi bi-arrow-clockwise"></i></a> -->
 			</div>
 		</template>
 
@@ -117,6 +124,7 @@ import AppSearchBar from './components/pebble-ui/AppSearchBar.vue'
 import Spinner from './components/pebble-ui/Spinner.vue'
 
 export default {
+	components: {AppWrapper, AppMenu, AppMenuItem, searchPersonnel, PersonnelItem, AppSearchBar, Spinner},
 
 	data() {
 		return {
@@ -183,8 +191,6 @@ export default {
 				this.personnelFilted();
 		},
 	},
-
-	components: {AppWrapper, AppMenu, AppMenuItem, searchPersonnel, PersonnelItem, AppSearchBar, Spinner},
 
 	methods: {
 		...mapActions(['closeElement']),

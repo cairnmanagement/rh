@@ -1,6 +1,6 @@
 <template>
     <AppModal 
-    :title="this.$route.params.id != 0 ?'Modification du personnel' : 'Nouveau personnel'" 
+    :title="titleModal" 
     size="lg" 
     @submit="record()"
     @modal-hide="routeToParent()" 
@@ -53,10 +53,21 @@ export default {
     },
     computed: {
         ...mapState(['openedElement']),
+
+        /**
+         * Retourne le titre de la modal
+         */
+        titleModal() {
+            if (this.$route.params.id != 0 && this.$route.name != 'PersonnelNew') {
+                'Modification du personnel'
+            }
+
+            return 'Nouveau personnel'
+        }
     },
 
     methods: {
-        ...mapActions(['refreshOpened']),
+        ...mapActions(['refreshOpened', 'newOpened']),
 
         /**
          * retourne à la route précédente
@@ -71,9 +82,15 @@ export default {
         record() {
             //verrouille le statu de chargement
             this.pending.personnel = true;
-            
+
+            let idPersonnel = 0;
+
+            if (this.openedElement) {
+                idPersonnel = this.openedElement.id;
+            } 
+
             if (confirm('vous souhaitez enregistrer ces modifications')) {
-                let apiUrl = `structurePersonnel/POST/${this.openedElement.id}?api_hierarchy=1`;
+                let apiUrl = `structurePersonnel/POST/${idPersonnel}?api_hierarchy=1`;
 
                 let query = {
                     nom: this.ressourcePersonnel.nom,
@@ -86,10 +103,13 @@ export default {
                 }
 
                 this.$app.apiPost(apiUrl, query).then((data) => {
-                    console.log(data);
-                    this.refreshOpened(data);
+                    if (idPersonnel == 0) {
+                        this.newOpened(data);
+                    } else {
+                        this.refreshOpened(data);
+                    }
 
-                    this.routeToParent();
+                    this.$router.push({name: 'Personnel', params: {id: data.id}});
                 })
                 .catch(this.$app.catchError)
                 .finally(() => {
@@ -107,7 +127,7 @@ export default {
          * @returns {Object}
          */
         getContact() {
-            if (this.openedElement.oPersonne) {
+            if (this.openedElement?.oPersonne) {
                 this.checkPersonnelEdit = true;
 
                 this.ressourcePersonnel.nom = this.openedElement.oPersonne.nom;
@@ -125,7 +145,7 @@ export default {
     },
 
     mounted() {
-        if (this.$route.params.id == 0) {
+        if (this.$route.params.id == 0 || this.$route.name == 'PersonnelNew') {
             this.checkPersonnelEdit = true;
         } else {
             this.getContact();

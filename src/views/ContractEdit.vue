@@ -151,11 +151,6 @@ export default {
          * Enregistre ou met a jours un contrat via le formulaire fourni
          */
         record() {
-            console.log('record');
-            console.log(this.contratItem);
-            console.log(typeof this.contratItem);
-            console.log('end record');
-
             this.pending.contrat = true;
 
             let url = `structurePersonnel/POST/${this.$route.params.id}/contrat/${this.$route.params.idContrat}`;
