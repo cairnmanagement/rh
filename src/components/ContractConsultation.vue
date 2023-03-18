@@ -13,13 +13,14 @@
                     <h2>{{openedElement.cache_nom}}</h2>
                 </div>
 
-                <div class="row g-2">
+                <div class="row w-100 g-2 justify-content-center">
                     <template v-for="(button, index) in buttonsContratOptions" :key="index">
                         <template v-if="getCondition(button.mode)">
-                            <div class="col-12 col-md">
+                            <div class="col-12 col-md-4">
                                 <router-link :to="getRoute(button.routeName)" v-slot="{navigate, href}" custom>
-                                    <a :href="href" @click="navigate" class="btn btn-sm w-100" :class="classBtn(button)">
-                                        <i class="bi" :class="button.icon"></i>
+                                    <a :href="href" @click="navigate" class="btn btn-sm w-100 " :class="classBtn(button)">
+                                        <i class="bi bi-lock-fill" v-if="!checkLastContrat"></i>
+                                        <i class="bi" :class="button.icon" v-else></i>
                                         {{button.label}}
                                     </a>
                                 </router-link>
@@ -80,7 +81,7 @@ export default {
                         label: "Faire une avenant",
                         color: "primary",
                         icon: "bi-file-earmark-plus",
-                        routeName: "DeleteContrat"
+                        routeName: "Avenant"
                     },
                     {
                         mode: 'delete',
@@ -129,6 +130,10 @@ export default {
              */
             checkAvenant() {
                 if (this.contrat.avenant__structure__personnel_contrat_id) {
+                    return false;
+                }
+
+                if (this.contrat.dsortie_reelle) {
                     return false;
                 }
 
@@ -224,7 +229,7 @@ export default {
                 }
 
                 return className;
-            }
+            },
         },
 
         mounted(){

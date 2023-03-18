@@ -15,41 +15,10 @@
 					</a>
 				</router-link>
 
-				<router-link :to="{name:'PersonnelNew'}" custom v-slot="{ navigate, href }">
-					<a class="btn btn-primary btn-sm me-2" :href="href" @click="navigate">
-						<i class="bi bi-plus-lg ms-1"></i>
-						Nouveau personnel
-					</a>
-				</router-link>
-
-				<!-- <router-link :to="'/personnel/'+openedElement.id+'/properties'" custom v-slot="{ navigate, href }">
-					<a class="btn btn-dark me-2" :href="href" @click="navigate">
-						<i class="bi bi-file-earmark me-1"></i>
-						{{openedElement.cache_nom}}
-					</a>
-				</router-link>
-
-				<div class="dropdown">
-					<button class="btn btn-dark dropdown-toggle" type="button" id="fileDdMenu" data-bs-toggle="dropdown" aria-expanded="false">
-						Fichier
-					</button>
-
-					<ul class="dropdown-menu" aria-labelledby="fileDdMenu">
-						<li>
-							<router-link :to="'/personnel/'+openedElement.id+'/informations'" custom v-slot="{ navigate, href }">
-								<a class="dropdown-item" :href="href" @click="navigate">Informations</a>
-							</router-link>
-						</li>
-
-						<li>
-							<router-link :to="'/'" custom v-slot="{ navigate, href }">
-								<a class="dropdown-item" :href="href" @click="navigate">Archiver</a>
-							</router-link>
-						</li>
-					</ul>
+				<div class="me-2" :href="href" @click="navigate">
+					<i class="bi bi-file-earmark me-1"></i>
+					{{openedElement.cache_nom}}
 				</div>
-
-				<a class="nav-link text-light" href="#"><i class="bi bi-arrow-clockwise"></i></a> -->
 			</div>
 		</template>
 
@@ -57,11 +26,12 @@
 		<template v-slot:menu>
 			<AppMenu>
 				<AppMenuItem href="/" look="dark" icon="bi bi-house">Mon personnel</AppMenuItem>
+				<AppMenuItem v-if="login.type >= 4" href="/parametre" look="dark" icon="bi bi-gear">Parametre</AppMenuItem>
 			</AppMenu>
 		</template>
 
 		<template v-slot:list>
-			<AppMenu>
+			<AppMenu v-if="'personnel' == listMode">
 				<app-search-bar 
 					v-model:showFilter="showFilter"
 					v-model:searchValue="searchValue"
@@ -88,9 +58,15 @@
 						<personnel-item v-else :personnel="personnel"></personnel-item>
 					</AppMenuItem>	
 				</template>
-
-				
 			</AppMenu>
+
+
+			<AppMenu v-else-if="'parametre' == listMode && login && login.type >= 4">
+				<AppMenuItem :href="'/parametre/'+param.url" v-for="param in params" :key="param.label">
+					<parameter-item :param="param"></parameter-item>
+				</AppMenuItem>
+			</AppMenu>
+
 		</template>
 
 		<template v-slot:core>
@@ -122,9 +98,10 @@ import searchPersonnel from './components/menulist/searchPersonnel.vue'
 import PersonnelItem from './components/menulist/personnelItem.vue'
 import AppSearchBar from './components/pebble-ui/AppSearchBar.vue'
 import Spinner from './components/pebble-ui/Spinner.vue'
+import ParameterItem from './components/menulist/parameterItem.vue'
 
 export default {
-	components: {AppWrapper, AppMenu, AppMenuItem, searchPersonnel, PersonnelItem, AppSearchBar, Spinner},
+	components: {AppWrapper, AppMenu, AppMenuItem, searchPersonnel, PersonnelItem, AppSearchBar, Spinner, ParameterItem},
 
 	data() {
 		return {
@@ -149,15 +126,47 @@ export default {
 				matriculeStatus: "null",
 				archived: "null"
 			},
+			params: [
+				{
+					label: 'Contrat type',
+					url: 'contrat-type'
+				},
+				{
+					label: 'Contrat qualification',
+					url: 'contrat-qualification'
+				},
+				{
+					label: 'Contrat statut',
+					url: 'contrat-statut'
+				}
+			]
 
 		}
 	},
 
 	computed: {
-		...mapState(['elements', 'openedElement']),
+		...mapState(['elements', 'openedElement', 'login']),
 
 		countNbFilterActive() {
 			return this.nbFilterActive.Actif + this.nbFilterActive.MatriculeStatus + this.nbFilterActive.Archived;
+		},
+
+				/**
+		 * Détermine quelle liste afficher :
+		 * collecte, programmation
+		 * 
+		 * @return {string}
+		 */
+		listMode() {
+			let routeName = this.$route.name;
+
+			if (['Parametre', 'ContratType', 'ContratQualification', 'ContratStatut'].includes(routeName)) {
+				return 'parametre';
+			} else if (['Home', 'Personnel'].includes(routeName)) {
+				return 'personnel';
+			}
+
+			return null;
 		}
 	},
 

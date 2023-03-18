@@ -85,6 +85,19 @@ const routes = [
         path: 'contrat/:idContrat/delete',
         name: 'DeleteContrat',
         component: () => import('../views/ContractDelete.vue')
+      },
+
+
+
+      {
+        path: 'contrat/:idContrat/avenant',
+        name: 'Avenant',
+        component: () => import('../views/ContractDelete.vue')
+      },
+      {
+        path: 'contrat/0/avenant/:idContrat',
+        name: 'NewAvenant',
+        component: () => import('../views/ContractEdit.vue')
       }
       
     ]
@@ -96,6 +109,26 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/A-propos.vue')
+  },
+  {
+    path: '/parametre',
+    name: 'Parametre',
+    component: () => import('../views/Parametre.vue'),
+  },
+  {
+    path: '/parametre/contrat-type',
+    name: 'ContratType',
+    component: () => import('../views/parametre/ParametreConsult.vue'),
+  },
+  {
+    path: '/parametre/contrat-qualification',
+    name: 'ContratQualification',
+    component: () => import('../views/parametre/ParametreConsult.vue')
+  },
+  {
+    path: '/parametre/contrat-statut',
+    name: 'ContratStatut',
+    component: () => import('../views/parametre/ParametreConsult.vue')
   },
 ]
   

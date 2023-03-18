@@ -280,7 +280,6 @@ export default createStore({
 				context.commit('open', el);
 			}
 			else {
-				// Il faut générer une requête pour charger l'élément manquant
 				console.log('Not found');
 			}
 		},

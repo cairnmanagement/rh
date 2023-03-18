@@ -10,61 +10,55 @@
         </div>
 
         <form>
-            <!-- <div class="my-2">
-                <label for="typeContrat" class="form-label">Type de contrat *</label>
-                <select class="form-select" id="typeContrat" required>
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                </select>
-            </div> -->
-
             <div class=" my-2 row g-2">
                 <div class="col-md">
                     <label for="dateEntree" class="form-label">Entrée *</label>
                     <input type="datetime-local" class="form-control" id="dateEntree" name="dentree" v-model="searchDentree" required>
                 </div>
-
+    
                 <div class="col-md">
                     <label for="dateSortie" class="form-label">Sortie prévue</label>
                     <input type="datetime-local" class="form-control" id="dateSortie" name="dsortie" v-model="searchDsortie">
                 </div>
             </div>
 
-            <div class="row g-2">
-                <div class="col-md">
+            <div class="my-2 row g-2">
+                <div class="col-12 col-md">
+                    <label for="typeContrat" class="form-label">Type de contrat *</label>
+                    <select class="form-select" id="typeContrat" v-model="searchType" required>
+                        <option v-if="contratType.length == 0" value="" disabled>Aucun type enregistré</option>
+                        <option v-for="type in contratType" :key="type.id" :value="type.id">{{ type.label }}</option>
+                    </select>
+                </div>
+
+                <div class="col-12 col-md-4">
                     <label for="periodedEssai" class="form-label">Période d'essai (jours)</label>
                     <input type="number" class="form-control" id="periodedEssai" name="periode_essai" v-model="searchPeriodeEssai">
                 </div>
 
-                <!-- <div class="col-md">
+                <div class="col-12 col-md-3">
                     <label for="dureeTravail" class="form-label">Temps de travail(%) *</label>
-                    <input type="number" name="mls__contrat_duree_travail" id="duréeTravail" class="form-control" required>
-                </div> -->
+                    <input type="number" name="mls__contrat_duree_travail" min="0" max="100" step="1" id="duréeTravail" class="form-control" v-model="searchTempsTravail" required>
+                </div>
             </div>
 
-            <!-- <div class="row g-2">
+            <div class="row g-2 mt-2">
                 <div class="col-md">
-                    <label for="qualification" class="form-label">Qualification</label>
-					<select name="qualification" id="qualification" class="form-select">
-						<option value="qu"></option>
-						<option value="qu"></option>
-						<option value="qu"></option>
-						<option value="qu"></option>
-					</select>
+                    <label for="qualification" class="form-label">Qualification *</label>
+                    <select name="qualification" id="qualification" class="form-select" v-model="searchQualification" required>
+                        <option v-if="contratQualification.length == 0" value="" disabled>Aucune qualification enregistrée</option>
+                        <option v-for="qualification in contratQualification" :key="qualification.id" :value="qualification.id">{{ qualification.label }}</option>
+                    </select>
                 </div>
 
                 <div class="col-md">
                     <label for="statut" class="form-label">Statut *</label>
-                    <select name="contrat_statut" id="statut" class="form-select" required>
-                        <option value="val"></option>
-                        <option value="val"></option>
-                        <option value="val"></option>
+                    <select name="contrat_statut" id="statut" class="form-select" v-model="searchStatut" required>
+                        <option v-if="contratStatut.length == 0" value="" disabled>Aucun statut enregistré</option>
+                        <option v-for="statut in contratStatut" :key="statut.id" :value="statut.id">{{ statut.label }}</option>
                     </select>
                 </div>
-            </div> -->
+            </div>
 
             <div class="form-check form-switch mt-3">
                 <label class="form-check-label" for="forfaitJour">Contrat au forfait jour</label>
@@ -176,6 +170,12 @@ export default {
 
     data() {
         return {
+            pending: {
+                contratRessource: true,
+            },
+
+            contratRessource: ['type', 'qualification', 'statut'],
+
             searchType: null,
             searchTempsTravail: null,
             searchDentree: null,
@@ -188,6 +188,10 @@ export default {
             searchNbParSemaine: null,
             searchNbParMois: null,
             searchNbParAn: null,
+
+            contratType: [],
+            contratQualification: [],
+            contratStatut: [],
         }
     },
 
@@ -287,12 +291,47 @@ export default {
             this.searchNbParSemaine = this.nb_par_semaine;
             this.searchNbParMois = this.nb_par_mois;
             this.searchNbParAn = this.nb_par_an;
+        },
+
+        /***
+         * Recupere les differents ressource nécessaire a un contrat
+         * qualigication, statut, type ...
+         */
+        getContratRessources() {
+            this.pending.contratRessource = true;
+
+            for (let ressource in this.contratRessource) {
+                let label = this.contratRessource[ressource];
+                let urlApi = `v2/contrat/${label}`;
+    
+                this.$app.apiGet(urlApi).then(data => {
+                    switch (label) {
+                        case 'type':
+                            this.contratType = data;
+                            break;
+
+                        case 'statut':
+                            this.contratStatut = data;                            
+                            break;
+
+                        case 'qualification':
+                            this.contratQualification = data;
+                            break;
+                    
+                        default:
+                            break;
+                    }
+                }).catch(this.$app.catchError)
+                .finally(() => {this.pending.contratRessource = false})
+            }
+
         }
 
     },
 
     mounted() {
         this.loadSearchValues();
+        this.getContratRessources();
     }
 }
 </script>
