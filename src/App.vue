@@ -5,7 +5,8 @@
 		:cfg-menu="cfgMenu"
 		:cfg-slots="cfgSlots"
 		
-		@auth-change="setLocal_user">
+		@auth-change="setLocal_user"
+		@config-menu="displayConfig = true">
 
 		<template v-slot:header>
 			<div class="mx-2 d-flex align-items-center" v-if="openedElement">
@@ -15,7 +16,7 @@
 					</a>
 				</router-link>
 
-				<div class="me-2" :href="href" @click="navigate">
+				<div class="me-2">
 					<i class="bi bi-file-earmark me-1"></i>
 					{{openedElement.cache_nom}}
 				</div>
@@ -60,19 +61,22 @@
 				</template>
 			</AppMenu>
 
-
-			<AppMenu v-else-if="'parametre' == listMode && login && login.type >= 4">
-				<AppMenuItem :href="'/parametre/'+param.url" v-for="param in params" :key="param.label">
-					<parameter-item :param="param"></parameter-item>
-				</AppMenuItem>
-			</AppMenu>
-
 		</template>
 
-		<template v-slot:core>
-			<div class="bg-light" v-if="isConnectedUser">
+		<template v-slot:core v-if="isConnectedUser">
+			<div class="bg-light">
 				<router-view />
 			</div>
+
+			<AppModal title="Configuration du module"
+				id="configModule"
+				:display="displayConfig"
+				:close-btn="true"
+				class-name="modal-dialog-scrollable modal-xl"
+				
+				@modal-hide="displayConfig = false">
+				<Config v-if="!pending.config && displayConfig" />
+			</AppModal>
 		</template>
 	</AppWrapper>
 	
@@ -98,10 +102,11 @@ import searchPersonnel from './components/menulist/searchPersonnel.vue'
 import PersonnelItem from './components/menulist/personnelItem.vue'
 import AppSearchBar from './components/pebble-ui/AppSearchBar.vue'
 import Spinner from './components/pebble-ui/Spinner.vue'
-import ParameterItem from './components/menulist/parameterItem.vue'
+import Config from './components/parametre/Config.vue';
+import AppModal from './components/pebble-ui/AppModal.vue'
 
 export default {
-	components: {AppWrapper, AppMenu, AppMenuItem, searchPersonnel, PersonnelItem, AppSearchBar, Spinner, ParameterItem},
+	components: {AppWrapper, AppMenu, AppMenuItem, searchPersonnel, PersonnelItem, AppSearchBar, Spinner, Config, AppModal},
 
 	data() {
 		return {
@@ -110,9 +115,11 @@ export default {
 			cfgSlots: CONFIG.cfgSlots,
 			appController: null,
 			pending: {
-				elements: true
+				elements: true,
+				config: false
 			},
 			isConnectedUser: false,
+			displayConfig: false,
 
 			showFilter: false,
 			nbFilterActive: {
@@ -160,9 +167,7 @@ export default {
 		listMode() {
 			let routeName = this.$route.name;
 
-			if (['Parametre', 'ContratType', 'ContratQualification', 'ContratStatut'].includes(routeName)) {
-				return 'parametre';
-			} else if (['Home', 'Personnel'].includes(routeName)) {
+			if (['Home', 'Personnel', 'EditContrat', 'infoContrat'].includes(routeName)) {
 				return 'personnel';
 			}
 

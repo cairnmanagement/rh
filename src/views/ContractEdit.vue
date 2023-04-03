@@ -1,13 +1,14 @@
 <template>
     <AppModal :title="titleModal" size="lg" @submit="record()" @modal-hide="routeToParent()" :submitBtn="true" :cancelBtn="true" :pending="pending.contrat">
 
-        <contract-form-2 
-            v-model:type="contratItem.type"
-            v-model:temps_travail="contratItem.temps_travail"
+        <contract-form 
+            v-model:type_id="contratItem.type_id"
+            v-model:pourcentage_temps_partiel="contratItem.pourcentage_temps_partiel"
             v-model:dentree="contratItem.dentree"
             v-model:dsortie="contratItem.dsortie"
-            v-model:qualification="contratItem.qualification"
-            v-model:statut="contratItem.statut"
+            v-model:duree_indeterminee="contratItem.duree_indeterminee"
+            v-model:qualification_id="contratItem.qualification_id"
+            v-model:statut_id="contratItem.statut_id"
             v-model:periode_essai="contratItem.periode_essai"
             v-model:salaire_horaire="contratItem.salaire_horaire"
             v-model:forfait_jour="contratItem.forfait_jour"
@@ -20,14 +21,14 @@
 
 <script>
 import { mapState } from 'vuex';
-import ContractForm2 from '../components/ContractForm2.vue';
+import ContractForm from '../components/ContractForm.vue';
 import date from 'date-and-time';
 
 // import ContractForm from '../components/ContractForm.vue';
 import AppModal from '../components/pebble-ui/AppModal.vue';
 
 export default {
-    components: { AppModal, ContractForm2, },
+    components: { AppModal, ContractForm, },
 
     data() {
         return {
@@ -35,12 +36,13 @@ export default {
                 contrat: false
             },
             contratItem: {
-                type: 0,                 /** Obligatoire **/
-                temps_travail: 0,        /** Obligatoire **/
-                dentree: '',              /** Obligatoire **/
+                type_id: 0,                                 /** Obligatoire **/
+                pourcentage_temps_partiel: 100,             /** Obligatoire if duree indeterminee true**/
+                dentree: '',                                
                 dsortie: '',
-                qualification: 0,        /** Obligatoire **/
-                statut: 0,               /** Obligatoire **/
+                duree_indeterminee: false,                  
+                qualification_id: 0,                        
+                statut_id: 0,                               
                 periode_essai: 0,
                 salaire_horaire: 0,
                 forfait_jour: false,
@@ -94,8 +96,6 @@ export default {
 
         /**
          * Retourne le contrat chargé via l'ID de l'URL
-         * 
-         * @return {object}
          */
         getContrat() {
             let contrat = this.openedContrats.find(e => e.id == this.$route.params.idContrat);
@@ -113,13 +113,14 @@ export default {
          * @param {Object} Contrat      Un contrat de travail
          */
          setContratItem(contrat) {
-            this.contratItem.type = contrat.type;
+            console.log('get', contrat);
+            this.contratItem.type_id = contrat.type_id ? contrat.type_id : 0;
             this.contratItem.temps_travail = contrat.temps_travail;
             this.contratItem.dentree = contrat.dentree;
-
-            this.contratItem.qualification = contrat.qualification;
-            this.contratItem.status = contrat.status;
-            this.contratItem.periode_essai = contrat.periode_essai;
+            this.contratItem.duree_indeterminee = contrat.duree_indeterminee == 'OUI' ? true : false;
+            this.contratItem.qualification_id = contrat.qualification_id ? contrat.qualification_id : 0;
+            this.contratItem.statut_id = contrat.statut_id ? contrat.statut_id : 0;
+            this.contratItem.pourcentage_temps_partiel = contrat.pourcentage_temps_partiel;
             this.contratItem.salaire_horaire = contrat.salaire_horaire;
             this.contratItem.forfait_jour = contrat.forfait_jour == 'OUI' ? true : false;
             this.contratItem.nb_par_semaine = contrat.nb_par_semaine;
@@ -153,12 +154,18 @@ export default {
         record() {
             this.pending.contrat = true;
 
-            let url = `structurePersonnel/POST/${this.$route.params.id}/contrat/${this.$route.params.idContrat}`;
+            let url = `v2/contrat/`;
 
-            this.$app.apiPost(url, this.contratItem).then((data) => {
-                console.log(data);
+            if (this.$route.params.idContrat != '0') {
+                url = 'v2/contrat/' + this.$route.params.idContrat;
+            } 
+            
+            this.contratItem['structure__personnel_id'] = this.$route.params.id;
+
+            this.$app.apiPost(url, this.contratItem).then(() => {
+                this.routeToParent();
             })
-            .catch(this.$app.cactchError)
+            .catch(this.$app.catchError)
             .finally(() => this.pending.contrat = false);
         }
     },

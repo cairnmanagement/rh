@@ -16,7 +16,10 @@ export default createStore({
 		personnelStats: null,
 		contratStats: null,
 		contratCurrentStats: null,
-		openedContrats:null
+		openedContrats:null,
+		contratQualification:[],
+		contratStatut: [],
+		contratType: []
 	},
 	getters: {
 		activeStructure(state) {
@@ -261,11 +264,44 @@ export default createStore({
 			}
 		},
 
-		// openedElementContrats (state, data){
-		// 	for (let key in data) {
-		// 		state.openedElementContrats[key] = data[key];
-		// 	}
-		// }
+		/**
+		 * Met à jour les données d'un state en fonction de la ressource
+		 * @param {object} state Le state de l'instance vueX
+		 * @param {array} contratRessourceOptions 
+		 * 		- ressource : Nom de la ressource à modifier: contratType, contratQualification, contratStatut
+		 * 		- data : Données à mettre à jour
+		 * 		- mode : 'reset', 'add', 'update', 'remove'
+		 */
+		setContratAsset(state, contratRessourceOptions) {
+			let ressource = contratRessourceOptions.ressource;
+			let aData = contratRessourceOptions.data;
+			let mode = contratRessourceOptions.mode;
+
+			if ("reset" === mode) {
+				state[ressource] = aData;
+			} else {
+				for (const index in aData) {
+					if ('add' === mode) {
+						state[ressource].push(aData[index]);
+					}
+	
+					if ('update' === mode) {
+						let findIndex = state[ressource].findIndex(e => e.id == aData[index].id);
+
+						state[ressource][findIndex] = aData[index];
+					}
+
+					if ('remove' === mode) {
+						let findIndex = state[ressource].findIndex(e => e.id == aData[index].id);
+
+						if(findIndex !== -1) {
+							state[ressource].splice(findIndex, 1);
+						}
+					}
+				}
+			}
+		},
+
 	},
 	actions: {
 		/**
@@ -444,6 +480,68 @@ export default createStore({
 				contrats
 			});
 		},
+
+		/**
+		 * Met a jour un ou plusieur element la liste d asset
+		 * @param {Object} context L'instance vueX
+		 * @param {array} contratAssetOptions 
+		 * 		- data: Liste d'asset
+		 * 		- ressource: Ressource a mettre a jour
+		 */
+		updateContratAsset(context, contratAssetOptions) {
+			context.commit('setContratAsset', {
+				mode: 'update',
+				data: [contratAssetOptions.data],
+				ressource: contratAssetOptions.ressource
+			});
+		},
+
+		/**
+		 * Initialise un element la liste de contrat type
+		 * @param {Object} context L'instance vueX
+		 * @param {array} contratAssetOptions 
+		 * 		- data: Liste de contrat asset
+		 * 		- ressource: Ressource a mettre a jour
+		 */
+		resetContratAsset(context, contratAssetOptions) {
+			context.commit('setContratAsset', {
+				mode: "reset",
+				data: contratAssetOptions.data,
+				ressource: contratAssetOptions.ressource
+			})
+		},
+
+		/**
+		 * Met a jour un ou plusieur element la liste de contrat type
+		 * @param {Object} context L'instance vueX
+		 * @param {array} contratAssetOptions 
+		 * 		- data: Liste de contrat asset
+		 * 		- ressource: Ressource a mettre a jour
+		 */
+		addContratAsset(context, contratAssetOptions) {
+			context.commit('setContratAsset', {
+				mode: 'add',
+				data: [contratAssetOptions.data],
+				ressource: contratAssetOptions.ressource
+			})
+		},
+
+		/**
+		 * Met a jour un ou plusieur element la liste de contrat type
+		 * @param {Object} context L'instance vueX
+		 * @param {array} contratAssetOptions 
+		 * 		- data: Liste de contrat asset
+		 * 		- ressource: Ressource a mettre a jour
+		 */
+		removeContratAsset(context, contratAssetOptions) {
+			context.commit('setContratAsset', {
+				mode: 'remove',
+				data: [contratAssetOptions.Data],
+				ressource: contratAssetOptions.ressource
+			})
+		}
+
+
 	},
 	modules: {
 	}

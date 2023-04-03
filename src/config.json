@@ -16,7 +16,7 @@
         "backNavigation": true
     },
     "cfgMenu": {
-        "href": null
+        "href": "#config"
     },
     "cfgSlots": {
         "menu": true,

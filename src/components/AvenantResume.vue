@@ -14,7 +14,7 @@
             </div>
             
             <div class="badge text-bg-secondary">
-                <span v-if="avSelected.duree_determinee === 'OUI'">Contrat a durée indeterminé</span>
+                <span v-if="avSelected.duree_indeterminee === 'OUI'">Contrat a durée indeterminé</span>
                 <span v-else>Contrat a durée déterminé</span>
             </div>
 
@@ -48,14 +48,14 @@
             </div>
 
             <div class="d-flex flex-column my-4">
-                <span>Temps de travail:</span>
+                <span>Temps de travail(%):</span>
 
-                <strong v-if="avSelected.mls__contrat_duree_travail == 'null' || avSelected.mls__contrat_duree_travail == 0" class="text-warning">
+                <strong v-if="avSelected.pourcentage_temps_partiel == 'null' || avSelected.pourcentage_temps_partiel == 0" class="text-warning">
                     Pas d'infos sur le temps de travail
                 </strong>
 
-                <strong v-else-if="avSelected.mls__contrat_duree_travail">
-                    {{avSelected.mls__contrat_duree_travail}} heures
+                <strong v-else-if="avSelected.pourcentage_temps_partiel">
+                    {{avSelected.pourcentage_temps_partiel}} %
                 </strong>
 
                 <strong v-else class="text-danger">Pas d'infos enregistrées</strong>                
