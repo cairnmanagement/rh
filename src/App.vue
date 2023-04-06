@@ -27,7 +27,7 @@
 		<template v-slot:menu>
 			<AppMenu>
 				<AppMenuItem href="/" look="dark" icon="bi bi-house">Mon personnel</AppMenuItem>
-				<AppMenuItem v-if="login.type >= 4" href="/parametre" look="dark" icon="bi bi-gear">Parametre</AppMenuItem>
+				<!-- <AppMenuItem v-if="login.type >= 4" href="/parametre" look="dark" icon="bi bi-gear">Parametre</AppMenuItem> -->
 			</AppMenu>
 		</template>
 
@@ -160,7 +160,7 @@ export default {
 
 				/**
 		 * Détermine quelle liste afficher :
-		 * collecte, programmation
+		 * personnel
 		 * 
 		 * @return {string}
 		 */
@@ -248,6 +248,7 @@ export default {
 			action = typeof action === 'undefined' ? 'update' : action;
 			this.$app.listElements(this, params)
 			.then((data) => {
+				console.log(data, 'list elements')
 				this.$store.dispatch('refreshElements', {
 					action,
 					elements: data,
@@ -262,25 +263,41 @@ export default {
 		personnelFilted() {
 			this.pending.elements = true;
 
-			let apiUrl = 'structurePersonnel/GET/list';
+
+			// let apiUrl = 'structurePersonnel/GET/list';
 			let search = {
-				'contrat': this.searchOptions.actif,
+				'actif': this.searchOptions.actif,
 				'matricule_status': this.searchOptions.matriculeStatus,
 				'archived': this.searchOptions.archived,
-				'q': this.searchValue
+				// 'q': this.searchValue
 			};
+			console.log(search, 'searchOptions');
+			this.listElements(search,'replace')
+			// this.$app.listElements(search, 'replace')
 
-			this.$app.apiGet(apiUrl, search)
-			.then((data) => {
-				this.$store.dispatch('refreshElements', {
-					action: 'replace',
-					elements: data,
-				});
-			})
-			.catch(this.$app.catchError)
-			.finally(() => {this.pending.elements = false});
+			// // this.apiGet()
+			// // this.$app.apiGet(apiUrl, search ) // pb dans le retour de l'api. elle retourne un tableau vide 
+			// // this.$app.listElements(this.search)
+			// .then((data) => {
+			// 	console.log(data, 'reponseAPI');
+			// 	this.$store.dispatch('refreshElements', {
+			// 		action: 'replace',
+			// 		elements: data,
+			// 	});
+			// })
+			// .catch(this.$app.catchError)
+			// .finally(() => {this.pending.elements = false});
 		},
 		
 	},
+	mounted(){
+		this.$app.addEventListener('structureChanged', () => {
+			this.$router.push('/');
+			if (this.isConnectedUser) {
+				this.listElements('','replace')
+				// this.personnelFilted()
+			}
+		});
+	}
 }
 </script>
