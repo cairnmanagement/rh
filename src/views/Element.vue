@@ -27,9 +27,7 @@
 
         <router-view></router-view>
 	</div>
-
 	<spinner v-else></spinner>
-
 </template>
 
 <script>
@@ -39,8 +37,8 @@ import {mapActions, mapState} from 'vuex'
 import ContractInfo from '../components/ContractInfo.vue';
 import CoordInfo from '../components/CoordInfo.vue';
 import EtatCivilInfo from '../components/EtatCivilInfo.vue';
-import Spinner from '../components/pebble-ui/Spinner.vue';
 import PersonnelHeaderCard from '@/components/PersonnelHeaderCard.vue';
+import Spinner from '../components/pebble-ui/Spinner.vue';
 
 export default {
     data() {
@@ -56,7 +54,7 @@ export default {
         ...mapState(["openedElement", 'openedContrats']),		
     },
 
-	components: { ContractInfo, CoordInfo, EtatCivilInfo, Spinner, PersonnelHeaderCard },
+	components: { ContractInfo, CoordInfo, EtatCivilInfo, PersonnelHeaderCard, Spinner },
 
     methods: {
 		...mapActions(['setOpenedContrats']),

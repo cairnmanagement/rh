@@ -1,5 +1,6 @@
 <template>
     <div class="container">
+    
         <template v-for="(filterSection, index) in aFilterSection" :key="'filtreSection-'+index" >
             <div class="my-2">
                 <h2 class="fs-5">{{filterSection.label}}</h2>
@@ -11,11 +12,11 @@
                             @click="updateSearchOptions(filterSection, oButton)">
                         {{ oButton.label }}
                     </button>
-                    <button class="btn btn-outline-secondary" :class="buttonDisplay('null', filterSection)" 
+                    <!-- <button class="btn btn-outline-secondary" :class="buttonDisplay('null', filterSection)" 
                             type="button" 
                             @click="updateSearchOptions(filterSection, 'Tous')">
                         Tous
-                    </button>
+                    </button> -->
                 </div>
             </div>
         </template>
@@ -59,24 +60,27 @@
                         'label':'Contrat', 
                         'mapSearch':'Actif', 
                         'button':  [
-                            {'label': 'Actif', 'value': '1'},
-                            {'label': 'Inactif', 'value': '0'}
+                            {'label': 'Actif', 'value': 'true'},
+                            {'label': 'Inactif', 'value': 'false'},
+                            {'label': 'Tous', 'value': null}
                         ]
                     },
                     {
                         'label':'Matricule', 
                         'mapSearch':'MatriculeStatus',
                         'button': [
-                            {'label': 'Actif', 'value': '1'},
-                            {'label': 'Inactif', 'value': '0'}
+                            {'label': 'Actif', 'value': 'true'},
+                            {'label': 'Inactif', 'value': 'false'},
+                            {'label': 'Tous', 'value': null}
                         ]
                     },
                     {
                         'label':'Archivé', 
                         'mapSearch':'Archived',
                         'button': [
-                            {'label': 'Oui', 'value': '1'},
-                            {'label': 'Non', 'value': '0'}
+                            {'label': 'Oui', 'value': 'true'},
+                            {'label': 'Non', 'value': 'false'},
+                            {'label': 'Tous', 'value': null}
                         ]
                     }
                 ],
@@ -106,11 +110,11 @@
             
 
             /**
-             * Met à jour les informations du searchOptions de l'element parents
+             * Met à jour les informations du searchOptions de l'element parent
              * Ainsi que le nombre de filtre activé
              * 
              * @param {Object}      filterSection       Represente la section du filtre
-             * @param {Object|string}      oButton              Object du button clicker
+             * @param {Object|string}      oButton              Object du button click
              * 
              * @event   update:nbFilterActif
              * @event   update:nbFilterMatricule
@@ -128,7 +132,7 @@
                 if (typeof oButton == 'string') {
                     button = {
                         'label': oButton,
-                        'value': 'null'
+                        'value': null
                     }
                 } else {
                     button = oButton;
@@ -163,9 +167,11 @@
 
         mounted() {
             this.count = {
+                
                 Actif: this.nbFilterActif,
                 MatriculeStatus: this.nbFilterMatricule,
                 Archived: this.nbFilterArchived,
+                
             }
         }
     }
