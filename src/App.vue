@@ -27,7 +27,6 @@
 		<template v-slot:menu>
 			<AppMenu>
 				<AppMenuItem href="/" look="dark" icon="bi bi-house">Mon personnel</AppMenuItem>
-				<AppMenuItem v-if="login.type >= 4" href="/parametre" look="dark" icon="bi bi-gear">Parametre</AppMenuItem>
 			</AppMenu>
 		</template>
 
