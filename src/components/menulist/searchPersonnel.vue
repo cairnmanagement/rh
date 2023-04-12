@@ -148,7 +148,7 @@
             },
 
             /**
-             * Retourne la classe CSS à donner au boutton de filtre si on le selectionne
+             * Retourne la classe CSS à donner au bouton de filtre si on le selectionne
              * 
              * @returns {String}
              */
