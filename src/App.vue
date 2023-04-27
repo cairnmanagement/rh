@@ -247,7 +247,7 @@ export default {
 			action = typeof action === 'undefined' ? 'update' : action;
 			this.$app.listElements(this, params)
 			.then((data) => {
-				console.log(data, 'list elements')
+
 				this.$store.dispatch('refreshElements', {
 					action,
 					elements: data,
@@ -270,7 +270,7 @@ export default {
 				'archived': this.searchOptions.archived,
 				// 'q': this.searchValue
 			};
-			console.log(search, 'searchOptions');
+
 			this.listElements(search,'replace')
 			// this.$app.listElements(search, 'replace')
 
@@ -289,6 +289,7 @@ export default {
 		},
 		
 	},
+
 	mounted(){
 		this.$app.addEventListener('structureChanged', () => {
 			this.$router.push('/');

@@ -113,7 +113,6 @@ export default {
          * @param {Object} Contrat      Un contrat de travail
          */
          setContratItem(contrat) {
-            console.log('get', contrat);
             this.contratItem.type_id = contrat.type_id ? contrat.type_id : 0;
             this.contratItem.temps_travail = contrat.temps_travail;
             this.contratItem.dentree = contrat.dentree;

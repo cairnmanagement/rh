@@ -88,7 +88,7 @@ export default {
                         label: "Mettre fin au contrat",
                         color: "danger",
                         icon: "bi-clipboard2-x",
-                        routeName: "DeleteContrat"
+                        routeName: "StopContrat"
                     },
                 ]
             }

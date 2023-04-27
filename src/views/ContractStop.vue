@@ -108,7 +108,8 @@ export default {
         record() {
             this.pending.endContrat = true;
 
-            let apiUrl = `structurePersonnel/POST/${this.$route.params.id}/contrat/${this.$route.params.idContrat}/stop`;
+            //let apiUrl = `structurePersonnel/POST/${this.$route.params.id}/contrat/${this.$route.params.idContrat}/stop`;
+            let apiUrl = `v2/contrat/${this.$route.params.idContrat}/stop`;
 
             this.$app.apiPost(apiUrl, this.endContratItem).then(() => {
                 if (this.avenant) {

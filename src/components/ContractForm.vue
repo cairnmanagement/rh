@@ -16,7 +16,7 @@
                     <input type="datetime-local" class="form-control" id="dateEntree" name="dentree" v-model="searchDentree">
                 </div>
     
-                <div class="col-md">
+                <div class="col-md" v-if="!searchDureeIndeterminee">
                     <label for="dateSortie" class="form-label">Sortie prévue <span v-if="!dsortieObligatory">*</span></label>
                     <input type="datetime-local" class="form-control" id="dateSortie" name="dsortie" v-model="searchDsortie">
                 </div>

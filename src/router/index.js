@@ -82,9 +82,9 @@ const routes = [
         component: () => import(/* webpackChunkName: "about" */ '../views/ContractEdit.vue')
       },
       {
-        path: 'contrat/:idContrat/delete',
-        name: 'DeleteContrat',
-        component: () => import('../views/ContractDelete.vue')
+        path: 'contrat/:idContrat/stop',
+        name: 'StopContrat',
+        component: () => import('../views/ContractStop.vue')
       },
 
 
@@ -92,7 +92,7 @@ const routes = [
       {
         path: 'contrat/:idContrat/avenant',
         name: 'Avenant',
-        component: () => import('../views/ContractDelete.vue')
+        component: () => import('../views/ContractStop.vue')
       },
       {
         path: 'contrat/0/avenant/:idContrat',
