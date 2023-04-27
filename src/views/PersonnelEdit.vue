@@ -9,7 +9,7 @@
     :pending="pending.personnel"
     >
         <ContactForm
-            v-if="checkPersonnelEdit"
+            v-if="personnelExists"
             v-model:nom = "ressourcePersonnel.nom"
             v-model:prenom = "ressourcePersonnel.prenom"
             v-model:civilite = "ressourcePersonnel.civilite"
@@ -46,7 +46,7 @@ export default {
                 nss:'',
                 nationalite:'',
             },
-            checkPersonnelEdit: false
+            personnelExists: false
 
         }
 
@@ -58,11 +58,9 @@ export default {
          * Retourne le titre de la modal
          */
         titleModal() {
-            if (this.$route.params.id != 0 && this.$route.name != 'PersonnelNew') {
-                'Modification du personnel'
-            }
 
-            return 'Nouveau personnel'
+            return this.openedElement?.id ? 'Modifier un personnel' : 'Nouveau personnel';
+
         }
     },
 
@@ -80,7 +78,6 @@ export default {
          * Enregistre les informations d'un personnel
          */
         record() {
-            //verrouille le statu de chargement
             this.pending.personnel = true;
 
             let idPersonnel = 0;
@@ -89,7 +86,7 @@ export default {
                 idPersonnel = this.openedElement.id;
             } 
 
-            if (confirm('vous souhaitez enregistrer ces modifications')) {
+            if (confirm('Souaitez-vous enregistrer ces modifications ?')) {
                 let apiUrl = `structurePersonnel/POST/${idPersonnel}?api_hierarchy=1`;
 
                 let query = {
@@ -128,7 +125,7 @@ export default {
          */
         getContact() {
             if (this.openedElement?.oPersonne) {
-                this.checkPersonnelEdit = true;
+                this.personnelExists = true;
 
                 this.ressourcePersonnel.nom = this.openedElement.oPersonne.nom;
                 this.ressourcePersonnel.prenom = this.openedElement.oPersonne.prenom;
@@ -146,7 +143,7 @@ export default {
 
     mounted() {
         if (this.$route.params.id == 0 || this.$route.name == 'PersonnelNew') {
-            this.checkPersonnelEdit = true;
+            this.personnelExists = true;
         } else {
             this.getContact();
         }

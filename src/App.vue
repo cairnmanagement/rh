@@ -17,8 +17,7 @@
 				</router-link>
 
 				<div class="me-2">
-					<i class="bi bi-file-earmark me-1"></i>
-					{{openedElement.cache_nom}}
+					<personnel-name :personnel="openedElement" />
 				</div>
 			</div>
 		</template>
@@ -31,33 +30,29 @@
 		</template>
 
 		<template v-slot:list>
-			<AppMenu v-if="'personnel' == listMode">
-				<app-search-bar 
+			<app-search-bar 
+				v-model:showFilter="showFilter"
+				v-model:searchValue="searchValue"
+
+				:nbFilterActive="countNbFilterActive"
+			/>
+
+			<template v-if="showFilter">
+				<search-personnel 
+					v-model:searchActif="searchOptions.actif"
+					v-model:searchMatriculeStatus="searchOptions.matriculeStatus"
+					v-model:searchArchived="searchOptions.archived"
 					v-model:showFilter="showFilter"
-					v-model:searchValue="searchValue"
 
-					:nbFilterActive="countNbFilterActive"
+					v-model:nbFilterActif="nbFilterActive.Actif"
+					v-model:nbFilterMatricule="nbFilterActive.MatriculeStatus"
+					v-model:nbFilterArchived="nbFilterActive.Archived"
 				/>
-
-				<template v-if="showFilter">
-					<search-personnel 
-						v-model:searchActif="searchOptions.actif"
-						v-model:searchMatriculeStatus="searchOptions.matriculeStatus"
-						v-model:searchArchived="searchOptions.archived"
-						v-model:showFilter="showFilter"
-
-						v-model:nbFilterActif="nbFilterActive.Actif"
-						v-model:nbFilterMatricule="nbFilterActive.MatriculeStatus"
-						v-model:nbFilterArchived="nbFilterActive.Archived"
-					/>
-				</template>
-
-				<template v-else >
-					<AppMenuItem :href="'/personnel/'+personnel.id" v-for="personnel in elements" :key="personnel.id">
-						<spinner v-if="this.pending.element"></spinner>
-						<personnel-item v-else :personnel="personnel"></personnel-item>
-					</AppMenuItem>	
-				</template>
+			</template>
+			<AppMenu v-else>
+				<AppMenuItem :href="'/personnel/'+personnel.id" v-for="personnel in elements" :key="personnel.id">
+					<personnel-item :personnel="personnel"></personnel-item>
+				</AppMenuItem>	
 			</AppMenu>
 
 		</template>
@@ -100,12 +95,12 @@ import CONFIG from "@/config.json"
 import searchPersonnel from './components/menulist/searchPersonnel.vue'
 import PersonnelItem from './components/menulist/personnelItem.vue'
 import AppSearchBar from './components/pebble-ui/AppSearchBar.vue'
-import Spinner from './components/pebble-ui/Spinner.vue'
 import Config from './components/parametre/Config.vue';
 import AppModal from './components/pebble-ui/AppModal.vue'
+import PersonnelName from './components/personnel/PersonnelName.vue'
 
 export default {
-	components: {AppWrapper, AppMenu, AppMenuItem, searchPersonnel, PersonnelItem, AppSearchBar, Spinner, Config, AppModal},
+	components: {AppWrapper, AppMenu, AppMenuItem, searchPersonnel, PersonnelItem, AppSearchBar, Config, AppModal, PersonnelName},
 
 	data() {
 		return {
@@ -155,22 +150,6 @@ export default {
 
 		countNbFilterActive() {
 			return this.nbFilterActive.Actif + this.nbFilterActive.MatriculeStatus + this.nbFilterActive.Archived;
-		},
-
-				/**
-		 * Détermine quelle liste afficher :
-		 * personnel
-		 * 
-		 * @return {string}
-		 */
-		listMode() {
-			let routeName = this.$route.name;
-
-			if (['Home', 'Personnel', 'EditContrat', 'infoContrat'].includes(routeName)) {
-				return 'personnel';
-			}
-
-			return null;
 		}
 	},
 

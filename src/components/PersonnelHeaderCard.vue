@@ -2,11 +2,9 @@
 
     <div class="card-body">
         <div class="position-relative">
-            <user-image :name="openedElement.oPersonne.nom" size="xl"></user-image>
+            <personnel-name :personnel="openedElement" display="vertical" size="xl" :useTitle="true" />
             <span v-if="openedElement.matricule" class="badge text-bg-secondary position-absolute" style="top:0px;">{{openedElement.matricule}}</span>
         </div>
-
-        <h2>{{openedElement.cache_nom}}</h2>
 
         <div v-if="openedElement.oContrat" class="d-flex align-items-center justify-content-center">
             <span v-if="!openedElement.oContrat.duree_indeterminee">pas de contrat</span>
@@ -26,7 +24,7 @@
 import { mapState } from 'vuex'
 import date from 'date-and-time';
 
-import UserImage from './pebble-ui/UserImage.vue'
+import PersonnelName from './personnel/PersonnelName.vue';
 
 export default {
     computed: {
@@ -59,7 +57,7 @@ export default {
         },
     },
 
-    components: { UserImage },
+    components: { PersonnelName },
 
     methods: {
         /**

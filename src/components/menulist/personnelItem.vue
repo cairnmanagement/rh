@@ -1,13 +1,7 @@
 <template>
 
     <div class="d-flex align-items-center justify-content-between">
-        <div class="d-flex align-items-center">
-            <div class="me-2">
-                <UserImage :name="personnel.cache_nom" />
-            </div>
-            
-            <div> {{personnel.cache_nom}}</div>
-        </div>
+        <personnel-name :personnel="personnel" />
 
         <div class="badge text-bg-secondary">
             {{personnel.matricule}}
@@ -17,7 +11,7 @@
 </template>
 
 <script>
-import UserImage from '../pebble-ui/UserImage.vue';
+import PersonnelName from '../personnel/PersonnelName.vue';
 
 
 export default {
@@ -25,7 +19,7 @@ export default {
         personnel: Object
     },
 
-    components: { UserImage }
+    components: { PersonnelName }
 }
 
 </script>
