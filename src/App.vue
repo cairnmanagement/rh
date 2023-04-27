@@ -128,9 +128,9 @@ export default {
 			},
 			searchValue: '',
 			searchOptions: {
-				actif: "null",
-				matriculeStatus: "null",
-				archived: "null"
+				actif: null,
+				matriculeStatus: null,
+				archived: "false"
 			},
 			params: [
 				{
@@ -268,7 +268,7 @@ export default {
 				'actif': this.searchOptions.actif,
 				'matricule_status': this.searchOptions.matriculeStatus,
 				'archived': this.searchOptions.archived,
-				// 'q': this.searchValue
+				'q': this.searchValue
 			};
 
 			this.listElements(search,'replace')
