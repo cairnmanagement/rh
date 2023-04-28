@@ -10,7 +10,7 @@
             <contract-delete-form
                 v-if="motifsList"
                 :motifsList = "motifsList"
-                v-model:motif = "endContratItem.motif_fin_id"
+                v-model:motif_fin_id = "endContratItem.motif_fin_id"
                 v-model:dsortie_reelle = "endContratItem.dsortie_reelle"/>
     </app-modal>
 </template>
