@@ -1,17 +1,13 @@
 <template>
 
     <div class="d-flex align-items-center justify-content-between">
-        <personnel-name :personnel="personnel" />
-
-        <div class="badge text-bg-secondary">
-            {{personnel.matricule}}
-        </div>
+        <personnel-identity :personnel="personnel" :showMatricule="true" />
     </div>
 
 </template>
 
 <script>
-import PersonnelName from '../personnel/PersonnelName.vue';
+import PersonnelIdentity from '../personnel/PersonnelIdentity.vue';
 
 
 export default {
@@ -19,7 +15,7 @@ export default {
         personnel: Object
     },
 
-    components: { PersonnelName }
+    components: { PersonnelIdentity }
 }
 
 </script>

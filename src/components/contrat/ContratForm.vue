@@ -1,12 +1,7 @@
 <template>
     <div>
-        <div class="border-bottom">
-            <div class="position-relative">
-                <user-image :name="openedElement.oPersonne.nom" size="xl"></user-image>
-                <span v-if="openedElement.matricule" class="badge text-bg-secondary position-absolute" style="top:0px; left:50%">{{openedElement.matricule}}</span>
-            </div>
-
-            <h2 class="text-center">{{ openedElement.cache_nom }}</h2>
+        <div class="border rounded p-2 bg-light">
+            <personnel-identity :personnel="openedPersonnel" display="horizontal" size="lg" :useTitle="false " :showMatricule="true" />
         </div>
 
         <form>
@@ -102,10 +97,10 @@
 
 <script>
 import { mapState } from 'vuex';
-import UserImage from './pebble-ui/UserImage.vue';
+import PersonnelIdentity from '../personnel/PersonnelIdentity.vue';
 
 export default {
-    components: { UserImage },
+    components: { PersonnelIdentity },
 
     props: {
         type_id: {
@@ -212,7 +207,7 @@ export default {
     },
 
     computed: {
-        ...mapState(['openedElement']),
+        ...mapState(['openedPersonnel']),
 
         /**
          * Retourne si la date de fin est obligatoire

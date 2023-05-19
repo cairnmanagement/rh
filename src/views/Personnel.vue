@@ -1,7 +1,7 @@
 <template>
 
-	<div class="container" v-if="openedElement">
-		<section class="text-center py-3 bg-light" v-if="openedElement.extendedData">
+	<div class="container" v-if="openedPersonnel">
+		<section class="text-center py-3 bg-light" v-if="openedPersonnel.extendedData">
 			<div class="row">
 				<div class="col-12 col-xxl-6">
 					<div class="card mb-3">
@@ -13,13 +13,13 @@
 					</div>
 
 					<div class="card mb-3">
-						<coord-info/>
+						<contact-info/>
 					</div>
 				</div>
 
 				<div class="col-12 col-xxl-6">
 					<div class="card">
-						<contract-info :contracts="openedContrats"></contract-info>
+						<ContratList :contrats="openedContrats" />
 					</div>
 				</div>
 			</div>	
@@ -34,8 +34,8 @@
 
 import {mapActions, mapState} from 'vuex'
 
-import ContractInfo from '../components/ContractInfo.vue';
-import CoordInfo from '../components/CoordInfo.vue';
+import ContratList from '../components/contrat/ContratList.vue';
+import ContactInfo from '../components/ContactInfo.vue';
 import EtatCivilInfo from '../components/EtatCivilInfo.vue';
 import PersonnelHeaderCard from '@/components/PersonnelHeaderCard.vue';
 import Spinner from '../components/pebble-ui/Spinner.vue';
@@ -51,10 +51,10 @@ export default {
     },
 
     computed: {
-        ...mapState(["openedElement", 'openedContrats']),		
+        ...mapState(["openedPersonnel", 'openedContrats']),		
     },
 
-	components: { ContractInfo, CoordInfo, EtatCivilInfo, PersonnelHeaderCard, Spinner },
+	components: { ContratList, ContactInfo, EtatCivilInfo, PersonnelHeaderCard, Spinner },
 
     methods: {
 		...mapActions(['setOpenedContrats']),
@@ -65,8 +65,9 @@ export default {
 		 * @param {number}	personnelId		l'id d'un personnel
          */
         loadData(personnelId) {
-			if (this.openedElement) {
-				if (!this.openedElement.extendedData) {
+			if (this.openedPersonnel) {
+				
+				if (!this.openedPersonnel.extendedData) {
 					this.pending.extendedData = true;
 
 					this.$app.apiGet("structurePersonnel/GET/" + personnelId, {
@@ -91,7 +92,7 @@ export default {
 		 * @param {number} personnelId ID du personnel pour charger les contrats. Si undefined, ID actif
 		 */
 		loadContract(personnelId) {
-			personnelId = typeof personnelId === 'undefined' ? this.openedElement.id  : personnelId;
+			personnelId = typeof personnelId === 'undefined' ? this.openedPersonnel.id  : personnelId;
 			this.pending.contrats = true;
 			this.$app.apiGet("structurePersonnel/GET/" + personnelId +"/contrats")
 			.then((data) => {

@@ -39,7 +39,7 @@ export default {
     },
 
     computed: {
-        ...mapState(['openedElement']),
+        ...mapState(['openedPersonnel']),
     },
 
     methods: {
@@ -60,7 +60,7 @@ export default {
             // Verrouille le status de chargement
             this.pending.email = true;
 
-            let apiUrl = `structurePersonnel/POST/${this.openedElement.id}/email/${this.$route.params.idMail}`;
+            let apiUrl = `structurePersonnel/POST/${this.openedPersonnel.id}/email/${this.$route.params.idMail}`;
 
             let query = {
                 type: this.ressourceEmail.type,
@@ -90,7 +90,7 @@ export default {
          * @param {number} idMail           l'id de l'entité email
          */
         getRessource(idMail) {
-            let oMail = this.openedElement.oPersonne.emails.find(e => e.id == idMail);
+            let oMail = this.openedPersonnel.oPersonne.emails.find(e => e.id == idMail);
 
             if (oMail) {
                 this.checkEmailEdit = true;
@@ -110,7 +110,7 @@ export default {
             this.checkEmailEdit = true;
         }
 
-        if (this.openedElement.oPersonne.emails) {
+        if (this.openedPersonnel.oPersonne.emails) {
             this.getRessource(this.$route.params.idMail);
         }
     }

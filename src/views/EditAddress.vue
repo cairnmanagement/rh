@@ -47,7 +47,7 @@ export default {
     },
 
     computed: {
-        ...mapState(['openedElement']),
+        ...mapState(['openedPersonnel']),
     },
 
     methods: {
@@ -68,7 +68,7 @@ export default {
             // Verrouille le status de chargement
             this.pending.adress = true;
 
-            let apiUrl = `structurePersonnel/POST/${this.openedElement.id}/adresse/${this.$route.params.idAdress}`
+            let apiUrl = `structurePersonnel/POST/${this.openedPersonnel.id}/adresse/${this.$route.params.idAdress}`
 
             let query = {
                 type: this.ressourceAdress.type,
@@ -102,7 +102,7 @@ export default {
          * @param {number} idAdress         l'id de l'entité adresse postal
          */
         getRessource(idAdress) {
-            let oAdress = this.openedElement.oPersonne.adresses.find(e => e.id == idAdress);
+            let oAdress = this.openedPersonnel.oPersonne.adresses.find(e => e.id == idAdress);
 
             if (oAdress) {
                 this.checkAdressEdit = true;
@@ -125,7 +125,7 @@ export default {
             this.checkAdressEdit = true;
         }
 
-        if (this.openedElement.oPersonne.adresses) {
+        if (this.openedPersonnel.oPersonne.adresses) {
             this.getRessource(this.$route.params.idAdress);
         }
     }

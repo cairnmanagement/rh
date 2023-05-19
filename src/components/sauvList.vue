@@ -51,7 +51,7 @@ import { mapState } from 'vuex'
         },
 
         computed: {
-		...mapState(['elements', 'openedElement']),
+		...mapState(['personnels', 'openedPersonnel']),
 
             // birthdayString() {
             //     let birthdayNames =[];

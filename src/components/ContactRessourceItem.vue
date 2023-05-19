@@ -74,7 +74,7 @@ export default {
     },
 
     computed: {
-        ...mapState(['openedElement']),
+        ...mapState(['openedPersonnel']),
 
         /**
          * Retourne un lien permettant de déclencher une action sur la ressource.
@@ -118,13 +118,13 @@ export default {
 
             switch (this.type) {
                 case 'telephone':
-                    route = {name:'ressourcePhone', params:{id:this.openedElement.id, idPhone:this.ressource.id}};
+                    route = {name:'ressourcePhone', params:{id:this.openedPersonnel.id, idPhone:this.ressource.id}};
                     break;
                 case 'mail':
-                    route =  {name:'ressourceMail', params:{id:this.openedElement.id, idMail:this.ressource.id}};
+                    route =  {name:'ressourceMail', params:{id:this.openedPersonnel.id, idMail:this.ressource.id}};
                     break;
                 case 'address':
-                    route =  {name:'ressourceAddress', params:{id:this.openedElement.id, idAdress:this.ressource.id}};
+                    route =  {name:'ressourceAddress', params:{id:this.openedPersonnel.id, idAdress:this.ressource.id}};
                     break;
                 default:
                     route = {};
@@ -172,7 +172,7 @@ export default {
             }
 
             if (confirm(alertMessage)) {
-                let apiUrl = `structurePersonnel/DELETE/${this.openedElement.id}/${type}/${ressourceId}`
+                let apiUrl = `structurePersonnel/DELETE/${this.openedPersonnel.id}/${type}/${ressourceId}`
 
                 this.$app.apiPost(apiUrl).then((resp) => {
                     if (resp === "OK") {

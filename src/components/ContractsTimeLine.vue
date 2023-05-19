@@ -1,14 +1,18 @@
 <template>
     <div class="card-body">
-        <h3 class="card-title fs-5 m-0">Évolution des effectifs <span class="fs-6">(sur 12 mois)</span> </h3>
-            <div class="col-11">
-                <div id="curve_chart" style="width: 100%;"></div>
-            </div>
+        <div class="d-flex align-items-center">
+            <h3 class="card-title fs-5 m-0">Évolution des effectifs</h3>
+            <span class="fw-light ms-2 text-secondary">12 mois</span>
+        </div>
+        <div class="col-11">
+            <div id="curve_chart" style="width: 100%;"></div>
+        </div>
     </div>
 </template>
 <script>
 
 import {GoogleCharts} from 'google-charts';
+import { getDisplayFormatedType } from '../js/contrat';
 
     
 export default {
@@ -28,40 +32,36 @@ export default {
 
             let i = 0;
 
+            let header;
+
             for (const month in this.contratStats) {
 
                 let stats = this.contratStats[month];
 
                 if (!i) {
-                    let header = ['Mois'];
+                    header = ['Mois'];
 
                     for (const type in stats) {
-                        // Remplacer les underscore par des espace, mettre en majuscule la première lettre de chaque mot du libellé
-                        let label = type.split('_').join(' ');
-                        // Changer type en une valeur transformée.
-                        
-
-                        header.push(label);
+                        header.push(getDisplayFormatedType(type));
                     }
-
-                    data.push(header);
                 }
-
-                // Créer une date et la rendrer "lisible" 2022-09-30 > Sept. 2022
                 
-                let monthString = month; // Changer month en une valeur transformée.
+                let date = new Date(month);
+                let monthString = date.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
+
 
                 let row = [monthString];
-                
 
                 for (const key in stats) {
                     row.push(stats[key]);
                 }
 
-                data.push(row);
+                data.unshift(row);
 
                 i++;
             }
+
+            data.unshift(header);
 
             let options ={
                 //title: 'Évolution des effectifs',

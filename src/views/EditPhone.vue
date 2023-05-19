@@ -40,7 +40,7 @@ export default {
     },
 
     computed: {
-        ...mapState(['openedElement']),
+        ...mapState(['openedPersonnel']),
     },
 
     methods: {
@@ -61,7 +61,7 @@ export default {
             // Verrouille le status de chargement
             this.pending.telephone = true;
 
-            let apiUrl = `structurePersonnel/POST/${this.openedElement.id}/telephone/${this.$route.params.idPhone}`
+            let apiUrl = `structurePersonnel/POST/${this.openedPersonnel.id}/telephone/${this.$route.params.idPhone}`
 
             let query = {
                 type: this.ressourceTelephone.type,
@@ -92,7 +92,7 @@ export default {
          * @param {number} idPhone          id de l'entité telephone
          */
         getRessource(idPhone) {
-                let oTelephone = this.openedElement.oPersonne.telephones.find(e => e.id == idPhone);
+                let oTelephone = this.openedPersonnel.oPersonne.telephones.find(e => e.id == idPhone);
 
                 if (oTelephone) {
                     this.checkPhoneEdit = true;
@@ -112,7 +112,7 @@ export default {
             this.checkPhoneEdit = true;
         }
 
-        if (this.openedElement.oPersonne.telephones) {
+        if (this.openedPersonnel.oPersonne.telephones) {
             this.getRessource(this.$route.params.idPhone);
         }
     }

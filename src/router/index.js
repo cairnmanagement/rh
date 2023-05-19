@@ -20,16 +20,8 @@ const routes = [
   {
     path: '/personnel/:id',
     name: 'Personnel',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Element.vue'),
+    component: () => import(/* webpackChunkName: "about" */ '../views/Personnel.vue'),
     children: [
-      {
-        path: 'properties',
-        component: () => import('../views/ElementProperties.vue')
-      },
-      {
-        path: 'informations',
-        component: () => import('../views/ElementInformations.vue')
-      },
       {
         path: '/personnel/:id/edit',
         name: 'ModificationEtatCivil',
@@ -70,7 +62,7 @@ const routes = [
       {
         path: '/personnel/:id/contrat/:idContrat',
         name: 'infoContrat',
-        component: () => import('../views/ContractConsult.vue')
+        component: () => import('../views/ContratConsultation.vue')
         
       },
       {
@@ -79,7 +71,7 @@ const routes = [
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
-        component: () => import(/* webpackChunkName: "about" */ '../views/ContractEdit.vue')
+        component: () => import(/* webpackChunkName: "about" */ '../views/ContratEdit.vue')
       },
       {
         path: 'contrat/:idContrat/stop',
@@ -97,7 +89,7 @@ const routes = [
       {
         path: 'contrat/0/avenant/:idContrat',
         name: 'NewAvenant',
-        component: () => import('../views/ContractEdit.vue')
+        component: () => import('../views/ContratEdit.vue')
       }
       
     ]

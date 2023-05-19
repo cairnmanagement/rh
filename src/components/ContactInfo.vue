@@ -13,11 +13,16 @@
                     </router-link>
                 </div>
             </div>
+
+            <div class="text-secondary m-2" v-if="empty">Aucune coordonnée</div>
         </div>
 
-        <ul class="list-group list-group-flush">
-            <contact-ressource-group v-for="(contact, key) in contacts" :key="'list'+key" :ressources="ressourceToSend(key)" :type="key"/>
+        <ul class="list-group list-group-flush" v-if="!empty">
+            <template v-for="(contactData, key) in collections" :key="'list'+key">
+                <contact-ressource-group  :ressources="contactData" :type="key" v-if="contactData.length" />
+            </template>
         </ul>
+
     </div>
 
 </template>
@@ -81,12 +86,40 @@ export default{
                     'classIcon': 'icon-address',
                     'title': "Ajouter une adresse"
                 },
-            },
+            }
         }
     },
 
     computed: {
-        ...mapState(["openedElement"]),
+        ...mapState(["openedPersonnel"]),
+
+        /**
+         * Retourne vrais si aucun contact n'existe
+         * 
+         * @return {bool}
+         */
+        empty() {
+            for (const key in this.collections) {
+                if (this.collections[key].length) {
+                    return false;
+                }
+            }
+            return true;
+        },
+
+        collections() {
+            let collections = {
+                telephone: [],
+                address: [],
+                mail: []
+            };
+
+            for (const key in collections) {
+                collections[key] = this.getContactCollection(key) ?? [];
+            }
+
+            return collections;
+        }
     },
 
     methods: {
@@ -101,7 +134,7 @@ export default{
          * @return {object}
          */
         routeLink(key, contact) {
-            let route = {name:contact.route, params:{id: this.openedElement.id}};
+            let route = {name:contact.route, params:{id: this.openedPersonnel.id}};
 
             if (key === 'telephone') route.params.idPhone = 0;
             if (key === 'mail') route.params.idMail = 0;
@@ -113,14 +146,18 @@ export default{
         /**
          * Retourne la ressource en fonction du contact label renseigné
          * 
-         * @param {String} contactLabel 
+         * @param {String} key 
          * 
          * @return {object}
          */
-        ressourceToSend(contactLabel) {
-            if (contactLabel === "telephone") return this.openedElement.oPersonne.telephones;
-            if (contactLabel === "mail") return this.openedElement.oPersonne.emails;
-            if (contactLabel === "address") return this.openedElement.oPersonne.adresses;
+        getContactCollection(key) {
+            const assets = {
+                telephone: 'telephones',
+                mail: 'emails',
+                address: 'adresses'
+            };
+
+            return this.openedPersonnel.oPersonne[assets[key]];
         },
 	}
 

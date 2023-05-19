@@ -1,7 +1,7 @@
 <template>
     <AppModal :title="titleModal" size="lg" @submit="record()" @modal-hide="routeToParent()" :submitBtn="true" :cancelBtn="true" :pending="pending.contrat">
 
-        <contract-form 
+        <contrat-form 
             v-model:type_id="contratItem.type_id"
             v-model:pourcentage_temps_partiel="contratItem.pourcentage_temps_partiel"
             v-model:dentree="contratItem.dentree"
@@ -21,14 +21,14 @@
 
 <script>
 import { mapState } from 'vuex';
-import ContractForm from '../components/ContractForm.vue';
+import ContratForm from '../components/contrat/ContratForm.vue';
 import date from 'date-and-time';
 
-// import ContractForm from '../components/ContractForm.vue';
+// import ContratForm from '../components/ContratForm.vue';
 import AppModal from '../components/pebble-ui/AppModal.vue';
 
 export default {
-    components: { AppModal, ContractForm, },
+    components: { AppModal, ContratForm, },
 
     data() {
         return {
@@ -76,12 +76,12 @@ export default {
          * 
          * @return {string}
          */
-         titleModal() {
+        titleModal() {
             if (this.contratExist) {
-                return `Modifier le contrat de travail n°${this.$route.params.idContrat}`;
+                return `Modifier le contrat n°${this.$route.params.idContrat}`;
             }
 
-            return 'Nouveau contrat de travail';
+            return 'Nouveau contrat';
         },  
     },
     
@@ -138,7 +138,7 @@ export default {
         /**
          * Initialise les date entree et sortie de contratItem
          */
-         setContratItemDate() {
+        setContratItemDate() {
             let dentree = new Date();
             let dsortie = new Date();
 

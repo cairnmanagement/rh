@@ -1,50 +1,39 @@
 <template>
 
-    <div class="card-body">
-        <section class="mb-3">
-            <div class="position-relative">
-                <user-image :name="openedElement.oPersonne.nom" size="xl"></user-image>
-                <span v-if="openedElement.matricule" class="badge text-bg-secondary position-absolute" style="top:0px; left:50%">{{openedElement.matricule}}</span>
-            </div>
-
-
-            <div class="d-flex flex-column align-items-center my-2">
-                <div class="mb-2 text-center">
-                    <h2>{{openedElement.cache_nom}}</h2>
-                </div>
-
-                <div class="row w-100 g-2 justify-content-center">
-                    <template v-for="(button, index) in buttonsContratOptions" :key="index">
-                        <template v-if="getCondition(button.mode)">
-                            <div class="col-12 col-md-4">
-                                <router-link :to="getRoute(button.routeName)" v-slot="{navigate, href}" custom>
-                                    <a :href="href" @click="navigate" class="btn btn-sm w-100 " :class="classBtn(button)">
-                                        <i class="bi bi-lock-fill" v-if="!checkLastContrat"></i>
-                                        <i class="bi" :class="button.icon" v-else></i>
-                                        {{button.label}}
-                                    </a>
-                                </router-link>
-                            </div>
-                        </template>
-                    </template>
-                </div>
-
-                <div v-if="checkLastContrat"></div>
-            </div>
-        </section>
+    <section class="mb-3">
         
-        <section class="border-top pt-4 d-flex">
-            <template v-if="avSelected">
-                <line-life-avenant :avenants="contrat.contrats" v-model:avSelected="avSelected"></line-life-avenant>
-                
-                <avenant-resume :av-selected="avSelected"></avenant-resume>         
-            </template>
+        <personnel-identity :personnel="openedPersonnel" display="vertical" size="lg" :useTitle="false " :showMatricule="true" />
 
-            <div v-else class="text-center">
-                <spinner></spinner>
-            </div>
-        </section>
-    </div>
+        <div class="row w-100 g-2 justify-content-center">
+            <template v-for="(button, index) in buttonsContratOptions" :key="index">
+                <template v-if="getCondition(button.mode)">
+                    <div class="col-12 col-md-4">
+                        <router-link :to="getRoute(button.routeName)" v-slot="{navigate, href}" custom>
+                            <a :href="href" @click="navigate" class="btn btn-sm w-100 " :class="classBtn(button)">
+                                <i class="bi bi-lock-fill" v-if="!checkLastContrat"></i>
+                                <i class="bi" :class="button.icon" v-else></i>
+                                {{button.label}}
+                            </a>
+                        </router-link>
+                    </div>
+                </template>
+            </template>
+        </div>
+
+        <div v-if="checkLastContrat"></div>
+    </section>
+    
+    <section class="border-top pt-4 d-flex">
+        <template v-if="avSelected">
+            <line-life-avenant :avenants="contrat.contrats" v-model:avSelected="avSelected"></line-life-avenant>
+            
+            <avenant-resume :av-selected="avSelected"></avenant-resume>         
+        </template>
+
+        <div v-else class="text-center">
+            <spinner></spinner>
+        </div>
+    </section>
 
 </template>
 
@@ -53,13 +42,13 @@
 
 <script>
 import { mapState } from 'vuex';
-import UserImage from './pebble-ui/UserImage.vue';
-import LineLifeAvenant from './LineLifeAvenant.vue';
-import AvenantResume from './AvenantResume.vue';
-import Spinner from './pebble-ui/Spinner.vue';
+import LineLifeAvenant from '../LineLifeAvenant.vue';
+import AvenantResume from '../AvenantResume.vue';
+import Spinner from '../pebble-ui/Spinner.vue';
+import PersonnelIdentity from '../personnel/PersonnelIdentity.vue';
 
 export default {
-        components: {LineLifeAvenant,  UserImage, AvenantResume, Spinner},
+        components: {LineLifeAvenant, AvenantResume, Spinner, PersonnelIdentity},
 
         props: {
             contrat: Object
@@ -95,7 +84,7 @@ export default {
         },
         
         computed: {
-            ...mapState(['openedElement']),
+            ...mapState(['openedPersonnel']),
 
             /**
              * Verifie si le contrat peu etre modifié

@@ -52,14 +52,14 @@ export default {
 
     },
     computed: {
-        ...mapState(['openedElement']),
+        ...mapState(['openedPersonnel']),
 
         /**
          * Retourne le titre de la modal
          */
         titleModal() {
 
-            return this.openedElement?.id ? 'Modifier un personnel' : 'Nouveau personnel';
+            return this.openedPersonnel?.id ? 'Modifier un personnel' : 'Nouveau personnel';
 
         }
     },
@@ -82,8 +82,8 @@ export default {
 
             let idPersonnel = 0;
 
-            if (this.openedElement) {
-                idPersonnel = this.openedElement.id;
+            if (this.openedPersonnel) {
+                idPersonnel = this.openedPersonnel.id;
             } 
 
             if (confirm('Souaitez-vous enregistrer ces modifications ?')) {
@@ -124,16 +124,16 @@ export default {
          * @returns {Object}
          */
         getContact() {
-            if (this.openedElement?.oPersonne) {
+            if (this.openedPersonnel?.oPersonne) {
                 this.personnelExists = true;
 
-                this.ressourcePersonnel.nom = this.openedElement.oPersonne.nom;
-                this.ressourcePersonnel.prenom = this.openedElement.oPersonne.prenom;
-                this.ressourcePersonnel.civilite = this.openedElement.oPersonne.civilite;
-                this.ressourcePersonnel.dn = this.openedElement.oPersonne.dn;
-                this.ressourcePersonnel.lieuNaissance = this.openedElement.oPersonne.lieuNaissance;
-                this.ressourcePersonnel.nss = this.openedElement.nss;
-                this.ressourcePersonnel.nationalite = this.openedElement.oPersonne.nationalite;
+                this.ressourcePersonnel.nom = this.openedPersonnel.oPersonne.nom;
+                this.ressourcePersonnel.prenom = this.openedPersonnel.oPersonne.prenom;
+                this.ressourcePersonnel.civilite = this.openedPersonnel.oPersonne.civilite;
+                this.ressourcePersonnel.dn = this.openedPersonnel.oPersonne.dn;
+                this.ressourcePersonnel.lieuNaissance = this.openedPersonnel.oPersonne.lieuNaissance;
+                this.ressourcePersonnel.nss = this.openedPersonnel.nss;
+                this.ressourcePersonnel.nationalite = this.openedPersonnel.oPersonne.nationalite;
             }
         }
     },

@@ -3,7 +3,7 @@
     
         <template v-for="(filterSection, index) in aFilterSection" :key="'filtreSection-'+index" >
             <div class="my-2">
-                <h2 class="fs-5">{{filterSection.label}}</h2>
+                <div class="fs-6 fw-bold">{{filterSection.label}}</div>
 
                 <div class="btn-group w-100" role="group" aria-label="filtre des contrat">
                     <button v-for="(oButton, i) in filterSection.button" :key="'filtreSection-'+index+'-button-'+i"
@@ -20,14 +20,6 @@
                 </div>
             </div>
         </template>
-
-        <div class="text-center my-4">
-            <button  type="button" class="btn btn-primary col-8" @click.prevent="hideFilterForm()">
-                <span v-if="pending.filter" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                <i v-else class="bi bi-check-lg me-1"></i>
-                Appliquer
-            </button>
-        </div>
     </div>
 </template>
 
@@ -69,8 +61,8 @@
                         'label':'Matricule', 
                         'mapSearch':'MatriculeStatus',
                         'button': [
-                            {'label': 'Actif', 'value': 'true'},
-                            {'label': 'Inactif', 'value': 'false'},
+                            {'label': 'Avec', 'value': 'true'},
+                            {'label': 'Sans', 'value': 'false'},
                             {'label': 'Tous', 'value': null}
                         ]
                     },
@@ -104,7 +96,7 @@
              * 
              * @event   update:showFilter
              */
-             hideFilterForm() {
+            hideFilterForm() {
                 this.$emit('update:showFilter', false);
             },
             

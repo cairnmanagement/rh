@@ -47,7 +47,6 @@ export default {
 	
 	data() {
 		return {
-			chartMode: false,
 			isPending: false,
 			pending: {
 				updatePersonnelStats: true,
@@ -59,15 +58,7 @@ export default {
 	
 	computed: {
 		
-		...mapState(['personnelStats', 'contratStats', 'contratCurrentStats']),
-
-		/**
-		 * Retourne le mode d'affichage des informations (table ou graphique)
-		 * @returns {String}
-		 */
-		displayMode() {
-			return this.chartMode ? 'chart' : 'list';
-		}
+		...mapState(['personnelStats', 'contratStats', 'contratCurrentStats', 'personnels', 'contrats', 'contratType'])
 	},
 
 	methods: {
@@ -108,9 +99,14 @@ export default {
 				})
 			}
         },
+
+		getContratTypeLabel(contrat) {
+			let type = this.contratType.find(e => e.id == contrat.type_id);
+			return type ? type.label : "Pas de type";
+		}
 	},
 
-	mounted() {
+	async mounted() {
 		this.loadStats();
 	}
 	

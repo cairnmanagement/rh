@@ -29,6 +29,10 @@ export default {
         drawChart() {
             let div = document.getElementById('piechart');
 
+            if (typeof div === 'undefined') {
+                return;
+            }
+
             let data = [
                 ['Task', 'Type de contrat']
             ];
@@ -71,10 +75,7 @@ export default {
          * Charge un diagramme
          */
         loadChart() {
-            let el = document.getElementById('piechart');
-            if (typeof el !== 'undefined') {
-                GoogleCharts.load(this.drawChart);
-            }
+            GoogleCharts.load(this.drawChart);
         }
     },
 
@@ -82,9 +83,12 @@ export default {
         this.loadChart();
     },
 
+    beforeUnmount() {
+        window.removeEventListener("resize", this.drawChart);
+    },
+
     mounted() {
         this.loadChart();
-        GoogleCharts.load(this.drawChart);
         window.addEventListener("resize", this.drawChart);
     }
 }

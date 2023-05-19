@@ -10,8 +10,8 @@ export default createStore({
 				THEME_COLOR: 'black'
 			}
 		},
-		elements: [],
-		openedElement: null,
+		personnels: [],
+		openedPersonnel: null,
 		tmpElement: null,
 		personnelStats: null,
 		contratStats: null,
@@ -19,7 +19,11 @@ export default createStore({
 		openedContrats:null,
 		contratQualification:[],
 		contratStatut: [],
-		contratType: []
+		contratType: [],
+		storePending: {
+			contratType: false
+		},
+		contrats: []
 	},
 	getters: {
 		activeStructure(state) {
@@ -38,12 +42,12 @@ export default createStore({
 
 		
 		/**
-		 * Charge un objet dans openedElement
+		 * Charge un objet dans openedPersonnel
 		 * @param {Object} state Le state de l'instance VueX
 		 * @param {Integer} id L'ID de l'élément à charger
 		 */
 		open(state, id) {
-			state.openedElement = id;
+			state.openedPersonnel = id;
 		},
 
 
@@ -52,28 +56,28 @@ export default createStore({
 		 * @param {Object} state Le state de l'instance VueX
 		 */
 		close(state) {
-			state.openedElement = null;
+			state.openedPersonnel = null;
 		},
 
 		/**
 		 * Remplace la liste des éléments chargés avec une nouvelle liste
 		 * @param {Object} state		Le state de l'instance VueX
-		 * @param {Array} elements		La nouvelle liste d'éléments
+		 * @param {Array} personnels		La nouvelle liste d'éléments
 		 */
-		replaceElements(state, elements) {
-			state.elements = elements;
+		replacePersonnels(state, personnels) {
+			state.personnels = personnels;
 		},
 
 		/**
-		 * Rafraichie la liste des éléments chargés à partir d'une autre liste.
-		 * - si un élément existe dans state et dans elements, il est actualisé avec le nouveau
-		 * - si un élément est dans elements mais pas dans state, il est ajouté
+		 * Rafraichie la liste du personnel chargée à partir d'une autre liste.
+		 * - si un personnel existe dans state et dans personnels, il est actualisé avec le nouveau
+		 * - si un personnel est dans personnels mais pas dans state, il est ajouté
 		 * @param {Object} state		Le state de l'instance VueX
-		 * @param {Array} elements		La nouvelle liste d'éléments
+		 * @param {Array} personnels		La nouvelle liste d'éléments
 		 */
-		updateElements(state, elements) {
-			elements.forEach(element => {
-				let stateEl = state.elements.find(e => e.id === element.id);
+		updatePersonnels(state, personnels) {
+			personnels.forEach(element => {
+				let stateEl = state.personnels.find(e => e.id === element.id);
 
 				// Mise à jour d'un élément existant
 				if (stateEl) {
@@ -83,7 +87,7 @@ export default createStore({
 				}
 				// Ajout d'un élément existant
 				else {
-					state.elements.push(element);
+					state.personnels.push(element);
 				}
 			});
 		},
@@ -91,14 +95,14 @@ export default createStore({
 		/**
 		 * Retire des éléments de la liste des éléments chargés
 		 * @param {Object} state Le state de l'instance vueX
-		 * @param {Array} elements Les ID des éléments à retirer
+		 * @param {Array} personnels Les ID des éléments à retirer
 		 */
-		removeElements(state, elements) {
-			elements.forEach(id => {
-				let index = state.elements.findIndex(e => e.id === id);
+		removePersonnels(state, personnels) {
+			personnels.forEach(id => {
+				let index = state.personnels.findIndex(e => e.id === id);
 
 				if (index !== -1) {
-					state.elements.splice(index, 1);
+					state.personnels.splice(index, 1);
 				}
 			});
 		},
@@ -110,7 +114,7 @@ export default createStore({
 		 */
 		updateOpened(state, data) {
 			for (let key in data) {
-				state.openedElement[key] = data[key];
+				state.openedPersonnel[key] = data[key];
 			}
 		},
 
@@ -120,7 +124,7 @@ export default createStore({
 		 * @param {object} data données du nouveau personnel
 		 */
 		newOpened(state, data) {
-			state.openedElement = data;
+			state.openedPersonnel = data;
 		},
 
 		/**
@@ -142,9 +146,9 @@ export default createStore({
 		},
 
 		/**
-		 * Enregistre une donnée dubliqué de openedElement
+		 * Enregistre une donnée dubliqué de openedPersonnel
 		 * @param {Object} state Le state de l'instance vueX
-		 * @param {Object} data Un objet identique à la structure de openedElement
+		 * @param {Object} data Un objet identique à la structure de openedPersonnel
 		 */
 		tmpElement(state, data) {
 			state.tmpElement = data;
@@ -162,18 +166,18 @@ export default createStore({
 			let key = ressourceOptions.ressource;
 			let data = ressourceOptions.data;
 
-			if (!(key in state.openedElement.oPersonne)) {
-				state.openedElement.oPersonne[key] = [];
+			if (!(key in state.openedPersonnel.oPersonne)) {
+				state.openedPersonnel.oPersonne[key] = [];
 			}
 
-			let ressource = state.openedElement.oPersonne[key].find(e => e.id == data.id);
+			let ressource = state.openedPersonnel.oPersonne[key].find(e => e.id == data.id);
 
 			if (ressource) {
 				for (const k in data) {
 					ressource[k] = data[k];
 				}
 			}
-			else state.openedElement.oPersonne[key].push(data);
+			else state.openedPersonnel.oPersonne[key].push(data);
 		},
 
 		/**
@@ -188,10 +192,10 @@ export default createStore({
 			let key = ressourceOptions.ressource;
 			let id = ressourceOptions.id;
 
-			let index = state.openedElement.oPersonne[key].findIndex(e => e.id == id);
+			let index = state.openedPersonnel.oPersonne[key].findIndex(e => e.id == id);
 
 			if (index !== -1) {
-				state.openedElement.oPersonne[key].splice(index, 1);
+				state.openedPersonnel.oPersonne[key].splice(index, 1);
 			}
 		},
 
@@ -267,15 +271,15 @@ export default createStore({
 		/**
 		 * Met à jour les données d'un state en fonction de la ressource
 		 * @param {object} state Le state de l'instance vueX
-		 * @param {array} contratRessourceOptions 
-		 * 		- ressource : Nom de la ressource à modifier: contratType, contratQualification, contratStatut
+		 * @param {array} assetsOptions 
+		 * 		- ressource : Nom de la ressource à modifier: contratType, contratQualification, contratStatut, contrats
 		 * 		- data : Données à mettre à jour
 		 * 		- mode : 'reset', 'add', 'update', 'remove'
 		 */
-		setContratAsset(state, contratRessourceOptions) {
-			let ressource = contratRessourceOptions.ressource;
-			let aData = contratRessourceOptions.data;
-			let mode = contratRessourceOptions.mode;
+		setAssets(state, assetsOptions) {
+			let ressource = assetsOptions.ressource;
+			let aData = assetsOptions.data;
+			let mode = assetsOptions.mode;
 
 			if ("reset" === mode) {
 				state[ressource] = aData;
@@ -286,16 +290,21 @@ export default createStore({
 					}
 	
 					if ('update' === mode) {
-						let findIndex = state[ressource].findIndex(e => e.id == aData[index].id);
+						let i = state[ressource].findIndex(e => e.id == aData[index].id);
 
-						state[ressource][findIndex] = aData[index];
+						if (i !== -1) {
+							state[ressource][i] = aData[index];
+						}
+						else {
+							state[ressource].push(aData[index]);
+						}
 					}
 
 					if ('remove' === mode) {
-						let findIndex = state[ressource].findIndex(e => e.id == aData[index].id);
+						let i = state[ressource].findIndex(e => e.id == aData[index].id);
 
-						if(findIndex !== -1) {
-							state[ressource].splice(findIndex, 1);
+						if(i !== -1) {
+							state[ressource].splice(i, 1);
 						}
 					}
 				}
@@ -310,7 +319,7 @@ export default createStore({
 		 * @param {Integer} elementId Id de l'élément à charger depuis les éléments existants ou depuis l'API
 		 */
 		load(context, elementId) {
-			let el = context.state.elements.find(e => e.id == elementId);
+			let el = context.state.personnels.find(e => e.id == elementId);
 
 			if (el) {
 				context.commit('open', el);
@@ -329,25 +338,25 @@ export default createStore({
 		},
 
 		/**
-		 * Met à jour la liste des éléments chargés
+		 * Met à jour la liste du personnel chargé
 		 * @param {Object} context L'instance VueX
 		 * @param {Object} payload Les paramètres de rafraichissement
 		 * - action			update (default), replace, remove
-		 * - elements		la liste des éléments
+		 * - personnels		la liste du personnel
 		 */
-		refreshElements(context, payload) {
+		refreshPersonnels(context, payload) {
 			if (!('action' in payload)) {
 				payload.action = 'update';
 			}
 
 			if (payload.action == 'update') {
-				context.commit('updateElements', payload.elements);
+				context.commit('updatePersonnels', payload.personnels);
 			}
 			else if (payload.action == 'replace') {
-				context.commit('replaceElements', payload.elements);
+				context.commit('replacePersonnels', payload.personnels);
 			}
 			else if (payload.action == 'remove') {
-				context.commit('removeElements', payload.elements);
+				context.commit('removePersonnels', payload.personnels);
 			}
 			else {
 				throw new Error(`La mutation ${payload.action} n'existe pas.`);
@@ -369,6 +378,7 @@ export default createStore({
 		 * @param {Object} data un personnel
 		 */
 		newOpened(context, data) {
+			context.dispatch('refreshPersonnels', { personnels: [data] })
 			context.commit('newOpened', data);
 		},
 
@@ -489,9 +499,9 @@ export default createStore({
 		 * 		- ressource: Ressource a mettre a jour
 		 */
 		updateContratAsset(context, contratAssetOptions) {
-			context.commit('setContratAsset', {
+			context.commit('setAssets', {
 				mode: 'update',
-				data: [contratAssetOptions.data],
+				data: contratAssetOptions.data,
 				ressource: contratAssetOptions.ressource
 			});
 		},
@@ -504,7 +514,7 @@ export default createStore({
 		 * 		- ressource: Ressource a mettre a jour
 		 */
 		resetContratAsset(context, contratAssetOptions) {
-			context.commit('setContratAsset', {
+			context.commit('setAssets', {
 				mode: "reset",
 				data: contratAssetOptions.data,
 				ressource: contratAssetOptions.ressource
@@ -519,9 +529,9 @@ export default createStore({
 		 * 		- ressource: Ressource a mettre a jour
 		 */
 		addContratAsset(context, contratAssetOptions) {
-			context.commit('setContratAsset', {
+			context.commit('setAssets', {
 				mode: 'add',
-				data: [contratAssetOptions.data],
+				data: contratAssetOptions.data,
 				ressource: contratAssetOptions.ressource
 			})
 		},
@@ -534,11 +544,127 @@ export default createStore({
 		 * 		- ressource: Ressource a mettre a jour
 		 */
 		removeContratAsset(context, contratAssetOptions) {
-			context.commit('setContratAsset', {
+			context.commit('setAssets', {
 				mode: 'remove',
-				data: [contratAssetOptions.Data],
+				data: [contratAssetOptions.data],
 				ressource: contratAssetOptions.ressource
 			})
+		},
+
+		/**
+		 * Met à jour la collection des contrats types.
+		 * 
+		 * @param {object} context Instance VueX
+		 * @param {array} collection Collection d'assets à mettre à jour
+		 */
+		updateContratTypes(context, collection) {
+			context.dispatch('updateContratAsset', {
+				data: collection,
+				ressource: 'contratType'
+			});
+		},
+
+		/**
+		 * Met à jour la collection des contrats types.
+		 * 
+		 * @param {object} context Instance VueX
+		 * @param {array} collection Collection d'assets à mettre à jour
+		 */
+		updateContrats(context, collection) {
+			context.commit('setAssets', {
+				mode: 'update',
+				data: collection,
+				ressource: 'contrats'
+			});
+		},
+
+		/**
+		 * Récupère les informations des assets depuis l'API
+		 * 
+		 * @param {object} context Instance vueX
+		 * @param {object} options
+		 * - @param {object} api Instance ApiController
+		 * - @param {string} asset Ressource : type, status, qualification
+		 * - @param {object} params Paramètres additionnels envoyées par le payload
+		 * 
+		 * @returns {Promise}
+		 */
+		async getAssetsFromApi(context, options) {
+			return options.api.get('v2/contrat/'+options.asset, options.params);
+		},
+
+		/**
+		 * Stock les informations récupérées depuis l'API dans le store.
+		 * 
+		 * @param {object} context Instance vueX
+		 * @param {object} options
+		 * - @param {object} api Instance ApiController
+		 * - @param {string} asset Ressource : type, status, qualification
+		 * - @param {object} params Paramètres additionnels envoyées par le payload
+		 * 
+		 * @returns {Promise}
+		 */
+		async storeAssetsFromApi(context, options)
+		{
+			let ressource = 'contrat' + options.asset.charAt(0).toUpperCase() + options.asset.slice(1);
+			
+			context.dispatch('startPending', [ressource]);
+			
+			try {
+				let data = await context.dispatch('getAssetsFromApi', options);
+				context.commit('setAssets', {
+					mode: 'reset',
+					data,
+					ressource
+				});
+			}
+			finally {
+				context.dispatch('stopPending', ['contratType']);
+			}
+		},
+
+		/**
+		 * Récupère les informations des types de contrat sur l'API
+		 * 
+		 * @param {object} context Instance vueX
+		 * @param {object} api Instance ApiController
+		 */
+		importContratTypeFromApi(context, api) {
+			context.dispatch('storeAssetsFromApi', {api, asset: 'type'});
+		},
+
+		/**
+		 * Démarre un processus de chargement asynchrone
+		 * 
+		 * @param {object} context Instance vueX
+		 * @param {array} pendings Liste des actions à mettre en attente
+		 */
+		startPending(context, pendings) {
+			context.dispatch('changePendingStatus', {pendings, value: true});
+		},
+
+		/**
+		 * Termine un processus de chargement asynchrone
+		 * 
+		 * @param {object} context Instance vueX
+		 * @param {array} pendings Liste des actions à mettre en attente
+		 */
+		stopPending(context, pendings) {
+			context.dispatch('changePendingStatus', {pendings, value: false});
+		},
+
+		/**
+		 * Modifie le statut des opérations en attente
+		 * 
+		 * @param {object} context Instance vueX
+		 * @param {object} options 
+		 * - @param {array} pendings Liste des actions à mettre en attente
+		 * - @param {bool} value Valeur à attribuer à l'action
+		 */
+		changePendingStatus(context, options) {
+			let storePending = {};
+			options.pendings.forEach(key => storePending[key] = options.value);
+			context.commit('setPending', storePending);
 		}
 
 

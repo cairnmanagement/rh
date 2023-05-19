@@ -9,7 +9,7 @@
 		@config-menu="displayConfig = true">
 
 		<template v-slot:header>
-			<div class="mx-2 d-flex align-items-center" v-if="openedElement">
+			<div class="mx-2 d-flex align-items-center" v-if="openedPersonnel">
 				<router-link to="/" custom v-slot="{ navigate, href }">
 					<a class="btn btn-dark me-2" :href="href" @click="navigate">
 						<i class="bi bi-arrow-left"></i>
@@ -17,7 +17,7 @@
 				</router-link>
 
 				<div class="me-2">
-					<personnel-name :personnel="openedElement" />
+					<personnel-identity :personnel="openedPersonnel" :showMatricule="true" />
 				</div>
 			</div>
 		</template>
@@ -32,15 +32,15 @@
 		<template v-slot:list>
 			<app-search-bar 
 				v-model:showFilter="showFilter"
-				v-model:searchValue="searchValue"
-
+				v-model:searchValue="searchOptions.q"
+				:pending="pending.personnels"
 				:nbFilterActive="countNbFilterActive"
-			/>
+				
+				@search="listPersonnels('replace')">
 
-			<template v-if="showFilter">
 				<search-personnel 
 					v-model:searchActif="searchOptions.actif"
-					v-model:searchMatriculeStatus="searchOptions.matriculeStatus"
+					v-model:searchMatriculeStatus="searchOptions.matricule_status"
 					v-model:searchArchived="searchOptions.archived"
 					v-model:showFilter="showFilter"
 
@@ -48,18 +48,22 @@
 					v-model:nbFilterMatricule="nbFilterActive.MatriculeStatus"
 					v-model:nbFilterArchived="nbFilterActive.Archived"
 				/>
-			</template>
-			<AppMenu v-else>
-				<AppMenuItem :href="'/personnel/'+personnel.id" v-for="personnel in elements" :key="personnel.id">
+			</app-search-bar>
+
+			<AppMenu v-if="!showFilter">
+				<AppMenuItem :href="'/personnel/'+personnel.id" v-for="personnel in personnels" :key="personnel.id">
 					<personnel-item :personnel="personnel"></personnel-item>
-				</AppMenuItem>	
+				</AppMenuItem>
+
+				<div class="text-muted m-2 text-center" v-if="!personnels.length && !pending.personnels">Aucun résultat</div>
 			</AppMenu>
 
 		</template>
 
 		<template v-slot:core v-if="isConnectedUser">
 			<div class="bg-light">
-				<router-view />
+
+				<router-view v-if="inited" />
 			</div>
 
 			<AppModal title="Configuration du module"
@@ -97,10 +101,11 @@ import PersonnelItem from './components/menulist/personnelItem.vue'
 import AppSearchBar from './components/pebble-ui/AppSearchBar.vue'
 import Config from './components/parametre/Config.vue';
 import AppModal from './components/pebble-ui/AppModal.vue'
-import PersonnelName from './components/personnel/PersonnelName.vue'
+import PersonnelIdentity from './components/personnel/PersonnelIdentity.vue'
+import { AssetsCollectionController } from './js/app/controllers/AssetsCollectionController';
 
 export default {
-	components: {AppWrapper, AppMenu, AppMenuItem, searchPersonnel, PersonnelItem, AppSearchBar, Config, AppModal, PersonnelName},
+	components: {AppWrapper, AppMenu, AppMenuItem, searchPersonnel, PersonnelItem, AppSearchBar, Config, AppModal, PersonnelIdentity},
 
 	data() {
 		return {
@@ -109,7 +114,7 @@ export default {
 			cfgSlots: CONFIG.cfgSlots,
 			appController: null,
 			pending: {
-				elements: true,
+				personnels: true,
 				config: false
 			},
 			isConnectedUser: false,
@@ -121,12 +126,13 @@ export default {
 				MatriculeStatus: 0,
 				Archived: 0,
 			},
-			searchValue: '',
 			searchOptions: {
 				actif: null,
-				matriculeStatus: null,
-				archived: "false"
+				matricule_status: null,
+				archived: "false",
+				q: ''
 			},
+			inited: false,
 			params: [
 				{
 					label: 'Contrat type',
@@ -146,7 +152,7 @@ export default {
 	},
 
 	computed: {
-		...mapState(['elements', 'openedElement', 'login']),
+		...mapState(['personnels', 'openedPersonnel', 'login', 'contratType', 'storePending', 'contrats']),
 
 		countNbFilterActive() {
 			return this.nbFilterActive.Actif + this.nbFilterActive.MatriculeStatus + this.nbFilterActive.Archived;
@@ -157,35 +163,10 @@ export default {
 		$route() {
 			this.$app.dispatchEvent('menuChanged', 'list');
 		},
-
-		/**
-		 * Observe l'état de connexion de l'utilisateur. Si l'utilisateur se connecte,
-		 * les éléments sont chargés depuis l'API
-		 */
-		isConnectedUser(val) {
-			if (val) {
-				this.listElements();
-			}
-		},
-
-		/**
-		 * Filtre le personnel en fonction de la recherche effectuée
-		 */
-		searchValue() {
-			this.personnelFilted();
-		},
-
-		/**
-		 * Filtre le personnel en function des filtres séléctionné
-		 */
-		showFilter() {
-			if (!this.showFilter)
-				this.personnelFilted();
-		},
 	},
 
 	methods: {
-		...mapActions(['closeElement']),
+		...mapActions(['closeElement', 'importContratTypeFromApi']),
 
 		/**
 		 * Modifie le format de la date entrée en paramètre et la retourne 
@@ -222,60 +203,56 @@ export default {
 		 * @param {Object} params Paramètre passés en GET dans l'URL
 		 * @param {String} action 'update' (défaut), 'replace', 'remove'
 		 */
-		listElements(params, action) {
+		listPersonnels(action) {
 			action = typeof action === 'undefined' ? 'update' : action;
-			this.$app.listElements(this, params)
-			.then((data) => {
 
-				this.$store.dispatch('refreshElements', {
+			this.pending.personnels = true;
+
+			return this.$app.listElements(this, this.searchOptions)
+			.then(async (data) => {
+
+				this.$store.dispatch('refreshPersonnels', {
 					action,
-					elements: data,
+					personnels: data,
 				});
+
+				return data;
+
 			})
-			.catch(this.$app.catchError);
+			.catch(this.$app.catchError)
+			.finally(() => this.pending.personnels = false);
 		},
 
 		/**
-		 * Filtre la liste du personnel avec les options de filtre défini.
+		 * Initialise les valeurs et charge les données.
 		 */
-		personnelFilted() {
-			this.pending.elements = true;
+		loadData() {
+			this.listPersonnels('replace').then(() => {
+				let contratsCollection = new AssetsCollectionController(this, {
+					assetName: 'contrats',
+					updateAction: 'updateContrats',
+					apiRoute: 'v2/contrat'
+				});
 
+				let typesCollection = new AssetsCollectionController(this, {
+					assetName: 'contratType',
+					updateAction: 'updateContratTypes',
+					apiRoute: 'v2/contrat/type'
+				});
 
-			// let apiUrl = 'structurePersonnel/GET/list';
-			let search = {
-				'actif': this.searchOptions.actif,
-				'matricule_status': this.searchOptions.matriculeStatus,
-				'archived': this.searchOptions.archived,
-				'q': this.searchValue
-			};
+				this.$assets.addCollection('contrats', contratsCollection);
+				this.$assets.addCollection('contratTypes', typesCollection);
 
-			this.listElements(search,'replace')
-			// this.$app.listElements(search, 'replace')
-
-			// // this.apiGet()
-			// // this.$app.apiGet(apiUrl, search ) // pb dans le retour de l'api. elle retourne un tableau vide 
-			// // this.$app.listElements(this.search)
-			// .then((data) => {
-			// 	console.log(data, 'reponseAPI');
-			// 	this.$store.dispatch('refreshElements', {
-			// 		action: 'replace',
-			// 		elements: data,
-			// 	});
-			// })
-			// .catch(this.$app.catchError)
-			// .finally(() => {this.pending.elements = false});
-		},
+				this.inited = true;
+			});
+		}
 		
 	},
 
-	mounted(){
+	mounted() {
 		this.$app.addEventListener('structureChanged', () => {
 			this.$router.push('/');
-			if (this.isConnectedUser) {
-				this.listElements('','replace')
-				// this.personnelFilted()
-			}
+			this.loadData();
 		});
 	}
 }

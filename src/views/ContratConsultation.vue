@@ -1,25 +1,25 @@
 <template>
     
     <AppModal 
-        :title="`Contrat de travail n°${this.$route.params.idContrat}`" 
+        :title="`Contrat n°${this.$route.params.idContrat}`" 
         size="lg" 
         @modal-hide="routeToParent()"
         :className="'modal-dialog-scrollable'"
         :cancelBtn="true">
         
-        <contract-consultation :contrat="contrat" />
+        <overview :contrat="contrat" />
     </AppModal>
 
 </template>
 
 <script>
 import {mapState} from 'vuex';
-import ContractConsultation from '../components/ContractConsultation.vue';
+import Overview from '../components/contrat/Overview.vue';
 import AppModal from '../components/pebble-ui/AppModal.vue';
 
 
 export default {
-    components: { AppModal, ContractConsultation},
+    components: { AppModal, Overview},
 
     computed: {
         ...mapState(['openedContrats']),
