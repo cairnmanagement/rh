@@ -25,7 +25,7 @@ export default {
             type: Array,
             required: true,
         },
-        motif: {
+        motif_fin_id: {
             type: Number,
             required: true,
         },
@@ -35,7 +35,7 @@ export default {
         }
     },
 
-    emits: ['update:motif', 'update:dsortie_reelle'],
+    emits: ['update:motif_fin_id', 'update:dsortie_reelle'],
 
     data() {
         return {
@@ -51,12 +51,12 @@ export default {
         },
 
         motifValue(newValue) {
-            this.$emit('update:motif', newValue);
+            this.$emit('update:motif_fin_id', newValue);
         }
     },
 
     mounted() {
-        this.motifValue = this.motif;
+        this.motifValue = this.motif_fin_id;
         this.dsortie_reelleValue = this.dsortie_reelle;
     },
 }
