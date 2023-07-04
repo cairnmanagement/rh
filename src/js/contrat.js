@@ -110,3 +110,66 @@ export function getDisplayFormatedDateRange(contrat, options) {
 
     return `Du ${getDisplayFormatedDate(dateStart)} au ${getDisplayFormatedDate(dateEnd)}`;
 }
+
+/**
+ * Contrôle si un avenant est possible sur le contrat sélectionné
+ * 
+ * Un avenant est possible si le contrat n'a pas de date de sortie ou si il n'y a pas 
+ * déjà un avenant sur le contrat.
+ * 
+ * @param {object} contrat Le contrat à tester
+ * 
+ * @return {boolean}
+ */
+export function isAvenantPossible(contrat) {
+    return !(contrat.avenant__structure__personnel_contrat_id || contrat.dsortie_reelle);
+}
+
+/**
+ * Contrôle si le contrat peu etre supprimé
+ * 
+ * Un contrat peut être supprimé si il n'a pas de date de sortie enregistré.
+ * 
+ * @return {boolean}
+ */
+export function isDeletable(contrat) {
+    return getDateValue(contrat.dsortie_reelle) ? false : true;
+}
+
+/**
+ * Contrôle si le contrat peu etre modifié
+ * 
+ * Un contrat peut être modifié si son verrou n'est pas à OUI.
+ * 
+ * @return {boolean}
+ */
+export function isEditable(contrat) {
+    return 'OUI' !== contrat.verrou;
+}
+
+/**
+ * Retourne le nombre de jours restant sur la période d'essai par rapport à aujourd'hui.
+ * 
+ * @param {object} contrat Le contrat à tester
+ * 
+ * @return {number}
+ */
+export function testPeriodRemaningDays(contrat) {
+    let testDays = contrat.periode_essai;
+
+    if (!testDays) {
+        return null;
+    }
+
+    let now = new Date();
+    let dateStart = getSelfDateStart(contrat);
+
+    // Si le contrat n'a pas commencé, le nombre de jours complet est retourné
+    if (now < dateStart) {
+        return testDays;
+    }
+
+    let diffNow = (now - dateStart) / 86400000;
+
+    return Math.round((testDays - diffNow));
+}

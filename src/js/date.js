@@ -11,6 +11,10 @@ import fr from 'date-and-time/locale/fr';
  * @returns {string}
  */
 export function getDisplayFormatedDate(val) {
+    if (!val) {
+        return null;
+    }
+    
     let d = val instanceof Date ? val : getDateFromSQL(val);
     date.locale(fr);
     return date.format(d, 'D MMM YYYY');

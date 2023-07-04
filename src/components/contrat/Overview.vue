@@ -4,31 +4,35 @@
         
         <personnel-identity :personnel="openedPersonnel" display="vertical" size="lg" :useTitle="false " :showMatricule="true" />
 
-        <div class="row w-100 g-2 justify-content-center">
+        <div class="row align-items-stretch g-2">
             <template v-for="(button, index) in buttonsContratOptions" :key="index">
-                <template v-if="getCondition(button.mode)">
-                    <div class="col-12 col-md-4">
-                        <router-link :to="getRoute(button.routeName)" v-slot="{navigate, href}" custom>
-                            <a :href="href" @click="navigate" class="btn btn-sm w-100 " :class="classBtn(button)">
+                <div  class="col-12 col-md d-block d-md-flex align-items-stretch" v-if="isActionPossible(button.action)">
+                    <router-link :to="getRoute(button.routeName)" v-slot="{navigate, href}" custom>
+                        <a :href="href" @click="navigate" class="btn btn-sm align-items-center d-block d-md-flex w-100 text-center" :class="classBtn(button)">
+                            <span>
                                 <i class="bi bi-lock-fill" v-if="!checkLastContrat"></i>
                                 <i class="bi" :class="button.icon" v-else></i>
                                 {{button.label}}
-                            </a>
-                        </router-link>
-                    </div>
-                </template>
+                            </span>
+                        </a>
+                    </router-link>
+                </div>
             </template>
         </div>
 
         <div v-if="checkLastContrat"></div>
     </section>
     
-    <section class="border-top pt-4 d-flex">
-        <template v-if="avSelected">
-            <line-life-avenant :avenants="contrat.contrats" v-model:avSelected="avSelected"></line-life-avenant>
-            
-            <avenant-resume :av-selected="avSelected"></avenant-resume>         
-        </template>
+    <section class="border-top pt-4">
+        <div class="row" v-if="contratSelected">
+
+            <div class="col-3">
+                <Timeline :contrats="contrat.contrats" :selected="contratSelected" @selection-change="changeContratSelection"></Timeline>
+            </div>
+            <div class="col">
+                <avenant-overview :contrat="contratSelected"></avenant-overview>         
+            </div>
+        </div>
 
         <div v-else class="text-center">
             <spinner></spinner>
@@ -42,13 +46,14 @@
 
 <script>
 import { mapState } from 'vuex';
-import LineLifeAvenant from '../LineLifeAvenant.vue';
-import AvenantResume from '../AvenantResume.vue';
+import Timeline from './Timeline.vue';
+import AvenantOverview from './AvenantOverview.vue';
 import Spinner from '../pebble-ui/Spinner.vue';
 import PersonnelIdentity from '../personnel/PersonnelIdentity.vue';
+import { isAvenantPossible, isDeletable, isEditable } from '../../js/contrat';
 
 export default {
-        components: {LineLifeAvenant, AvenantResume, Spinner, PersonnelIdentity},
+        components: {Timeline, AvenantOverview, Spinner, PersonnelIdentity},
 
         props: {
             contrat: Object
@@ -56,24 +61,24 @@ export default {
 
         data() {
             return {
-                avSelected: {},
+                contratSelected: {},
                 buttonsContratOptions: [
                     {
-                        mode: 'edit',
+                        action: 'edit',
                         label: "Modifier le contrat",
-                        color: "success",
+                        color: "secondary",
                         icon: "bi-pencil",
                         routeName: "EditContrat"
                     },
                     {
-                        mode: 'avenant',
+                        action: 'avenant',
                         label: "Faire une avenant",
                         color: "primary",
                         icon: "bi-file-earmark-plus",
                         routeName: "Avenant"
                     },
                     {
-                        mode: 'delete',
+                        action: 'delete',
                         label: "Mettre fin au contrat",
                         color: "danger",
                         icon: "bi-clipboard2-x",
@@ -91,12 +96,8 @@ export default {
              * 
              * @return {boolean}
              */
-            checkEditContrat() {
-                if ('OUI' === this.contrat.verrou) {
-                    return false;
-                }
-
-                return true;
+            isEditable() {
+                return isEditable(this.contrat);
             },
 
             /**
@@ -104,29 +105,17 @@ export default {
              * 
              * @return {boolean}
              */
-            checkDeleteContrat() {
-                if (this.contrat.dsortie_reelle && '0000-00-00 00:00:00' !== this.contrat.dsortie_reelle) {
-                    return false;
-                }
-
-                return true;
+            isDeletable() {
+                return isDeletable(this.contrat);
             },
 
             /**
-             * Verifie si on peux faire un avenant
+             * Contrôle si un avenant est possible sur le contrat sélectionné
              * 
              * @return {boolean}
              */
-            checkAvenant() {
-                if (this.contrat.avenant__structure__personnel_contrat_id) {
-                    return false;
-                }
-
-                if (this.contrat.dsortie_reelle) {
-                    return false;
-                }
-
-                return true;
+            isAvenantPossible() {
+                return isAvenantPossible(this.contrat);
             },
 
             /**
@@ -135,7 +124,7 @@ export default {
              * @return {boolean}
              */
             checkLastContrat() {
-                if (this.contrat.contrats[0].id === this.avSelected.id ) {
+                if (this.contrat.contrats[0].id === this.contratSelected.id ) {
                     return true;
                 }
 
@@ -149,23 +138,23 @@ export default {
 
         methods: {
             /**
-             * Retourne true ou false en function du mode du button
+             * Retourne true ou false en function du action du button
              * 
-             * @param {String} mode l'avtion que va effectuer le button
+             * @param {String} action l'avtion que va effectuer le button
              * 
              * @return {Boolean}  
              */
-            getCondition(mode) {
-                if (mode === 'edit') {
-                    return this.checkEditContrat;
+            isActionPossible(action) {
+                if (action === 'edit') {
+                    return this.isEditable;
                 }
 
-                if (mode === 'delete') {
-                    return this.checkDeleteContrat;
+                if (action === 'delete') {
+                    return this.isDeletable;
                 }
 
-                if (mode === 'avenant') {
-                    return this.checkAvenant;
+                if (action === 'avenant') {
+                    return this.isAvenantPossible;
                 }
 
                 return false;
@@ -187,7 +176,7 @@ export default {
              */
             loadFirstAvenant() {
                 for(let keyAvenant in this.contrat.contrats) {
-                    this.avSelected = this.contrat.contrats[keyAvenant];
+                    this.contratSelected = this.contrat.contrats[keyAvenant];
                     break;
                 }
             },
@@ -211,7 +200,7 @@ export default {
             classBtn(button) {
                 let className = '';
 
-                className += ' btn-' + button.color;
+                className += ' btn-outline-' + button.color;
 
                 if (!this.checkLastContrat) {
                     className += ' disabled';
@@ -219,6 +208,15 @@ export default {
 
                 return className;
             },
+
+            /**
+             * Modifie l'avenant sélectionné
+             * 
+             * @param {object} avenant L'avenant à sélectionner
+             */
+            changeContratSelection(avenant) {
+                this.contratSelected = avenant;
+            }
         },
 
         mounted(){

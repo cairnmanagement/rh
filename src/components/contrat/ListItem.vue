@@ -1,34 +1,17 @@
 <template>
-    <button @click="showContract()" class="list-group-item list-group-item-action mb-1 border rounded-1 contrat-item" type="button">
-        <div class="d-flex align-items-center justify-content-between">
-            <div>
-                <div class="d-flex align-items-center" :class="className">
-                    <span>Contrat n°{{ contrat.id }}</span>
-                    <span class="badge text-bg-light border rounded-pill ms-2" :class="statusBadgeClassName">{{ statusLabel }}</span>
-                </div>
+    <button @click="showContract()" class="list-group-item list-group-item-action mb-1 border rounded-1" type="button">
+        <div class="d-flex align-items-center" :class="className">
+            <span :class="contratTextClassName"><i class="bi bi-file-earmark-text"></i> Contrat n°{{ contrat.id }}</span>
+            <span class="badge text-bg-light border rounded-pill ms-2" :class="statusBadgeClassName">{{ statusLabel }}</span>
+        </div>
 
-                <div class="d-flex align-items-center">
-                    <progress-awaiting v-if="pending.type" size="50" />
-                    <span v-else>{{ typeLabel }}</span>
-                    <span class="ms-1 fw-lighter">{{ dateLabel }}</span>
-                </div>
-            </div>
-
-            <div class="icon-display">
-                <i class="bi bi-eye"></i>
-            </div>
+        <div>
+            <progress-awaiting v-if="pending.type" size="50" />
+            <span v-else>{{ typeLabel }}</span>
+            <span class="ms-1 fw-lighter">{{ dateLabel }}</span>
         </div>
     </button>
 </template>
-
-<style lang="scss" scoped>
-    .icon-display {
-        display: none;
-    }
-    .contrat-item:hover .icon-display {
-        display: block;
-    }
-</style>
 
 <script>
 
@@ -68,12 +51,21 @@ export default {
         },
 
         /**
-         * retourne le nom de la classe badge a appliqué si contrat actif
+         * Retourne le nom de la classe CSS à appliquer sur les badges lorsque le contrat est actif
          * 
          * @return {string}
          */
         statusBadgeClassName() {
             return this.isActive ? 'text-success border-success' : 'text-muted border-muted';
+        },
+
+        /**
+         * Retourne le nom de la classe CSS à appliquer sur le texte lorsque le contrat est actif
+         * 
+         * @return {string}
+         */
+        contratTextClassName() {
+            return this.isActive ? 'text-success' : 'text-secondary';
         },
 
         /**

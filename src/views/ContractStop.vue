@@ -6,10 +6,8 @@
         @modal-hide="routeToParent()"
         :submit-btn="true"
         :cancel-btn="true"
-        :pending="pending.endContrat" >
+        :pending="pending.endContrat">
             <contract-delete-form
-                v-if="motifsList"
-                :motifsList = "motifsList"
                 v-model:motif_fin_id = "endContratItem.motif_fin_id"
                 v-model:dsortie_reelle = "endContratItem.dsortie_reelle"/>
     </app-modal>
@@ -32,8 +30,7 @@ export default {
             endContratItem: {
                 dsortie_reelle: '',
                 motif_fin_id: 0
-            },
-            motifsList: null
+            }
         }
     },
 
@@ -58,10 +55,8 @@ export default {
         },
 
         contrat() {
-            let contrat={};
-            contrat = this.openedContrats.find(e => e.id == this.$route.params.idContrat);
-
-           return contrat;
+            const contrat = this.openedContrats.find(e => e.id == this.$route.params.idContrat);
+            return contrat;
         }
     },
 
@@ -88,30 +83,14 @@ export default {
         },
 
         /**
-         * Récupère la liste des motifs de cloture de contrat
-         */
-        getMotifsCloture() {
-            this.pending.motifCloture = true
-            ;
-            let apiUrl = `structurePersonnelContrat/GET/listMotifsCloture`;
-
-            this.$app.apiGet(apiUrl).then(response => {
-                this.motifsList = response;
-            })
-            .catch(this.$app.catchError)
-            .finally(() => this.pending.motifCloture = false);
-        } ,
-
-        /**
          * Enregistre la fin du contrat avec sont motifs de cloture
          */
         record() {
             this.pending.endContrat = true;
 
-            //let apiUrl = `structurePersonnel/POST/${this.$route.params.id}/contrat/${this.$route.params.idContrat}/stop`;
-            let apiUrl = `v2/contrat/${this.$route.params.idContrat}/stop`;
+            const apiUrl = `v2/contrat/${this.$route.params.idContrat}/stop`;
 
-            this.$app.apiPost(apiUrl, this.endContratItem).then(() => {
+            this.$app.api.post(apiUrl, this.endContratItem).then(() => {
                 if (this.avenant) {
                     this.$router.push({name:'EditContrat', params:{id: this.$route.params.id, idContrat: 0}});
                 }
@@ -120,10 +99,6 @@ export default {
             .catch(this.$app.catchError)
             .finally(() => this.pending.endContrat = false);
         }
-    },
-
-    mounted() {
-        this.getMotifsCloture();
     }
 }
 

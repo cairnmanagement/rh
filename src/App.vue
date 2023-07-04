@@ -31,7 +31,6 @@
 
 		<template v-slot:list>
 			<app-search-bar 
-				v-model:showFilter="showFilter"
 				v-model:searchValue="searchOptions.q"
 				:pending="pending.personnels"
 				:nbFilterActive="countNbFilterActive"
@@ -42,7 +41,6 @@
 					v-model:searchActif="searchOptions.actif"
 					v-model:searchMatriculeStatus="searchOptions.matricule_status"
 					v-model:searchArchived="searchOptions.archived"
-					v-model:showFilter="showFilter"
 
 					v-model:nbFilterActif="nbFilterActive.Actif"
 					v-model:nbFilterMatricule="nbFilterActive.MatriculeStatus"
@@ -50,7 +48,7 @@
 				/>
 			</app-search-bar>
 
-			<AppMenu v-if="!showFilter">
+			<AppMenu>
 				<AppMenuItem :href="'/personnel/'+personnel.id" v-for="personnel in personnels" :key="personnel.id">
 					<personnel-item :personnel="personnel"></personnel-item>
 				</AppMenuItem>
@@ -102,7 +100,7 @@ import AppSearchBar from './components/pebble-ui/AppSearchBar.vue'
 import Config from './components/parametre/Config.vue';
 import AppModal from './components/pebble-ui/AppModal.vue'
 import PersonnelIdentity from './components/personnel/PersonnelIdentity.vue'
-import { AssetsCollectionController } from './js/app/controllers/AssetsCollectionController';
+import { AssetsCollection } from './js/app/services/AssetsCollection';
 
 export default {
 	components: {AppWrapper, AppMenu, AppMenuItem, searchPersonnel, PersonnelItem, AppSearchBar, Config, AppModal, PersonnelIdentity},
@@ -120,7 +118,6 @@ export default {
 			isConnectedUser: false,
 			displayConfig: false,
 
-			showFilter: false,
 			nbFilterActive: {
 				Actif: 0,
 				MatriculeStatus: 0,
@@ -166,7 +163,7 @@ export default {
 	},
 
 	methods: {
-		...mapActions(['closeElement', 'importContratTypeFromApi']),
+		...mapActions(['setConfig']),
 
 		/**
 		 * Modifie le format de la date entrée en paramètre et la retourne 
@@ -226,22 +223,43 @@ export default {
 		/**
 		 * Initialise les valeurs et charge les données.
 		 */
-		loadData() {
+		async loadData() {
+
+			this.pending.config = true;
+
+			try {
+				const config = await this.$app.api.get('v2/personnel/config');
+				this.setConfig(config);
+			}
+			catch (e) {
+				this.$app.catchError(e);
+			}
+			finally {
+				this.pending.config = false;
+			}
+
 			this.listPersonnels('replace').then(() => {
-				let contratsCollection = new AssetsCollectionController(this, {
+
+				this.$assets.addCollection('contrats', new AssetsCollection(this, {
 					assetName: 'contrats',
-					updateAction: 'updateContrats',
 					apiRoute: 'v2/contrat'
-				});
-
-				let typesCollection = new AssetsCollectionController(this, {
+				}));
+				this.$assets.import('contratTypes', new AssetsCollection(this, {
 					assetName: 'contratType',
-					updateAction: 'updateContratTypes',
 					apiRoute: 'v2/contrat/type'
-				});
-
-				this.$assets.addCollection('contrats', contratsCollection);
-				this.$assets.addCollection('contratTypes', typesCollection);
+				}));
+				this.$assets.import('contratQualifications', new AssetsCollection(this, {
+					assetName: 'contratQualification',
+					apiRoute: 'v2/contrat/qualification'
+				}));
+				this.$assets.import('contratStatuts', new AssetsCollection(this, {
+					assetName: 'contratStatut',
+					apiRoute: 'v2/contrat/statut'
+				}));
+				this.$assets.import('contratMotifsFin', new AssetsCollection(this, {
+					assetName: 'contratMotifsFin',
+					apiRoute: 'v2/contrat/motif_fin'
+				}));
 
 				this.inited = true;
 			});

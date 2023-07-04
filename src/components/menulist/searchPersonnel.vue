@@ -12,11 +12,6 @@
                             @click="updateSearchOptions(filterSection, oButton)">
                         {{ oButton.label }}
                     </button>
-                    <!-- <button class="btn btn-outline-secondary" :class="buttonDisplay('null', filterSection)" 
-                            type="button" 
-                            @click="updateSearchOptions(filterSection, 'Tous')">
-                        Tous
-                    </button> -->
                 </div>
             </div>
         </template>

@@ -17,13 +17,15 @@ export default createStore({
 		contratStats: null,
 		contratCurrentStats: null,
 		openedContrats:null,
-		contratQualification:[],
+		contratQualification: [],
 		contratStatut: [],
 		contratType: [],
+		contratMotifsFin: [],
 		storePending: {
 			contratType: false
 		},
-		contrats: []
+		contrats: [],
+		config: {}
 	},
 	getters: {
 		activeStructure(state) {
@@ -311,6 +313,32 @@ export default createStore({
 			}
 		},
 
+		/**
+		 * Actualise les informations de configuration du module RH stockée dans le store
+		 * 
+		 * @param {object} state Le state de VueX
+		 * @param {object} configOptions 
+		 * - action 	'update' (par défaut), 'reset'
+		 * - config 	La configuration à stocker
+		 */
+		config(state, configOptions)  {
+			const action = configOptions.action ? configOptions.action : 'update';
+			const config = configOptions.config;
+
+			if (action == 'reset') {
+				state.config = config;
+			}
+			else {
+				if (!state.config) {
+					state.config = {};
+				}
+
+				for (const key in config) {
+					state[key] = config[key];
+				}
+			}
+		}
+
 	},
 	actions: {
 		/**
@@ -565,6 +593,32 @@ export default createStore({
 		},
 
 		/**
+		 * Met à jour la collection des qualifications de contrats.
+		 * 
+		 * @param {object} context Instance VueX
+		 * @param {array} collection Collection d'assets à mettre à jour
+		 */
+		updateContratQualifications(context, collection) {
+			context.dispatch('updateContratAsset', {
+				data: collection,
+				ressource: 'contratQualification'
+			});
+		},
+
+		/**
+		 * Met à jour la collection des statuts de contrats.
+		 * 
+		 * @param {object} context Instance VueX
+		 * @param {array} collection Collection d'assets à mettre à jour
+		 */
+		updateContratStatuts(context, collection) {
+			context.dispatch('updateContratAsset', {
+				data: collection,
+				ressource: 'contratStatut'
+			});
+		},
+
+		/**
 		 * Met à jour la collection des contrats types.
 		 * 
 		 * @param {object} context Instance VueX
@@ -665,6 +719,32 @@ export default createStore({
 			let storePending = {};
 			options.pendings.forEach(key => storePending[key] = options.value);
 			context.commit('setPending', storePending);
+		},
+
+		/**
+		 * Réinitialise la configuration du module RH stockée dans le store
+		 * 
+		 * @param {object} context Instance VueX
+		 * @param {object} config La configuration à actualiser
+		 */
+		setConfig(context, config) {
+			context.commit('config', {
+				action: 'reset',
+				config
+			});
+		},
+
+		/**
+		 * Actualise la configuration du module RH stockée dans le store
+		 * 
+		 * @param {object} context Instance VueX
+		 * @param {object} config La configuration à actualiser
+		 */
+		updateConfig(context, config) {
+			context.commit('config', {
+				action: 'update',
+				config
+			});
 		}
 
 

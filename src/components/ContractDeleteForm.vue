@@ -7,11 +7,11 @@
             </div>
         </div>
 
-        <div class="row g-2">
+        <div class="row g-2" v-if="motifsList">
             <div class="col mb-3">
                 <label for="type" class="form-label">Type:</label>
                 <select class="form-select" v-model="motifValue">
-                    <option v-for="motif in motifsList" :key="motif.id" :value="motif.id">{{ motif.motif }}</option>
+                    <option v-for="motif in motifsList" :key="motif.id" :value="motif.id">{{ motif.label }}</option>
                 </select>
             </div>
         </div>
@@ -21,10 +21,6 @@
 <script>
 export default {
     props: {
-        motifsList: {
-            type: Array,
-            required: true,
-        },
         motif_fin_id: {
             type: Number,
             required: true,
@@ -41,6 +37,10 @@ export default {
         return {
             motifValue: null,
             dsortie_reelleValue: null,
+            motifsList: null,
+            pending: {
+                motifs_fin: false
+            }
         }
     },
 
@@ -52,6 +52,19 @@ export default {
 
         motifValue(newValue) {
             this.$emit('update:motif_fin_id', newValue);
+        }
+    },
+
+    async beforeMount() {
+        this.pending.motifs_fin = true;
+        try {
+            this.motifsList = await this.$assets.getCollection('contratMotifsFin').getCollection();
+        }
+        catch (e) {
+            this.$app.catchError(e);
+        }
+        finally {
+            this.pending.motifs_fin = false;
         }
     },
 

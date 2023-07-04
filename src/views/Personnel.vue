@@ -1,7 +1,7 @@
 <template>
 
-	<div class="container" v-if="openedPersonnel">
-		<section class="text-center py-3 bg-light" v-if="openedPersonnel.extendedData">
+	<div class="container py-3" v-if="openedPersonnel">
+		<template v-if="openedPersonnel.extendedData">
 			<div class="row">
 				<div class="col-12 col-xxl-6">
 					<div class="card mb-3">
@@ -23,7 +23,7 @@
 					</div>
 				</div>
 			</div>	
-		</section>
+		</template>
 
         <router-view></router-view>
 	</div>
