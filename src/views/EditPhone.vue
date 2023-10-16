@@ -20,7 +20,7 @@
 <script>
 import { mapActions, mapState } from 'vuex';
 import AppModal from '../components/pebble-ui/AppModal.vue';
-import FormPhone from '../components/FormPhone';
+import FormPhone from '../components/personnel/contact/FormPhone.vue';
 import AlertMessage from '../components/pebble-ui/AlertMessage.vue';
 
 export default {

@@ -35,9 +35,9 @@
 import {mapActions, mapState} from 'vuex'
 
 import ContratList from '../components/contrat/ContratList.vue';
-import ContactInfo from '../components/ContactInfo.vue';
-import EtatCivilInfo from '../components/EtatCivilInfo.vue';
-import PersonnelHeaderCard from '@/components/PersonnelHeaderCard.vue';
+import ContactInfo from '../components/personnel/contact/ContactInfo.vue';
+import EtatCivilInfo from '../components/personnel/EtatCivilInfo.vue';
+import PersonnelHeaderCard from '../components/personnel/HeaderCard.vue';
 import Spinner from '../components/pebble-ui/Spinner.vue';
 
 export default {
@@ -105,17 +105,18 @@ export default {
     /**
      * Lorsque la route interne est mise à jour, le nouvel élément doit être chargé.
      */
-    beforeRouteUpdate(to) {
-        this.$store.dispatch("load", to.params.id);
-        this.loadData(to.params.id);
-        this.loadContract(to.params.id);
-
+    beforeRouteUpdate(to, from) {
+		if (to.params.id !== from.params.id) {
+			this.$store.dispatch("load", to.params.id);
+			this.loadData(to.params.id);
+			this.loadContract(to.params.id);
+		}
     },
 
     /**
      * Lorsqu'on quite la route active, l'élément ouvert est vidé.
      */
-    beforeRouteLeave(from, to, next) {
+    beforeRouteLeave(to, from, next) {
         this.$store.dispatch("unload");
         next();
     },

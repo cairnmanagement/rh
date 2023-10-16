@@ -7,13 +7,13 @@
     },
     "cfg": {
         "module": "rh",
-        "moduleLabel": "e-DRH",
+        "moduleLabel": "DRH",
         "aside": true,
         "app_mode": "default",
         "ppp": "private",
         "logos": null,
         "backAction": "/",
-        "backNavigation": true
+        "backNavigation": false
     },
     "cfgMenu": {
         "href": "#config"

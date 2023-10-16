@@ -1,21 +1,62 @@
 <template>
-    <div>
-        {{ contrat.verrou }}
-    </div>
-    <div>
-        {{ contrat.notified }}
-    </div>
-    <div>
-        {{ contrat.opened }}
-    </div>
-    <div>
-        
-    </div>
-    <div>
-        {{ contrat.statut_id }}
+
+    <div class="d-flex align-items-center mb-2">
+        <button class="btn btn-warning rounded-pill me-2" v-if="contrat.verrou === 'OUI'">
+            <i class="bi bi-lock-fill"></i>
+            Verrouillé
+        </button>
+        <button class="btn btn-success rounded-pill me-2" v-if="contrat.notified === 'OUI'">
+            <i class="bi bi-bell-fill"></i>
+            Notifié
+        </button>
+        <button class="btn btn-success rounded-pill me-2" v-if="contrat.opened === 'OUI'">
+            <i class="bi bi-eye-fill"></i>
+            Consulté
+        </button>
     </div>
 
-    <table class="table rounded table-sm border">
+    <div class="mb-1">
+        <span :class="contratClassName">
+            <i class="bi me-1" :class="startDateIcon"></i>
+            {{ contratLabel }} du {{ dateStartDisplay }}
+        </span>
+
+        <span class="text-secondary">
+            <i class="bi bi-chevron-right mx-2"></i>
+            <i class="bi me-1" :class="endDateIcon" v-if="endDateIcon"></i>
+            {{ labelDateEnd }}
+        </span>
+    </div>
+
+    <div class="my-1 d-flex align-items-center">
+        <span class="badge bg-primary rounded-pill me-2" v-if="type">{{ type.label }}</span>
+        <span v-if="qualification" class="text-primary me-2">{{ qualification.label }}</span>
+        <span v-if="statut" class="text-secondary me-2">{{ statut.label }}</span>
+    </div>
+
+    <div :class="testPeriodClassName" class="my-2">
+        <em>{{ testPeriodLabel }}</em>
+    </div>
+
+    <ul class="list-group list-group-horizontal my-3" v-if="contrat.dsortie_reelle">
+        <li class="list-group-item shadow-sm list-group-item-danger border-danger">
+            <i class="bi me-2" :class="endDateIcon"></i>
+            Date de sortie enregistrée
+        </li>
+        <li class="list-group-item shadow-sm border-danger">
+            {{ dateEndDisplay }}
+        </li>
+        <li class="list-group-item shadow-sm border-danger" v-if="motif_fin">
+            <em>{{ motif_fin.label }}</em>
+        </li>
+    </ul>
+
+    <hr>
+
+    <h3 class="fs-4">Attributs du contrat</h3>
+    
+
+    <!-- <table class="table rounded table-sm border">
         <thead>
             <tr>
                 <th>Classe</th>
@@ -29,9 +70,9 @@
                 <td>{{ contrat.cotation }}</td>
             </tr>
         </tbody>
-    </table>
+    </table> -->
 
-    <table class="table rounded border table-sm">
+    <!-- <table class="table rounded border table-sm">
         <thead>
             <tr>
                 <th>Niveau</th>
@@ -46,70 +87,71 @@
                 <td>{{ contrat.coeficient_id }}</td>
             </tr>
         </tbody>
-    </table>
-    <div>
-        {{ contrat.motif_fin_id }}
-    </div>
-    <div>
-        <span :class="contratClassName">
-            <i class="bi me-1" :class="startDateIcon"></i>
-            Avenant du {{ dateStartDisplay }}
-        </span>
+    </table> -->
 
-        <span class="text-secondary">
-            <i class="bi bi-chevron-right mx-2"></i>
-            <i class="bi me-1" :class="endDateIcon" v-if="endDateIcon"></i>
-            {{ labelDateEnd }}
-        </span>
-    </div>
-
-    <div class="badge text-bg-secondary rounded-pill">
-        {{ contrat.type_id }}
-    </div>
-
+    <div class="my-4">
+        <ul class="list-group list-group-horizontal my-3">
+            <li class="list-group-item shadow-sm list-group-item-light">
+                <i class="bi bi-currency-euro me-2"></i>
+                Salaire horaire
+            </li>
+            <li class="list-group-item shadow-sm">
+                <strong v-if="contrat.salaire_horaire">
+                    {{contrat.salaire_horaire}}&nbsp;€ 
+                </strong>
+                <span v-else class="text-secondary">
+                    Non renseigné
+                </span>
+            </li>
+        </ul>
     
-    <div :class="testPeriodClassName" class="my-2">
-        <em>{{ testPeriodLabel }}</em>
+        <ul class="list-group list-group-horizontal my-3">
+            <li class="list-group-item shadow-sm" :class="{'list-group-item-light': isPartTime}">
+                <i class="bi bi-clock-fill me-2"></i>
+                <template v-if="isPartTime">
+                    Temps partiel
+                </template>
+                <template v-else>
+                    Temps plein
+                </template>
+            </li>
+            <li class="list-group-item shadow-sm" v-if="isPartTime">
+                {{ contrat.pourcentage_temps_partiel }}&nbsp;%
+            </li>
+        </ul>
     </div>
 
-    <div class="d-flex flex-column my-4">
-        <span>Salaire horaire:</span>
-
-        
-        <strong v-if="contrat.salaire_horaire">
-            {{contrat.salaire_horaire}}€ 
-        </strong>
-
-        <span v-else class="text-secondary">
-            Non renseigné
-        </span>
-    </div>
-
-    <div class="d-flex flex-column my-4" v-if="contrat.pourcentage_temps_partiel">
-        <span>Temps de travail(%):</span>
-
-        <strong>
-            {{contrat.pourcentage_temps_partiel}} %
-        </strong>    
-    </div>
-
-    <div v-if="contrat.forfait_jour === 'OUI'">
-        <span>Contrat au forfait jour:</span>
-        
-        <table class="table table-bordered table-sm">
+    <div class="rounded border shadow-sm overflow-hidden my-4" v-if="contrat.forfait_jour === 'OUI'">
+        <table class="table m-0">
             <thead class="table-light">
-                <tr class="text-center">
-                    <th class="text-left">unités/semaine</th>
-                    <th class="text-left">unités/mois</th>
-                    <th class="text-left">unités/an</th>
+                <tr>
+                    <th colspan="3" class="text-left fw-normal">
+                        <i class="bi bi-calendar-day-fill me-2"></i>
+                        Contrat au forfait jour
+                    </th>
+                </tr>
+    
+                <tr>
+                    <th class="text-start border-end fw-normal text-secondary">Unit/semaine</th>
+                    <th class="text-start border-end fw-normal text-secondary">Unit/mois</th>
+                    <th class="text-start fw-normal text-secondary">Unit/an</th>
                 </tr>
             </thead>
-
+    
             <tbody>
-                <tr class="text-end">
-                    <td>{{contrat.nb_par_semaine}}</td>
-                    <td>{{contrat.nb_par_mois}}</td>
-                    <td>{{contrat.nb_par_an}}</td>
+                <tr>
+                    <td class="border-end">
+                        <template v-if="contrat.nb_par_semaine">{{ contrat.nb_par_semaine }}</template>
+                        <span class="text-secondary" v-else>Non-renseigné</span>
+                    </td>
+                    <td class="border-end">
+                        <template v-if="contrat.nb_par_mois">{{ contrat.nb_par_mois }}</template>
+                        <span class="text-secondary" v-else>Non-renseigné</span>
+                    </td>
+                    <td>
+                        <template v-if="contrat.nb_par_an">{{ contrat.nb_par_an }}</template>
+                        <span class="text-secondary" v-else>Non-renseigné</span>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -125,8 +167,23 @@ import { getDisplayFormatedDate } from '../../js/date';
 export default {
     name: 'avenantResume',
 
+    data() {
+        return {
+            type: null,
+            qualification: null,
+            statut: null,
+            motif_fin: null
+        }
+    },
+
     props: {
         contrat: Object
+    },
+
+    watch: {
+        contrat(newVal) {
+            this.loadAssets(newVal);
+        }
     },
 
     computed: {
@@ -228,12 +285,32 @@ export default {
          */
         testPeriodClassName() {
             return testPeriodRemaningDays(this.contrat) > 0 ? '' : 'text-secondary';
+        },
+
+        /**
+         * Retourne le libellé pour le contrat : soit Contrat, soit Avenant.
+         * 
+         * @return {string}
+         */
+        contratLabel() {
+            return this.contrat.flag_avenant === "OUI" ? "Avenant" : "Contrat"
+        },
+
+        /**
+         * Retourne true si le contrat est à temps partiel
+         * 
+         * Un contrat est à temps partiel lorsque la valeur pourcentage_temps_partiel est renseignée et que la 
+         * valeur est inférieur à 100.
+         * 
+         * @return {bool}
+         */
+        isPartTime() {
+            return this.contrat.pourcentage_temps_partiel && this.contrat.pourcentage_temps_partiel < 100;
         }
 
     },
 
     methods: {
-
 
         /**
          * Modifie le format de la date entrée en paramètre et la retourne 
@@ -244,7 +321,45 @@ export default {
             return date.format(new Date(el), 'DD MMM YYYY')
         },
 
+        async loadAssets(contrat) {
 
+            contrat = typeof contrat === 'undefined' ? this.contrat : contrat;
+
+            const assets = [
+                {
+                    collectionName: "contratTypes",
+                    dataKey: "type",
+                    joinKey: "type_id"
+                },
+                {
+                    collectionName: "contratQualifications",
+                    dataKey: "qualification",
+                    joinKey: "qualification_id"
+                },
+                {
+                    collectionName: "contratStatuts",
+                    dataKey: "statut",
+                    joinKey: "statut_id"
+                },
+                {
+                    collectionName: "contratMotifsFin",
+                    dataKey: "motif_fin",
+                    joinKey: "motif_fin_id"
+                }
+            ];
+
+            assets.forEach(async asset => {
+                if (contrat[asset.joinKey]) {
+                    const collection = this.$assets.getCollection(asset.collectionName);
+                    this[asset.dataKey] = await collection.getById(contrat[asset.joinKey]);
+                }
+            });
+        }
+
+    },
+
+    mounted() {
+        this.loadAssets();
     }
 }
 </script>

@@ -8,7 +8,7 @@
     :cancelBtn="true"
     :pending="pending.personnel"
     >
-        <ContactForm
+        <PersonnelForm
             v-if="personnelExists"
             v-model:nom = "ressourcePersonnel.nom"
             v-model:prenom = "ressourcePersonnel.prenom"
@@ -17,7 +17,7 @@
             v-model:lieu-naissance = "ressourcePersonnel.lieuNaissance"
             v-model:nss = "ressourcePersonnel.nss"
             v-model:nationalite = "ressourcePersonnel.nationalite">
-        </ContactForm>
+        </PersonnelForm>
 
         <alert-message v-else variant="warning">Aucun élément trouvé</alert-message>
     </AppModal>
@@ -26,11 +26,11 @@
 import { mapActions, mapState } from 'vuex';
 
 import AppModal from '../components/pebble-ui/AppModal.vue';
-import ContactForm from '../components/ContactForm.vue';
+import PersonnelForm from '../components/personnel/PersonnelForm.vue';
 import AlertMessage from '../components/pebble-ui/AlertMessage.vue';
 
 export default {
-    components: { AppModal, ContactForm, AlertMessage },
+    components: { AppModal, PersonnelForm, AlertMessage },
 
     data() {
         return {

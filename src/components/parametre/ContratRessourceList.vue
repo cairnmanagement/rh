@@ -1,22 +1,29 @@
 <template>
-    <Spinner v-if="pending.contratRessoures"/>
 
-    <div v-else>
+    <div>
         <div class="d-flex justify-content-between align-items-center">
-            <h1 class="fs-3 my-3">{{ ressource.title }}</h1>
-    
-            <button v-if="!modeAjout" type="button" class="btn btn-primary d-flex justify-content-center align-items-center" @click.prevent="showAddForm()">
+            <h1 class="fs-3 my-3">{{ ressourceConfig.title }}</h1>
+
+            <button v-if="!creationForm" type="button" class="btn btn-primary d-flex justify-content-center align-items-center" @click.prevent="displayCreationForm()">
                 <i class="bi bi-plus-circle me-1"></i>
-                <span class="d-none d-md-block">Ajouter {{ ressource.buttonLabel }}</span>
+                <span class="d-none d-md-block">Ajouter</span>
             </button>
         </div>
+        
+        <div class="mb-3" v-if="creationForm">
+            <AlertMessage v-if="alertMessage" variant="warning">{{ alertMessage }}</AlertMessage>
+    
+            <InputText :placeholder="'Libellé pour '+ressourceConfig.label" :pending="pending.saveContratRessource" @confirm="record($event)" @cancel="cancel()"/>
+        </div>
 
-        <AlertMessage v-if="alertMessage" variant="warning">{{ alertMessage }}</AlertMessage>
+        <div class="alert alert-secondary d-flex align-items-center" v-if="ressourceConfig.description">
+            <i class="bi bi-lightbulb me-2"></i>
+            {{ ressourceConfig.description }}
+        </div>
 
-        <InputText v-if="modeAjout" :placeholder="ressource.buttonLabel" :pending="pending.saveContratType" @confirm="record($event)" @cancel="cancel()"/>
 
-        <ul class="list-group my-3" v-if="ressourceListe.length != 0">
-            <contrat-ressource-item v-for="ressourceItem in ressourceListe" :key="ressourceItem.id" :ressource="ressourceItem" :variable="ressource.variable" :label="ressource.label"></contrat-ressource-item>
+        <ul class="list-group my-3" v-if="ressourcesList.length > 0">
+            <contrat-ressource-item v-for="ressourceItem in ressourcesList" :key="ressourceItem.id" :ressource="ressourceItem" :ressource-config="ressourceConfig"></contrat-ressource-item>
         </ul>
 
         <AlertMessage v-else variant="info"> {{ ressourceEmpty }} </AlertMessage>
@@ -28,12 +35,11 @@
 import AlertMessage from '../pebble-ui/AlertMessage.vue';
 import ContratRessourceItem from '@/components/parametre/ContratRessourceItem.vue';
 import InputText from '../InputText.vue';
-import { mapActions, mapState } from 'vuex';
-import Spinner from '../pebble-ui/Spinner.vue';
+import { mapState } from 'vuex';
 
 export default {
 
-    components: { AlertMessage, ContratRessourceItem, InputText, Spinner },
+    components: { AlertMessage, ContratRessourceItem, InputText },
 
     props: {
         ressourceName: String
@@ -42,31 +48,40 @@ export default {
     data() {
         return {
             pending: {
-                contratRessoures: true,
                 saveContratRessource: false
             },
             alertMessage: null,
-            modeAjout:false,
+            creationForm:false,
             ressourcesDict: {
                 type: {
                     label: "type",
                     variable: "contratType",
-                    title: "Contrat type",
-                    buttonLabel: "un type de contrat"
+                    collectionName: "contratTypes",
+                    title: "Types de contrat",
+                    description: "Type de contrat au sens du droit du travail : CDI, CDD, alternance..."
                 },
                 qualification: {
                     label: "qualification",
                     variable: "contratQualification",
-                    title: "Contrat qualification",
-                    buttonLabel: "une qualification de contrat"
+                    collectionName: "contratQualifications",
+                    title: "Qualifications des contrats",
+                    description: "Métier ou fonction exercé par un employé dans l'entreprise. Cuisinier, Chef cuisinier, Barman..."
                 },
                 statut: {
                     label: "statut",
                     variable: "contratStatut",
-                    title: "Contrat statut",
-                    buttonLabel: "un statut de contrat"
+                    collectionName: "contratStatuts",
+                    title: "Statuts salariaux",
+                    description: "Statut du salarier. Cadre, Non-cadre, ETAM..."
+                },
+                motif_fin: {
+                    label: "motif_fin",
+                    variable: "contratMotifsFin",
+                    collectionName: "contratMotifsFin",
+                    title: "Motifs de fin",
+                    description: "Motif justifiant l'arrêt d'un contrat de travail : Fin de CDD, rupture conventionnelle, licenciement pour faute..."
                 }
-            }
+,            }
         }
     },
 
@@ -74,21 +89,20 @@ export default {
         ressourceName(newVal, oldVal) {
             if (newVal !== oldVal) {
                 this.cancel();
-                this.getContratRessources();
             }
         }
     },
 
     computed: {
-        ...mapState(['contratType', 'contratQualification', 'contratStatut']),
+        ...mapState(['contratType', 'contratQualification', 'contratStatut', 'contratMotifsFin']),
 
         /**
          * Retourne la liste de la ressource en fonction de ressourceName
          * 
          * @return {array}
          */
-        ressourceListe() {
-            return this[this.ressource.variable];
+        ressourcesList() {
+            return this[this.ressourceConfig.variable];
         },
 
         /**
@@ -96,7 +110,7 @@ export default {
          * 
          * @return {object}
          */
-        ressource() {
+        ressourceConfig() {
             return this.ressourcesDict[this.ressourceName];
         },
 
@@ -106,68 +120,43 @@ export default {
          * @return {string}
          */
         ressourceEmpty() {
-            let sentence = this.ressourceName == "qualification" ? 'Auncune qualification enregistrée' : `Aucun ${this.ressourceName} enregistré`;
+            let sentence = this.ressourceName == "qualification" ? 'Auncune qualification enregistrée' : `Aucun ${this.ressourceConfig.title.toLowerCase()} enregistré`;
 
             return sentence;
         }
     },
 
     methods: {
-        ...mapActions(['resetContratAsset', 'addContratAsset']),
-
         /**
          * Active le formumaire d'ajout
          */
-         showAddForm() {
-            this.modeAjout = true;
-        },
-
-        /**
-         * Récupere les ressources necessaire au fonctionnement
-         * contratType, contratQuallification, contratStatut
-         */
-        getContratRessources() {
-            this.pending.contratRessoures = true;
-
-            let urlApi = `v2/contrat/${this.ressource.label}`;
-
-            this.$app.apiGet(urlApi).then((data) => {
-                let options = {
-                    'data' : data,
-                    'ressource' : this.ressource.variable
-                };
-
-                this.resetContratAsset(options);
-            }).catch(this.$app.catchError)
-            .finally( () => { this.pending.contratRessoures = false} );
+        displayCreationForm() {
+            this.creationForm = true;
         },
 
         /**
          * Ajoute une ressource à la liste
          */
-        record(event) {
-            if (!event) {
-                this.alertMessage = "le champs ne doit pas être vide, veuillez le remplir."
+        record(labelValue) {
+            if (!labelValue) {
+                this.alertMessage = "Le champs libellé doit pas être vide."
                 return;
             }
 
             this.alertMessage = null;
             this.pending.saveContratRessource = true;
 
-            let urlApi = `v2/contrat/${this.ressource.label}`;
+            let urlApi = `v2/contrat/${this.ressourceConfig.label}`;
             let query = {
-                label: event
+                label: labelValue
             }
 
-            this.$app.apiPost(urlApi, query).then((data) => {
-                let options = {
-                    'data' : data,
-                    'ressource' : this.ressource.variable
-                };
-                this.addContratAsset(options);
-                this.modeAjout = false;
+            this.$app.api.post(urlApi, query).then((data) => {
+                const collection = this.$assets.getCollection(this.ressourceConfig.collectionName);
+                collection.updateCollection([data]);
+                this.creationForm = false;
             }).catch(this.$app.catchError)
-            .finally(() => { this.pending[this.ressource.variable] = false });
+            .finally(() => { this.pending.saveContratRessource = false });
         },
 
         /**
@@ -175,12 +164,8 @@ export default {
          */
         cancel() {
             this.alertMessage = null;
-            this.modeAjout = false;
+            this.creationForm = false;
         }
-    },
-
-    mounted() {
-        this.getContratRessources();
     }
 
 }

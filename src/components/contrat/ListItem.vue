@@ -6,7 +6,7 @@
         </div>
 
         <div>
-            <progress-awaiting v-if="pending.type" size="50" />
+            <progress-awaiting v-if="pending.type" :size="50" />
             <span v-else>{{ typeLabel }}</span>
             <span class="ms-1 fw-lighter">{{ dateLabel }}</span>
         </div>

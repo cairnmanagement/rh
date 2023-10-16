@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 import ContratForm from '../components/contrat/ContratForm.vue';
 import date from 'date-and-time';
 
@@ -58,7 +58,8 @@ export default {
                 'niveau_id', 
                 'position_id', 
                 'coeficient_id', 
-                'motif_fin_id'
+                'motif_fin_id',
+                'dsortie_reelle'
             ]
         }
     },
@@ -81,6 +82,8 @@ export default {
     
 
     methods: {
+        ...mapActions(['updateOpenedContrats']),
+
         /**
          * retourne à la route précédente
          */
@@ -166,7 +169,12 @@ export default {
                 headers: {
                     'Content-Type' : 'application/json'
                 }
-            }).then(() => {
+            }).then((contrat) => {
+                const collection = this.$assets.getCollection("contrats");
+                collection.updateCollection([contrat]);
+
+                this.updateOpenedContrats([contrat]);
+
                 this.routeToParent();
             })
             .catch(this.$app.catchError)

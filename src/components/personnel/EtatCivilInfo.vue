@@ -59,7 +59,7 @@
 
 import { mapState } from 'vuex';
 
-import { getDisplayFormatedDate, getValue as getDateValue } from '../js/date';
+import { getDisplayFormatedDate, getValue as getDateValue } from '../../js/date';
 
 export default{
 

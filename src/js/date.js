@@ -42,3 +42,31 @@ export function getDateFromSQL(val) {
 export function getValue(val) {
     return val && val !== "0000-00-00 00:00:00" && val !== "0000-00-00" ? val : null;
 }
+
+/**
+ * Retourne une valeur de date exploitable pour les champs de formulaire
+ * 
+ * @param {Date|string} d La date à transformer
+ * @param {boolean} time Ajouter les heures minutes secondes
+ * 
+ * @return {string}
+ */
+export function getFormDate(d, time)
+{
+    if (d) {
+
+        if (typeof d === "string") {
+            d = getDateFromSQL(d);
+        }
+        
+        let format = 'YYYY-MM-DD';
+        if (time) {
+            format += "THH:mm:ss";
+        }
+
+        date.locale(fr);
+        return date.format(d, format);
+    }
+
+    return null;
+}

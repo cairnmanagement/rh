@@ -22,7 +22,7 @@
 
 <script>
 import AppModal from '../components/pebble-ui/AppModal.vue';
-import FormPostalAddress from '../components/FormPostalAddress.vue';
+import FormPostalAddress from '../components/personnel/contact/FormPostalAddress.vue';
 import { mapActions, mapState } from 'vuex';
 import AlertMessage from '../components/pebble-ui/AlertMessage.vue';
 

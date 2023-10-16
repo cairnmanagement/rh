@@ -5,7 +5,7 @@
         size="lg" 
         @modal-hide="routeToParent()"
         :className="'modal-dialog-scrollable'"
-        :cancelBtn="true">
+        :closeBtn="true">
         
         <overview :contrat="contrat" />
     </AppModal>

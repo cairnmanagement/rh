@@ -19,7 +19,7 @@
 <script>
 import { mapActions, mapState } from 'vuex';
 import AppModal from '../components/pebble-ui/AppModal.vue';
-import FormMailAddress from '../components/FormMailAddress.vue';
+import FormMailAddress from '../components/personnel/contact/FormMailAddress.vue';
 import AlertMessage from '../components/pebble-ui/AlertMessage.vue';
 
 export default {

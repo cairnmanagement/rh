@@ -246,6 +246,7 @@ export default createStore({
 				state.openedContrats = contrats;
 			}
 			else if (mode == 'refresh') {
+				// Mise à jour des contrats racines
 				contrats.forEach(contrat => {
 					let contratFound = state.openedContrats.find(e => e.id == contrat.id);
 
@@ -258,15 +259,31 @@ export default createStore({
 						state.openedContrats.push(contrat);
 					}
 				});
+
+				// Mise à jour des avenants
+				state.openedContrats.forEach(contrat => {
+					if (contrat.contrats) {
+						contrat.contrats.forEach(avenant => {
+							let contratFound = contrats.find(e => e.id == avenant.id);
+
+							if (contratFound) {
+								for (const key in contratFound) {
+									avenant[key] = contratFound[key];
+								}
+							}
+						});
+					}
+				});
 			}
 			else if (mode == 'remove') {
+				// Suppression des contrats racines
 				contrats.forEach(contrat => {
 					let index = state.openedContrats.findIndex(e => e.id == contrat.id);
 
 					if (index !== -1) {
 						state.openedContrats.splice(index, 1);
 					}
-				})
+				});
 			}
 		},
 

@@ -1,6 +1,6 @@
 <template>
     <div class="input-group">
-        <input type="text" class="form-control" :placeholder="placeholder" v-model="inputValue" />
+        <input type="text" class="form-control" :placeholder="placeholder" v-model="inputValue" @keyup.enter="confirm()" />
 
         <button type="button" class="btn btn-primary d-flex justify-content-center align-items-center" @click.prevent="confirm()" :disabled="pending">
             <i v-if="!pending" class="bi bi-save me-1"></i>
@@ -11,7 +11,7 @@
         </button>
 
         <button type="button" class="btn btn-secondary d-flex justify-content-center align-items-center" @click.prevent="cancel()">
-            <i class="bi bi-trash-fill me-1"></i>
+            <i class="bi bi-x me-1"></i>
             <span class="d-none d-md-block">{{ cancelLabel }}</span>
         </button>
 

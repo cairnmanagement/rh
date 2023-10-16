@@ -70,13 +70,13 @@ export default {
                         icon: "bi-pencil",
                         routeName: "EditContrat"
                     },
-                    {
-                        action: 'avenant',
-                        label: "Faire une avenant",
-                        color: "primary",
-                        icon: "bi-file-earmark-plus",
-                        routeName: "Avenant"
-                    },
+                    // {
+                    //     action: 'avenant',
+                    //     label: "Faire une avenant",
+                    //     color: "primary",
+                    //     icon: "bi-file-earmark-plus",
+                    //     routeName: "Avenant"
+                    // },
                     {
                         action: 'delete',
                         label: "Mettre fin au contrat",
