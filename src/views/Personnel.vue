@@ -8,6 +8,8 @@
 						<personnel-header-card></personnel-header-card>
 					</div>
 
+					<attributes-card :personnel="openedPersonnel" />
+
 					<div class="card mb-3">
 						<etat-civil-info/>
 					</div>
@@ -39,6 +41,7 @@ import ContactInfo from '../components/personnel/contact/ContactInfo.vue';
 import EtatCivilInfo from '../components/personnel/EtatCivilInfo.vue';
 import PersonnelHeaderCard from '../components/personnel/HeaderCard.vue';
 import Spinner from '../components/pebble-ui/Spinner.vue';
+import AttributesCard from '../components/personnel/AttributesCard.vue';
 
 export default {
     data() {
@@ -54,7 +57,7 @@ export default {
         ...mapState(["openedPersonnel", 'openedContrats']),		
     },
 
-	components: { ContratList, ContactInfo, EtatCivilInfo, PersonnelHeaderCard, Spinner },
+	components: { ContratList, ContactInfo, EtatCivilInfo, PersonnelHeaderCard, Spinner, AttributesCard },
 
     methods: {
 		...mapActions(['setOpenedContrats']),

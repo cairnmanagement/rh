@@ -102,8 +102,8 @@ export default {
         async record() {
             this.pending = true;
             try {
-                const config = await this.$app.api.patch('v2/personnel/config', this.tmpConfig);
-                this.updateConfig(config);
+                await this.$app.api.patch('v2/personnel/config', this.tmpConfig);
+                this.updateConfig(this.tmpConfig);
             }
             catch (e) {
                 this.$app.catchError(e);

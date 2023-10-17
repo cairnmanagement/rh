@@ -23,7 +23,7 @@
 
 
         <ul class="list-group my-3" v-if="ressourcesList.length > 0">
-            <contrat-ressource-item v-for="ressourceItem in ressourcesList" :key="ressourceItem.id" :ressource="ressourceItem" :ressource-config="ressourceConfig"></contrat-ressource-item>
+            <ressource-item v-for="ressourceItem in ressourcesList" :key="ressourceItem.id" :ressource="ressourceItem" :ressource-config="ressourceConfig"></ressource-item>
         </ul>
 
         <AlertMessage v-else variant="info"> {{ ressourceEmpty }} </AlertMessage>
@@ -33,13 +33,13 @@
 
 <script>
 import AlertMessage from '../pebble-ui/AlertMessage.vue';
-import ContratRessourceItem from '@/components/parametre/ContratRessourceItem.vue';
+import RessourceItem from './RessourceItem.vue';
 import InputText from '../InputText.vue';
 import { mapState } from 'vuex';
 
 export default {
 
-    components: { AlertMessage, ContratRessourceItem, InputText },
+    components: { AlertMessage, RessourceItem, InputText },
 
     props: {
         ressourceName: String
@@ -58,28 +58,48 @@ export default {
                     variable: "contratType",
                     collectionName: "contratTypes",
                     title: "Types de contrat",
-                    description: "Type de contrat au sens du droit du travail : CDI, CDD, alternance..."
+                    description: "Type de contrat au sens du droit du travail : CDI, CDD, alternance...",
+                    apiRoute: "v2/contrat/type"
                 },
                 qualification: {
                     label: "qualification",
                     variable: "contratQualification",
                     collectionName: "contratQualifications",
                     title: "Qualifications des contrats",
-                    description: "Métier ou fonction exercé par un employé dans l'entreprise. Cuisinier, Chef cuisinier, Barman..."
+                    description: "Métier ou fonction exercé par un employé dans l'entreprise. Cuisinier, Chef cuisinier, Barman...",
+                    apiRoute: "v2/contrat/type"
                 },
                 statut: {
                     label: "statut",
                     variable: "contratStatut",
                     collectionName: "contratStatuts",
                     title: "Statuts salariaux",
-                    description: "Statut du salarier. Cadre, Non-cadre, ETAM..."
+                    description: "Statut du salarier. Cadre, Non-cadre, ETAM...",
+                    apiRoute: "v2/contrat/type"
                 },
                 motif_fin: {
                     label: "motif_fin",
                     variable: "contratMotifsFin",
                     collectionName: "contratMotifsFin",
                     title: "Motifs de fin",
-                    description: "Motif justifiant l'arrêt d'un contrat de travail : Fin de CDD, rupture conventionnelle, licenciement pour faute..."
+                    description: "Motif justifiant l'arrêt d'un contrat de travail : Fin de CDD, rupture conventionnelle, licenciement pour faute...",
+                    apiRoute: "v2/contrat/type"
+                },
+                fonction: {
+                    label: "fonction",
+                    variable: "personnelFonctions",
+                    collectionName: "personnelFonctions",
+                    title: "Fonctions du personnel",
+                    description: "La fonction du personnel est une caractéristique non contractuelle qui peut être liée à ses missions ou qui peut préciser sa qualification.",
+                    apiRoute: "v2/personnel/fonction"
+                },
+                secteur: {
+                    label: "secteur",
+                    variable: "personnelSecteurs",
+                    collectionName: "personnelSecteurs",
+                    title: "Secteur du personnel",
+                    description: "Le secteur est une caractéristique non contractuelle qui peut rattacher le personnel à un service ou à un groupe dans l'entreprise. Secteur RH, Cuisine...",
+                    apiRoute: "v2/personnel/secteur"
                 }
 ,            }
         }
@@ -94,7 +114,7 @@ export default {
     },
 
     computed: {
-        ...mapState(['contratType', 'contratQualification', 'contratStatut', 'contratMotifsFin']),
+        ...mapState(['contratType', 'contratQualification', 'contratStatut', 'contratMotifsFin', 'personnelSecteurs', 'personnelFonctions']),
 
         /**
          * Retourne la liste de la ressource en fonction de ressourceName
@@ -146,7 +166,7 @@ export default {
             this.alertMessage = null;
             this.pending.saveContratRessource = true;
 
-            let urlApi = `v2/contrat/${this.ressourceConfig.label}`;
+            let urlApi = this.ressourceConfig.apiRoute;
             let query = {
                 label: labelValue
             }

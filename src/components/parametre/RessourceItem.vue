@@ -74,7 +74,7 @@ export default {
             if (confirm("Confirmez-vous supprimer cette ligne : "+this.ressource.label)) {
                 this.pending.deleteRessource = true;
 
-                let urlApi = `v2/contrat/${this.ressourceConfig.label}/${this.ressource.id}`;
+                let urlApi = `${this.ressourceConfig.apiRoute}/${this.ressource.id}`;
     
                 this.$app.api.delete(urlApi).then(() => {
                     const collection = this.$assets.getCollection(this.ressourceConfig.collectionName);
@@ -102,7 +102,7 @@ export default {
             this.alertMessage = null;
             this.pending.saveRessource = true;
 
-            let urlApi = `v2/contrat/${this.ressourceConfig.label}/${this.ressource.id}`;
+            let urlApi = `${this.ressourceConfig.apiRoute}/${this.ressource.id}`;
             let query = {
                 label: newLabelValue
             };

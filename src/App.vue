@@ -260,6 +260,14 @@ export default {
 					assetName: 'contratMotifsFin',
 					apiRoute: 'v2/contrat/motif_fin'
 				}));
+				this.$assets.import('personnelFonctions', new AssetsCollection(this, {
+					assetName: 'personnelFonctions',
+					apiRoute: 'v2/personnel/fonction'
+				}));
+				this.$assets.import('personnelSecteurs', new AssetsCollection(this, {
+					assetName: 'personnelSecteurs',
+					apiRoute: 'v2/personnel/secteur'
+				}));
 
 				this.inited = true;
 			});

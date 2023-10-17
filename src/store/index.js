@@ -21,6 +21,8 @@ export default createStore({
 		contratStatut: [],
 		contratType: [],
 		contratMotifsFin: [],
+		personnelFonctions: [],
+		personnelSecteurs: [],
 		storePending: {
 			contratType: false
 		},
