@@ -275,6 +275,13 @@ export default createStore({
 							}
 						});
 					}
+					else {
+						let copy = {};
+						for (const key in contrat) {
+							copy[key] = contrat[key];
+						}
+						contrat.contrats = [copy];
+					}
 				});
 			}
 			else if (mode == 'remove') {
@@ -353,7 +360,7 @@ export default createStore({
 				}
 
 				for (const key in config) {
-					state[key] = config[key];
+					state.config[key] = config[key];
 				}
 			}
 		}

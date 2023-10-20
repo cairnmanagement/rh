@@ -20,12 +20,17 @@
 				</div>
 
 				<div class="col-12 col-xxl-6">
-					<div class="card">
+					<div class="card mb-3">
 						<ContratList :contrats="openedContrats" />
 					</div>
+
+					<!-- <div v-if="pending.logins">Chargement des comptes...</div>
+					<account-card :personnel="openedPersonnel" :logins="logins" v-else /> -->
 				</div>
 			</div>	
 		</template>
+
+		<spinner v-else></spinner>
 
         <router-view></router-view>
 	</div>
@@ -42,14 +47,17 @@ import EtatCivilInfo from '../components/personnel/EtatCivilInfo.vue';
 import PersonnelHeaderCard from '../components/personnel/HeaderCard.vue';
 import Spinner from '../components/pebble-ui/Spinner.vue';
 import AttributesCard from '../components/personnel/AttributesCard.vue';
+// import AccountCard from '../components/personnel/account/AccountCard.vue';
 
 export default {
     data() {
         return {
             pending: {
                 extendedData: true,
-				contrats: true
-            }
+				contrats: true,
+				logins: true
+            },
+			logins: []
         };
     },
 
@@ -57,7 +65,7 @@ export default {
         ...mapState(["openedPersonnel", 'openedContrats']),		
     },
 
-	components: { ContratList, ContactInfo, EtatCivilInfo, PersonnelHeaderCard, Spinner, AttributesCard },
+	components: { ContratList, ContactInfo, EtatCivilInfo, PersonnelHeaderCard, Spinner, AttributesCard }, //AccountCard
 
     methods: {
 		...mapActions(['setOpenedContrats']),
@@ -86,6 +94,15 @@ export default {
 				else {
 					this.pending.extendedData = false;
 				}
+
+				// this.pending.logins = true;
+
+				// this.$app.api.get("v2/personnel/"+personnelId+"/account")
+				// .then((logins) => {
+				// 	this.logins = logins;
+				// })
+				// .catch(this.$app.catchError)
+				// .finally(() => this.pending.logins = false);
 			}
         },
 
