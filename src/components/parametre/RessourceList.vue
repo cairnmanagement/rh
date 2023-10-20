@@ -67,7 +67,7 @@ export default {
                     collectionName: "contratQualifications",
                     title: "Qualifications des contrats",
                     description: "Métier ou fonction exercé par un employé dans l'entreprise. Cuisinier, Chef cuisinier, Barman...",
-                    apiRoute: "v2/contrat/type"
+                    apiRoute: "v2/contrat/qualification"
                 },
                 statut: {
                     label: "statut",
@@ -75,7 +75,7 @@ export default {
                     collectionName: "contratStatuts",
                     title: "Statuts salariaux",
                     description: "Statut du salarier. Cadre, Non-cadre, ETAM...",
-                    apiRoute: "v2/contrat/type"
+                    apiRoute: "v2/contrat/statut"
                 },
                 motif_fin: {
                     label: "motif_fin",
@@ -83,7 +83,7 @@ export default {
                     collectionName: "contratMotifsFin",
                     title: "Motifs de fin",
                     description: "Motif justifiant l'arrêt d'un contrat de travail : Fin de CDD, rupture conventionnelle, licenciement pour faute...",
-                    apiRoute: "v2/contrat/type"
+                    apiRoute: "v2/contrat/motif_fin"
                 },
                 fonction: {
                     label: "fonction",
