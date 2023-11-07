@@ -12,6 +12,7 @@ export default createStore({
 		},
 		personnels: [],
 		openedPersonnel: null,
+		openedPersonnelLogins: [], 
 		tmpElement: null,
 		personnelStats: null,
 		contratStats: null,

@@ -24,8 +24,8 @@
 						<ContratList :contrats="openedContrats" />
 					</div>
 
-					<!-- <div v-if="pending.logins">Chargement des comptes...</div>
-					<account-card :personnel="openedPersonnel" :logins="logins" v-else /> -->
+					<div v-if="pending.logins">Chargement des comptes...</div>
+					<account-card :personnel="openedPersonnel" :logins="openedPersonnelLogins" @account-removed="removeAccount" v-else />
 				</div>
 			</div>	
 		</template>
@@ -47,7 +47,8 @@ import EtatCivilInfo from '../components/personnel/EtatCivilInfo.vue';
 import PersonnelHeaderCard from '../components/personnel/HeaderCard.vue';
 import Spinner from '../components/pebble-ui/Spinner.vue';
 import AttributesCard from '../components/personnel/AttributesCard.vue';
-// import AccountCard from '../components/personnel/account/AccountCard.vue';
+import AccountCard from '../components/personnel/account/AccountCard.vue';
+import { AssetsCollection } from '../js/app/services/AssetsCollection';
 
 export default {
     data() {
@@ -56,16 +57,15 @@ export default {
                 extendedData: true,
 				contrats: true,
 				logins: true
-            },
-			logins: []
+            }
         };
     },
 
     computed: {
-        ...mapState(["openedPersonnel", 'openedContrats']),		
+        ...mapState(["openedPersonnel", 'openedContrats', 'openedPersonnelLogins']),		
     },
 
-	components: { ContratList, ContactInfo, EtatCivilInfo, PersonnelHeaderCard, Spinner, AttributesCard }, //AccountCard
+	components: { ContratList, ContactInfo, EtatCivilInfo, PersonnelHeaderCard, Spinner, AttributesCard, AccountCard },
 
     methods: {
 		...mapActions(['setOpenedContrats']),
@@ -95,14 +95,14 @@ export default {
 					this.pending.extendedData = false;
 				}
 
-				// this.pending.logins = true;
+				this.pending.logins = true;
 
-				// this.$app.api.get("v2/personnel/"+personnelId+"/account")
-				// .then((logins) => {
-				// 	this.logins = logins;
-				// })
-				// .catch(this.$app.catchError)
-				// .finally(() => this.pending.logins = false);
+				this.$assets.import('openedPersonnelLogins', new AssetsCollection(this, {
+					assetName: 'openedPersonnelLogins',
+					apiRoute: "v2/personnel/"+personnelId+"/account"
+				}))
+				.catch(this.$app.catchError)
+				.finally(() => this.pending.logins = false);
 			}
         },
 
@@ -119,7 +119,25 @@ export default {
 				this.setOpenedContrats(data);
 			})
 			.catch(this.$app.catchError).finally(() => this.pending.contrats = false);
-        }
+        },
+
+		/**
+		 * Vide les collections chargées
+		 */
+		resetCollection() {
+			const collection = this.$assets.getCollection("openedPersonnelLogins");
+			collection.reset();
+		},
+
+		/**
+		 * Retire un login de la liste des comptes liées
+		 * 
+		 * @param {object} login Le login à supprimer
+		 */
+		removeAccount(login) {
+			const collection = this.$assets.getCollection("openedPersonnelLogins");
+			collection.removeAssetById(login.id);
+		}
     },
 	
     /**
@@ -128,6 +146,7 @@ export default {
     beforeRouteUpdate(to, from) {
 		if (to.params.id !== from.params.id) {
 			this.$store.dispatch("load", to.params.id);
+			this.resetCollection();
 			this.loadData(to.params.id);
 			this.loadContract(to.params.id);
 		}
@@ -137,6 +156,7 @@ export default {
      * Lorsqu'on quite la route active, l'élément ouvert est vidé.
      */
     beforeRouteLeave(to, from, next) {
+		this.resetCollection();
         this.$store.dispatch("unload");
         next();
     },

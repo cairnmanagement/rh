@@ -78,7 +78,7 @@ export default {
         /**
          * retourne à la route précédente
          */
-         routeToParent() {
+        routeToParent() {
             this.$router.go(-1);
         },
 

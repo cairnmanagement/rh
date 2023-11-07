@@ -61,6 +61,18 @@
             </div>
         </div>
 
+        <div class="card card-body mb-3" v-if="hasTeamclockApp">
+            <h4 class="fs-5">Compte de pointage par équipe <span class="badge rounded-pill text-bg-admin"><i class="bi bi-shield-shaded"></i> 5</span></h4>
+            <div class="form-text mb-3">
+                L'application team-pointage est disponible sur cette licence. Pour que l'application fonctionne, elle doit 
+                être connectée à un compte disposant des autorisations sur l'ensemble d'un groupe de personnel (équipe).
+            </div>
+
+            <label for="MODULE_RH_TEAMCLOCK_ACCOUNT" class="form-label">Compte de l'application</label>
+            <input type="text" class="form-control" id="MODULE_RH_TEAMCLOCK_ACCOUNT" name="MODULE_RH_TEAMCLOCK_ACCOUNT" v-model="tmpConfig.MODULE_RH_TEAMCLOCK_ACCOUNT" :disabled="isReadonly('MODULE_RH_TEAMCLOCK_ACCOUNT')">
+            <span class="form-text">Indiquez le nom d'utilisateur. Si plusieurs comptes, séparer chaque nom d'utilisateur par une virgule.</span>
+        </div>
+
         <div class="my-3 text-end">
             <button type="submit" class="btn btn-admin" :disabled="pending || isReadonly('all')">
                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" v-if="pending"></span>
@@ -74,6 +86,7 @@
 
 <script>
 import { mapActions, mapState } from 'vuex';
+import { hasTeamclockAppLicence } from '../../js/personnel';
 
 export default {
     data() {
@@ -84,13 +97,24 @@ export default {
                 MODULE_RH_REGNUM_AUTO: 5,
                 MODULE_RH_REGNUM_NEXT: 5,
                 MODULE_RH_REGNUM_MATRIX: 5,
-                MODULE_RH_ENABLE_RUP: 5
-            }
+                MODULE_RH_ENABLE_RUP: 5,
+                MODULE_RH_TEAMCLOCK_ACCOUNT: 5
+            },
+            licence: null
         }
     },
 
     computed: {
-        ...mapState(['config'])
+        ...mapState(['config']),
+
+        /**
+         * Retourne true si la licence active détient un accès à team-pointage
+         * 
+         * @return {bool}
+         */
+        hasTeamclockApp() {
+            return hasTeamclockAppLicence(this.licence);
+        }
     },
     
     methods: {
@@ -142,7 +166,9 @@ export default {
 
         boolVals.forEach(key => {
             this.tmpConfig[key] = this.tmpConfig[key] ? true : false;
-        })
+        });
+
+        this.licence = this.$app.licence;
     }
 }
 </script>

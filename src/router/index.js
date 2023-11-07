@@ -84,8 +84,22 @@ const routes = [
         path: 'fonction',
         name: 'FonctionAttribute',
         component: () => import('../views/PersonnelAttribute.vue')
+      },
+      {
+        path: 'account/new',
+        name: "AccountNew",
+        component: () => import('../views/account/NewAccount.vue')
+      },
+      {
+        path: 'account/:idAccount/pin',
+        name: "AccountPin",
+        component: () => import('../views/account/EditPin.vue')
+      },
+      {
+        path: 'account/create-team-clock-access',
+        name: "CreateTeamClockAccess",
+        component: () => import('../views/account/TeamclockAccess.vue')
       }
-      
     ]
   },
   {
